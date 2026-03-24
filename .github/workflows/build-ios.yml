@@ -27,11 +27,11 @@ jobs:
       - name: Build web
         run: npx vite build
 
-      - name: Sync Capacitor iOS
-        run: npx cap sync ios
-
-      - name: Install CocoaPods
-        run: cd ios/App && pod install
+      - name: Sync Capacitor iOS + CocoaPods
+        run: |
+          npx cap sync ios
+          cd ios/App
+          pod install --repo-update
 
       - name: Install Codemagic CLI tools
         run: pip3 install codemagic-cli-tools
