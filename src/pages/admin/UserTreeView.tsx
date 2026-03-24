@@ -32,7 +32,7 @@ interface TreeNode extends TreeUser {
 
 const RS: Record<string, { label: string; shortLabel: string; color: string; bg: string; icon: typeof User }> = {
   ADMIN:            { label: "Administrator",     shortLabel: "Admin", color: "#ef4444", bg: "rgba(239,68,68,0.12)",  icon: Shield },
-  MITARBEITER:      { label: "Mitarbeiter",       shortLabel: "MA",    color: "#f0d878", bg: "rgba(168,85,247,0.1)",  icon: Briefcase },
+  MITARBEITER:      { label: "Mitarbeiter",       shortLabel: "MA",    color: "#a78bfa", bg: "rgba(168,85,247,0.1)",  icon: Briefcase },
   KUNDE:            { label: "Kunde",             shortLabel: "Kunde", color: "#3b82f6", bg: "rgba(59,130,246,0.12)", icon: Building2 },
   SUBUNTERNEHMER:   { label: "Subunternehmer",    shortLabel: "Sub",   color: "#f59e0b", bg: "rgba(245,158,11,0.12)", icon: User },
   HANDELSVERTRETER: { label: "Handelsvertreter",  shortLabel: "HV",    color: "#22d3ee", bg: "rgba(6,182,212,0.1)",   icon: Handshake },

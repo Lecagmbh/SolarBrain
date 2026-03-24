@@ -720,8 +720,18 @@ function LeadDetailPanel({ item, onClose }: { item: UnifiedItem; onClose: () => 
               {LEAD_STATUSES.find(s => s.key === currentStatus)?.icon} {LEAD_STATUSES.find(s => s.key === currentStatus)?.label || currentStatus}
             </span>
           </div>
-          <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>
+          <div style={{ fontSize: 12, color: "#64748b", marginTop: 2, display: "flex", alignItems: "center", gap: 8 }}>
             {item.publicId} · eingegangen {lead?.timestamp ? new Date(lead.timestamp).toLocaleString("de-DE") : ""}
+            {lead?.signatureStatus === "signed" && (
+              <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 10, background: "rgba(34,197,94,0.12)", color: "#22c55e", fontWeight: 700 }}>
+                ✅ Unterschrieben
+              </span>
+            )}
+            {lead?.signatureStatus === "sent" && (
+              <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 10, background: "rgba(245,158,11,0.12)", color: "#f59e0b", fontWeight: 700 }}>
+                ✉️ Warte auf Unterschrift
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -763,6 +773,41 @@ function LeadDetailPanel({ item, onClose }: { item: UnifiedItem; onClose: () => 
             🗑 Löschen
           </button>
         </div>
+
+        {/* ═══ DROPBOX SIGN STATUS ═══ */}
+        {lead?.signatureRequestId && (
+          <div style={{
+            marginBottom: 16, padding: "14px 18px", borderRadius: 12,
+            background: lead.signatureStatus === "signed" ? "rgba(34,197,94,0.06)" : "rgba(245,158,11,0.06)",
+            border: `1px solid ${lead.signatureStatus === "signed" ? "rgba(34,197,94,0.15)" : "rgba(245,158,11,0.15)"}`,
+            display: "flex", alignItems: "center", gap: 12,
+          }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+              background: lead.signatureStatus === "signed" ? "rgba(34,197,94,0.15)" : "rgba(245,158,11,0.15)",
+              fontSize: 18,
+            }}>
+              {lead.signatureStatus === "signed" ? "✅" : "✉️"}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: lead.signatureStatus === "signed" ? "#22c55e" : "#f59e0b" }}>
+                {lead.signatureStatus === "signed" ? "Digital unterschrieben" : "Unterschrift ausstehend"}
+              </div>
+              <div style={{ fontSize: 11, color: "#64748b" }}>
+                {lead.signatureStatus === "signed" && lead.signedAt
+                  ? `Unterschrieben am ${new Date(lead.signedAt).toLocaleString("de-DE")}`
+                  : "Dropbox Sign Email wurde an den Kunden gesendet"
+                }
+              </div>
+            </div>
+            {lead.signatureStatus === "signed" && lead.signatureRequestId && (
+              <a href={`/api/esignature/download/${lead.signatureRequestId}`} target="_blank" rel="noopener"
+                style={{ ...actionBtn("rgba(34,197,94,0.1)", "rgba(34,197,94,0.2)", "#22c55e"), padding: "8px 14px", fontSize: 12, textDecoration: "none" }}>
+                📥 Signiertes PDF
+              </a>
+            )}
+          </div>
+        )}
 
         {/* Delete Confirm */}
         {showDeleteConfirm && (

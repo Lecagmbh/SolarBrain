@@ -1,1 +1,0 @@
-export { useInstallationDetail } from "./useInstallationDetail";

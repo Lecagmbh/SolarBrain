@@ -24,7 +24,7 @@ import PublicFormularPage from "./pages/PublicFormularPage";
 const UploadPortalPage = lazy(() => import("./features/upload-portal/UploadPortalPage"));
 const PartnerPage = lazy(() => import("./pages/PartnerPage"));
 const UnternehmenPage = lazy(() => import("./pages/UnternehmenPage"));
-const VDE4110FormularePage = lazy(() => import("./pages/VDE4110FormularePage"));
+// VDE4110FormularePage entfernt (dead import)
 
 // ─── Baunity D2D Pages ───────────────────────────────────────────────────────
 const MapPage = lazy(() => import("./features/map/MapPage"));
@@ -40,7 +40,7 @@ const UsersPageNew = lazy(() => import("./features/users/UsersPage"));
 const DokumenteMatrix = lazy(() => import("./pages/admin/DokumenteMatrix"));
 const AnlagenWizardPage = lazy(() => import("./pages/AnlagenWizardPage"));
 const NetzbetreiberCenterPage = lazy(() => import("./pages/NetzbetreiberCenterPage"));
-const UserManagementPage = lazy(() => import("./pages/UserManagementPage"));
+// UserManagementPage entfernt (dead import)
 const RechnungenPage = lazy(() => import("./pages/RechnungenPage"));
 const KundenRechnungenPage = lazy(() => import("./pages/KundenRechnungenPage"));
 const EmailCommandCenter = lazy(() => import("./pages/EmailCommandCenter"));
@@ -88,7 +88,7 @@ const AccountingPage = lazy(() => import("./features/accounting").then(m => ({ d
 const FinanzenPage = lazy(() => import("./features/finanzen").then(m => ({ default: m.FinanzenPage })));
 // PanelTestPage: ARCHIVED
 // WorkflowRouter entfernt – ersetzt durch Ops Center
-const VDEFormularePage = lazy(() => import("./pages/VDEFormularePage"));
+// VDEFormularePage entfernt (dead import)
 const EmailInboxPage = lazy(() => import("./modules/admin/emails/EmailsPage"));
 // Deaktiviert – wird neu konzipiert
 // const EmailLearningCenter = lazy(() => import("./pages/admin/EmailLearningCenter"));
@@ -120,6 +120,12 @@ const PortalNotificationsPage = lazy(() => import("./portal").then(m => ({ defau
 const OnboardingPage = lazy(() => import("./portal").then(m => ({ default: m.OnboardingPage })));
 const PortalImpersonatePage = lazy(() => import("./portal/pages/ImpersonatePage"));
 const PortalRequireAuth = lazy(() => import("./portal/PortalRequireAuth"));
+
+// Redirect to external static page (served by nginx, not React)
+const ExternalWizardRedirect = () => {
+  window.location.href = "/wizard";
+  return null;
+};
 
 // Loading Fallback
 const PageLoader = () => (
@@ -164,6 +170,7 @@ export default function AppRouter() {
         <Route path="/termin/absagen" element={<L><CancelPage /></L>} />
         <Route path="/pay/:token" element={<L><PaymentPage /></L>} />
         <Route path="/formular/:slug" element={<PublicFormularPage />} />
+        <Route path="/wizard" element={<ExternalWizardRedirect />} />
         <Route path="/upload/:token" element={<L><UploadPortalPage /></L>} />
         <Route path="/partner" element={<L><PartnerPage /></L>} />
         <Route path="/unternehmen" element={<L><UnternehmenPage /></L>} />
