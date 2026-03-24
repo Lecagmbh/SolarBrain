@@ -1,0 +1,282 @@
+/* ===========================
+   SUMMARY â€“ ENDLVL UI
+=========================== */
+
+.summary-root {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.summary-header {
+  margin-bottom: 28px;
+}
+
+.summary-header h2 {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.summary-header p {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+/* Anmeldung */
+.summary-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.summary-section-head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.summary-section h3 {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* Badge */
+.summary-badge {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color: #02140a;
+}
+
+/* Cards */
+.summary-card {
+  margin-bottom: 18px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.06),
+    rgba(255,255,255,0.02)
+  );
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.summary-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.summary-card-icon {
+  font-size: 20px;
+}
+
+.summary-card-title {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* Rows */
+.summary-row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.summary-row-label {
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.summary-row-value {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Footer */
+.summary-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 34px;
+}
+
+.summary-error {
+  color: #ef4444;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+/* ===============================
+   TECH SUMMARY – HIGH END
+================================ */
+
+.summary-tech-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-tech-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.tech-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tech-main strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.95);
+}
+
+.tech-meta {
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+}
+
+.tech-value {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: monospace;
+  color: rgba(56,189,248,0.95);
+}
+/* ===============================
+   SUMMARY – ENDLVL CARDS
+================================ */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.summary-card {
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.summary-card-head {
+  padding: 14px 16px 0 16px;
+}
+.summary-card-head h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.summary-card-body {
+  padding: 12px 16px 16px 16px;
+}
+
+.summary-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 6px 0;
+}
+.summary-row-label {
+  color: rgba(255,255,255,0.55);
+  font-size: 12px;
+}
+.summary-row-value {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Pills */
+.summary-pills {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.summary-pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(56,189,248,0.15);
+  border: 1px solid rgba(56,189,248,0.35);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* KPIs */
+.summary-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.summary-kpis--card {
+  padding: 12px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(56,189,248,0.10), rgba(139,92,246,0.08));
+  border: 1px solid rgba(56,189,248,0.25);
+}
+.summary-kpi span {
+  font-size: 11px;
+  color: rgba(255,255,255,0.65);
+}
+.summary-kpi strong {
+  font-family: monospace;
+  font-size: 15px;
+}
+
+/* TECH LIST */
+.summary-tech-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.summary-tech-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.tech-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tech-main strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+.tech-meta {
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+}
+.tech-value {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(56,189,248,0.95);
+}
+
+/* Footer */
+.summary-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18px;
+}

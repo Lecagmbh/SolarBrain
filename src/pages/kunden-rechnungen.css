@@ -1,0 +1,263 @@
+/* Kunden-Rechnungen: Read-only Ansicht */
+
+.kr-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+.kr-loading, .kr-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 80px 20px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.kr-error { color: #ef4444; }
+
+.kr-spin { animation: kr-spin 1s linear infinite; }
+@keyframes kr-spin { to { transform: rotate(360deg); } }
+
+/* Header */
+.kr-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.kr-header__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #e2e8f0;
+}
+.kr-header__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+.kr-header__sub {
+  font-size: 13px;
+  color: #64748b;
+  margin: 2px 0 0;
+}
+
+/* Stats */
+.kr-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.kr-stat {
+  flex: 1;
+  min-width: 140px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.kr-stat__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+}
+.kr-stat__value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+.kr-stat--warn .kr-stat__value { color: #f59e0b; }
+.kr-stat--ok .kr-stat__value { color: #10b981; }
+
+/* Filters */
+.kr-filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.kr-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 8px;
+  padding: 0 12px;
+  flex: 1;
+  min-width: 180px;
+  color: #94a3b8;
+}
+.kr-search input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e2e8f0;
+  font-size: 13px;
+  padding: 9px 0;
+  width: 100%;
+}
+.kr-search input::placeholder { color: #475569; }
+
+.kr-filter-tabs {
+  display: flex;
+  gap: 4px;
+  background: rgba(30, 41, 59, 0.4);
+  border-radius: 8px;
+  padding: 3px;
+}
+.kr-tab {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.kr-tab:hover { color: #e2e8f0; }
+.kr-tab--active {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60a5fa;
+}
+
+/* Empty */
+.kr-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #475569;
+}
+.kr-empty svg { margin-bottom: 12px; opacity: 0.3; }
+.kr-empty p { font-size: 14px; margin: 0; }
+
+/* Card List */
+.kr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.kr-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 10px;
+  padding: 16px;
+  transition: border-color 0.15s;
+}
+.kr-card:hover {
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.kr-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.kr-card__nr {
+  font-size: 14px;
+  font-weight: 700;
+  color: #e2e8f0;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+
+.kr-card__ref {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  background: rgba(148, 163, 184, 0.06);
+  border-radius: 6px;
+}
+
+.kr-card__details {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.kr-card__detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.kr-card__detail-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+}
+.kr-card__detail span:last-child {
+  font-size: 13px;
+  color: #cbd5e1;
+}
+.kr-card__detail--amount {
+  margin-left: auto;
+}
+.kr-card__amount {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #f1f5f9 !important;
+}
+
+.kr-card__actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Status Badge */
+.kr-status {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.kr-status--offen { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.kr-status--bezahlt { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.kr-status--ueberfaellig { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.kr-status--mahnung { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+.kr-status--default { background: rgba(148, 163, 184, 0.1); color: #94a3b8; }
+
+/* Buttons */
+.kr-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(96, 165, 250, 0.1);
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.kr-btn:hover {
+  background: rgba(96, 165, 250, 0.2);
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .kr-page { padding: 16px 12px 40px; }
+  .kr-stats { flex-direction: column; }
+  .kr-card__details { gap: 12px; }
+  .kr-card__detail--amount { margin-left: 0; }
+  .kr-filters { flex-direction: column; }
+}

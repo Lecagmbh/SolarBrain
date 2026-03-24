@@ -1,0 +1,221 @@
+/* ANALYTICS */
+
+.an-page {
+  min-height: 100vh;
+  padding: var(--space-6) var(--space-8);
+}
+
+.an-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+
+.an-title {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+}
+
+.an-period {
+  padding: var(--space-2) var(--space-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.an-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+@media (max-width: 1000px) { .an-metrics { grid-template-columns: repeat(2, 1fr); } }
+
+.an-metric {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+}
+
+.an-metric-value {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.an-metric-label {
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  margin-top: var(--space-1);
+}
+
+.an-metric-trend {
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  margin-top: var(--space-2);
+}
+
+.an-metric-trend.positive { color: var(--success-400); }
+.an-metric-trend.negative { color: var(--danger-400); }
+
+.an-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
+}
+
+@media (max-width: 1000px) { .an-grid { grid-template-columns: 1fr; } }
+
+.an-card .card-content { padding: var(--space-5); }
+
+/* Bar Chart */
+.an-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  height: 200px;
+  gap: var(--space-4);
+}
+
+.an-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.an-bar-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.an-bar {
+  width: 100%;
+  max-width: 48px;
+  background: var(--primary-500);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: var(--space-2);
+  transition: height 0.5s ease-out;
+}
+
+.an-bar-value {
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: white;
+}
+
+.an-bar-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: var(--space-2);
+}
+
+/* Reasons */
+.an-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.an-reason {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+}
+
+.an-reason-rank {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--text-muted);
+  width: 24px;
+}
+
+.an-reason-text {
+  flex: 1;
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+}
+
+.an-reason-count {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--warning-400);
+}
+
+/* NB Performance */
+.an-nb-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.an-nb-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 40px;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.an-nb-name {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.an-nb-bar-wrap {
+  height: 8px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.an-nb-bar {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease-out;
+}
+
+.an-nb-bar--fast { background: var(--success-500); }
+.an-nb-bar--ok { background: var(--primary-500); }
+.an-nb-bar--slow { background: var(--warning-500); }
+
+.an-nb-days {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  text-align: right;
+}
+
+/* Export */
+.an-export {
+  text-align: center;
+}
+
+.an-export p {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.an-export-btns {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+}

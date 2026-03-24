@@ -1,0 +1,353 @@
+/* Guide Drawer - Slide-Over von rechts */
+.guide-drawer__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  animation: guide-backdrop-in 0.2s ease-out;
+}
+
+@keyframes guide-backdrop-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.guide-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 480px;
+  max-width: 100%;
+  background: rgba(15, 23, 42, 0.97);
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  animation: guide-slide-in 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes guide-slide-in {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(0); }
+}
+
+.guide-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.guide-drawer__header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.guide-drawer__header-icon {
+  color: #EAD068;
+}
+
+.guide-drawer__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.guide-drawer__close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.guide-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.guide-drawer__body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.guide-drawer__body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+/* Intro */
+.guide-drawer__intro {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(212, 168, 67, 0.08);
+  border: 1px solid rgba(212, 168, 67, 0.15);
+  margin-bottom: 24px;
+}
+
+.guide-drawer__intro-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.guide-drawer__intro-text {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+}
+
+/* Section */
+.guide-drawer__section {
+  margin-bottom: 24px;
+}
+
+.guide-drawer__section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Steps */
+.guide-drawer__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.guide-drawer__step {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.guide-drawer__step-number {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(212, 168, 67, 0.15);
+  color: #EAD068;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guide-drawer__step-content {
+  flex: 1;
+}
+
+.guide-drawer__step-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2px;
+}
+
+.guide-drawer__step-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.4;
+}
+
+/* Do/Don't Lists */
+.guide-drawer__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.guide-drawer__list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.guide-drawer__list-item--do {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.guide-drawer__list-item--dont {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.guide-drawer__list-icon--do {
+  flex-shrink: 0;
+  color: #4ade80;
+  margin-top: 1px;
+}
+
+.guide-drawer__list-icon--dont {
+  flex-shrink: 0;
+  color: #f87171;
+  margin-top: 1px;
+}
+
+/* FAQ */
+.guide-drawer__faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.guide-drawer__faq-item {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.guide-drawer__faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.guide-drawer__faq-question:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.guide-drawer__faq-chevron {
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.4);
+  transition: transform 0.2s;
+}
+
+.guide-drawer__faq-chevron--open {
+  transform: rotate(180deg);
+}
+
+.guide-drawer__faq-answer {
+  padding: 0 14px 12px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+}
+
+/* Inline Help Box */
+.inline-help {
+  border-radius: 12px;
+  border: 1px solid rgba(212, 168, 67, 0.15);
+  background: rgba(212, 168, 67, 0.05);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.inline-help__trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  color: #EAD068;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.inline-help__trigger:hover {
+  background: rgba(212, 168, 67, 0.08);
+}
+
+.inline-help__chevron {
+  margin-left: auto;
+  transition: transform 0.2s;
+}
+
+.inline-help__chevron--open {
+  transform: rotate(180deg);
+}
+
+.inline-help__content {
+  padding: 0 16px 16px;
+}
+
+.inline-help__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inline-help__step {
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+
+.inline-help__step-num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(212, 168, 67, 0.15);
+  color: #EAD068;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inline-help__categories {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inline-help__category {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.4;
+}
+
+.inline-help__category strong {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 768px) {
+  .guide-drawer {
+    width: 100%;
+  }
+}

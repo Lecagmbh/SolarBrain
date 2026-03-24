@@ -1,0 +1,15 @@
+.hook-item {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.hook-item input {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(148,163,184,0.5);
+  background: rgba(15,23,42,0.9);
+  color: #e5e7eb;
+  font-size: 13px;
+}

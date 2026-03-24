@@ -1,0 +1,9 @@
+export { OverviewTab } from "./OverviewTab";
+export { TechTab } from "./TechTab";
+export { DocumentsTab } from "./DocumentsTab";
+export { TimelineTab } from "./TimelineTab";
+export { EmailsTab } from "./EmailsTab";
+export { TasksTab } from "./TasksTab";
+export { KommunikationTab } from "./KommunikationTab";
+export { WhatsAppTab } from "./WhatsAppTab";
+export { ChatTab } from "./ChatTab";

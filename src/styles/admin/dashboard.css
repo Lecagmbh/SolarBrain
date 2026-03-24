@@ -1,0 +1,215 @@
+/* KPI Grid */
+
+.admin-dashboard-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+
+.admin-kpi-card {
+  background: radial-gradient(circle at top left, #020b29, #020617 75%);
+  border-radius: var(--admin-radius);
+  border: 1px solid rgba(15, 23, 42, 0.98);
+  box-shadow: var(--admin-shadow-subtle);
+  padding: 0.95rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.admin-kpi-label {
+  font-size: 0.8rem;
+  color: var(--admin-text-soft);
+}
+
+.admin-kpi-value {
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.admin-kpi-sub {
+  font-size: 0.8rem;
+  color: var(--admin-text-soft);
+}
+
+/* Pipeline */
+
+.admin-pipeline-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.2rem;
+}
+
+.admin-pipeline-left {
+  flex: 1;
+}
+
+.admin-pipeline-header {
+  margin-bottom: 0.5rem;
+}
+
+.admin-pipeline-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+.admin-pipeline-header p {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--admin-text-soft);
+}
+
+.admin-pipeline-badges {
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--admin-text-soft);
+}
+
+/* Status Buttons */
+
+.admin-pipeline-status-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.8rem;
+}
+
+.admin-pipeline-status-btn {
+  flex: 1;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--admin-border);
+  padding: 0.6rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  font-size: 0.8rem;
+  color: var(--admin-text-soft);
+  cursor: pointer;
+}
+.admin-pipeline-status-btn span.label {
+  font-weight: 500;
+  color: var(--admin-text);
+}
+.admin-pipeline-status-btn span.count {
+  font-size: 0.9rem;
+}
+
+.admin-pipeline-status-btn--active {
+  background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.16), rgba(15, 23, 42, 0.95));
+  border-color: rgba(34, 197, 94, 0.7);
+  box-shadow: 0 12px 35px rgba(22, 163, 74, 0.4);
+}
+
+/* Filter Row unten */
+
+.admin-pipeline-footer {
+  margin-top: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--admin-text-soft);
+}
+
+/* Aktivitäten Tabelle */
+
+.admin-activity-panel {
+  margin-top: 1.6rem;
+}
+
+.admin-activity-header {
+  margin-bottom: 0.8rem;
+}
+.admin-activity-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+.admin-activity-header p {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--admin-text-soft);
+}
+
+/* Table */
+
+.admin-table-wrapper {
+  border-radius: var(--admin-radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.98);
+  box-shadow: var(--admin-shadow-soft);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: radial-gradient(circle at top left, #020b29, #020617 80%);
+}
+
+.admin-table thead {
+  background: rgba(15, 23, 42, 0.96);
+}
+.admin-table th,
+.admin-table td {
+  padding: 0.55rem 0.75rem;
+  font-size: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.9);
+}
+.admin-table th {
+  font-weight: 500;
+  color: var(--admin-text-soft);
+}
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tbody tr {
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.admin-table tbody tr:hover {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.admin-table-status {
+  font-size: 0.8rem;
+}
+
+/* Empty / Error */
+
+.admin-dashboard-empty,
+.admin-dashboard-error {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+.admin-dashboard-error {
+  color: var(--admin-danger);
+}
+
+/* Responsiv */
+
+@media (max-width: 1024px) {
+  .admin-shell {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+  .admin-dashboard-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .admin-pipeline-panel {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .admin-main {
+    padding: 1.2rem 1.2rem 1.6rem;
+  }
+  .admin-dashboard-kpi-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

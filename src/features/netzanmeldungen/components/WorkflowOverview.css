@@ -1,0 +1,424 @@
+/**
+ * WORKFLOW OVERVIEW v2.0 - Premium Glassmorphism CSS
+ * ===================================================
+ * Large visual boxes with glow effects and smooth animations
+ */
+
+.wf-container {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.wf-container--loading,
+.wf-container--error {
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Skeleton Loading */
+.wf-skeleton {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.wf-skeleton__box {
+  flex: 1;
+  height: 120px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: 16px;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Header */
+.wf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.wf-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+}
+
+.wf-title__icon {
+  font-size: 22px;
+}
+
+.wf-total {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.wf-total__count {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+}
+
+.wf-total__label {
+  font-size: 12px;
+  color: var(--text-tertiary, #64748b);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Pipeline */
+.wf-pipeline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.wf-pipeline::-webkit-scrollbar {
+  height: 6px;
+}
+
+.wf-pipeline::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wf-pipeline::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+/* Step Wrapper */
+.wf-step-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.wf-step-wrapper:nth-child(1) { animation-delay: 0ms; }
+.wf-step-wrapper:nth-child(2) { animation-delay: 60ms; }
+.wf-step-wrapper:nth-child(3) { animation-delay: 120ms; }
+.wf-step-wrapper:nth-child(4) { animation-delay: 180ms; }
+.wf-step-wrapper:nth-child(5) { animation-delay: 240ms; }
+.wf-step-wrapper:nth-child(6) { animation-delay: 300ms; }
+.wf-step-wrapper:nth-child(7) { animation-delay: 360ms; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Workflow Box */
+.wf-box {
+  position: relative;
+  min-width: 110px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.wf-box:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.wf-box:hover .wf-box__glow {
+  opacity: 0.15;
+}
+
+/* Glow Effect */
+.wf-box__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    var(--box-color) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* Content */
+.wf-box__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 6px;
+}
+
+.wf-box__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wf-box__icon {
+  color: var(--box-color);
+  opacity: 0.8;
+}
+
+.wf-box__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.wf-box__count {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-primary, #f8fafc);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.wf-box__meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-tertiary, #64748b);
+}
+
+.wf-box__spacer {
+  height: 16px;
+}
+
+/* Active State */
+.wf-box--active {
+  background: color-mix(in srgb, var(--box-color) 12%, transparent);
+  border-color: var(--box-color);
+}
+
+.wf-box--active .wf-box__glow {
+  opacity: 0.2;
+}
+
+.wf-box--active .wf-box__label {
+  color: var(--box-color);
+}
+
+.wf-box--active .wf-box__count {
+  color: var(--box-color);
+}
+
+.wf-box__active-border {
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--box-color);
+  border-radius: 18px;
+  animation: activePulse 2s ease-in-out infinite;
+}
+
+@keyframes activePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Urgent State (Rückfrage with items) */
+.wf-box--urgent {
+  border-color: var(--box-color);
+  animation: urgentPulse 2s ease-in-out infinite;
+}
+
+.wf-box--urgent .wf-box__glow {
+  opacity: 0.2;
+  animation: urgentGlow 2s ease-in-out infinite;
+}
+
+@keyframes urgentPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--box-color) 40%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 20px 4px color-mix(in srgb, var(--box-color) 30%, transparent);
+  }
+}
+
+@keyframes urgentGlow {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.35; }
+}
+
+/* Badge */
+.wf-box__badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  animation: badgeBounce 1s ease-in-out infinite;
+}
+
+.wf-box__badge-dot {
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  animation: dotPulse 1s ease-in-out infinite;
+}
+
+@keyframes badgeBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Arrow */
+.wf-arrow {
+  display: flex;
+  align-items: center;
+  color: var(--text-tertiary, #64748b);
+  opacity: 0.4;
+}
+
+/* Filter Indicator */
+.wf-filter-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.wf-filter-indicator__label {
+  font-size: 12px;
+  color: var(--text-tertiary, #64748b);
+}
+
+.wf-filter-indicator__value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--filter-color, var(--text-primary, #f8fafc));
+  padding: 4px 10px;
+  background: color-mix(in srgb, var(--filter-color, #3b82f6) 15%, transparent);
+  border-radius: 6px;
+}
+
+.wf-filter-indicator__clear {
+  margin-left: auto;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary, #94a3b8);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.wf-filter-indicator__clear:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary, #f8fafc);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .wf-container {
+    padding: 20px;
+  }
+
+  .wf-box {
+    min-width: 95px;
+  }
+
+  .wf-box__content {
+    padding: 14px 16px;
+  }
+
+  .wf-box__count {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 640px) {
+  .wf-container {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .wf-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .wf-box {
+    min-width: 85px;
+  }
+
+  .wf-box__content {
+    padding: 12px 14px;
+  }
+
+  .wf-box__count {
+    font-size: 22px;
+  }
+
+  .wf-box__label {
+    font-size: 10px;
+  }
+
+  .wf-arrow {
+    display: none;
+  }
+}

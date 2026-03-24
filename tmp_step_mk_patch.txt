@@ -1,0 +1,9 @@
+# PATCH: Replace nbRestrictions block in StepMesskonzept.tsx
+
+{Array.isArray(currentDef.nbRestrictions) && currentDef.nbRestrictions.length > 0 && (
+  <ul className="mkx-vis-restrictions">
+    {currentDef.nbRestrictions.map((r, i) => (
+      <li key={i}>{r}</li>
+    ))}
+  </ul>
+)}

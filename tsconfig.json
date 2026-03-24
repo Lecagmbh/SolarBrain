@@ -1,0 +1,17 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
+  "exclude": [
+    "src/modules/wizard/_legacy/**",
+    "src/modules/wizard.bak*",
+    "src/**/_legacy/**",
+    "src/_archived/**"
+  ]
+}

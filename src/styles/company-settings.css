@@ -1,0 +1,77 @@
+.cs-page { padding: 18px 18px 28px; }
+.cs-header { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-bottom:14px; }
+.cs-header h1 { margin:0; font-size:18px; letter-spacing:.2px; }
+.cs-sub { margin:6px 0 0; opacity:.75; font-size:13px; }
+
+.cs-card {
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(18,18,25,0.55);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+.cs-head {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.cs-head .t { font-weight: 1000; font-size: 14px; }
+.cs-body { padding: 14px; display:grid; gap: 14px; }
+
+.cs-grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+@media (max-width: 900px){ .cs-grid2 { grid-template-columns: 1fr; } }
+
+.cs-field label { display:block; font-size: 12px; opacity:.75; margin-bottom:6px; font-weight: 1000; }
+.cs-input, .cs-textarea {
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  padding: 10px 12px;
+  outline: none;
+  font-size: 13px;
+  width: 100%;
+}
+.cs-input:focus, .cs-textarea:focus {
+  border-color: rgba(212,168,67,0.45);
+  box-shadow: 0 0 0 4px rgba(212,168,67,0.15);
+}
+.cs-textarea { min-height: 96px; resize: vertical; }
+
+.cs-btn {
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  border-radius: 12px;
+  padding: 9px 12px;
+  font-weight: 1000;
+  font-size: 12px;
+  cursor: pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.cs-btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.14); }
+.cs-btn--primary { background: rgba(212,168,67,0.24); border-color: rgba(212,168,67,0.35); }
+
+.cs-hint { font-size: 12px; opacity: 0.75; line-height: 1.4; }
+.cs-pill {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size: 12px;
+  font-weight: 1000;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.05);
+}
+.cs-pill--ok { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.22); }
+.cs-pill--bad { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.22); }
+
+.cs-toast { position: fixed; right: 18px; bottom: 18px; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); background: rgba(15,15,20,0.92); box-shadow: 0 14px 34px rgba(0,0,0,0.45); display:flex; align-items:center; gap:10px; z-index:9999; max-width:min(560px, calc(100vw - 36px)); }
+.cs-toast .dot { width:10px; height:10px; border-radius:999px; background: rgba(212,168,67,0.9); }
+.cs-toast--error .dot { background: rgba(239,68,68,0.9); }
+.cs-toast--ok .dot { background: rgba(34,197,94,0.9); }
+.cs-toast .msg { font-size: 13px; font-weight: 1000; }

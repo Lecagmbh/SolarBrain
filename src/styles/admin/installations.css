@@ -1,0 +1,359 @@
+/* Modal Backdrop */
+
+.installation-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 3.5rem;
+  z-index: 40;
+}
+
+/* Modal */
+
+.installation-modal {
+  width: min(1120px, 100% - 3rem);
+  max-height: calc(100vh - 5rem);
+  background: radial-gradient(circle at top left, #020b29, #020617 80%);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(15, 23, 42, 0.95);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+
+.installation-modal-header {
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.9);
+  display: flex;
+  justify-content: space-between;
+  gap: 1.1rem;
+}
+
+.installation-eyebrow {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--admin-text-soft);
+}
+
+.installation-title {
+  margin: 0.15rem 0 0;
+  font-size: 1.25rem;
+}
+
+.installation-sub,
+.installation-sub-small {
+  margin: 0.1rem 0 0;
+  font-size: 0.8rem;
+  color: var(--admin-text-soft);
+}
+
+/* Meta Row */
+
+.installation-meta-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+  padding: 0.75rem 1.4rem 0.6rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.9);
+}
+
+.installation-meta-item span:first-child {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--admin-text-soft);
+}
+.installation-meta-item strong {
+  font-size: 0.9rem;
+}
+
+/* Tabs */
+
+.installation-tabs {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.4rem 1.4rem 0;
+}
+
+.installation-tab {
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.8rem;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--admin-text-soft);
+  cursor: pointer;
+}
+.installation-tab--active {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(34, 197, 94, 0.5);
+  color: var(--admin-text);
+}
+
+/* Content */
+
+.installation-tab-content {
+  padding: 1rem 1.4rem 1.2rem;
+  overflow-y: auto;
+}
+
+/* Overview Grid */
+
+.installation-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.installation-overview-card {
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.95);
+  padding: 0.8rem 0.85rem;
+}
+
+.installation-overview-card h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.95rem;
+}
+
+/* List */
+
+.detail-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8rem;
+}
+
+.detail-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.15rem 0;
+}
+.detail-list li span:first-child {
+  color: var(--admin-text-soft);
+  min-width: 40%;
+}
+.detail-list li span:last-child {
+  text-align: right;
+}
+
+/* Muted / Notes */
+
+.detail-muted {
+  font-size: 0.78rem;
+  color: var(--admin-text-soft);
+}
+
+.detail-note-box {
+  border-radius: 10px;
+  border: 1px dashed rgba(148, 163, 184, 0.5);
+  padding: 0.55rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+/* Actions */
+
+.installation-form-group {
+  margin-top: 0.7rem;
+}
+.installation-form-group label {
+  display: block;
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+
+.installation-actions-row {
+  margin-top: 0.7rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Documents */
+
+.installation-docs-header h3 {
+  margin: 0 0 0.3rem;
+}
+.installation-docs-header p {
+  margin: 0 0 0.7rem;
+}
+
+.installation-docs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.installation-docs-section h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+}
+
+.detail-upload-group {
+  margin-bottom: 0.6rem;
+}
+.detail-upload-title {
+  font-size: 0.8rem;
+  margin-bottom: 0.15rem;
+}
+.detail-upload-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8rem;
+}
+.detail-upload-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.12rem 0;
+}
+.detail-upload-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--admin-accent);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.detail-upload-meta {
+  font-size: 0.75rem;
+  color: var(--admin-text-soft);
+}
+
+/* History */
+
+.installation-history-columns {
+  display: grid;
+  grid-template-columns: 1.1fr 1.1fr;
+  gap: 1.2rem;
+}
+
+.detail-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8rem;
+}
+.detail-timeline li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+}
+.detail-timeline-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  margin-top: 0.25rem;
+  background: radial-gradient(circle at top left, #22c55e, #15803d);
+}
+.detail-timeline-title {
+  font-weight: 500;
+}
+.detail-timeline-meta {
+  font-size: 0.75rem;
+  color: var(--admin-text-soft);
+}
+
+/* Comments */
+
+.detail-comment-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8rem;
+}
+.detail-comment-list li {
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.95);
+  background: rgba(15, 23, 42, 0.9);
+  padding: 0.55rem 0.7rem;
+  margin-bottom: 0.5rem;
+}
+.detail-comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+}
+.detail-comment-header span:first-child {
+  font-weight: 500;
+}
+.detail-comment-date {
+  font-size: 0.75rem;
+  color: var(--admin-text-soft);
+}
+.detail-comment-body {
+  white-space: pre-wrap;
+}
+
+/* KI Tab */
+
+.installation-ki-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr;
+  gap: 1rem;
+}
+.installation-ki-card {
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.95);
+  background: rgba(15, 23, 42, 0.92);
+  padding: 0.75rem 0.8rem;
+  font-size: 0.8rem;
+}
+
+.installation-ki-card h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+}
+
+/* Responsiv */
+
+@media (max-width: 1100px) {
+  .installation-overview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .installation-docs-grid,
+  .installation-history-columns,
+  .installation-ki-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .installation-modal {
+    width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  .installation-meta-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .installation-overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ================================
+   KUNDE: Kommentare/Status sperren
+   (Frontend UX – Backend bleibt Truth)
+   ================================ */
+.admin-shell-modern[data-role="kunde"] .detail-comment-editor,
+.admin-shell-modern[data-role="kunde"] .detail-comment-editor * {
+  display: none !important;
+}
+
+/* falls es einen Button/Text "Status / Kommentar speichern" gibt */
+.admin-shell-modern[data-role="kunde"] button:disabled,
+.admin-shell-modern[data-role="kunde"] .btn-disabled {
+  cursor: not-allowed;
+}

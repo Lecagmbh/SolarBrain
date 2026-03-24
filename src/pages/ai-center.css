@@ -1,0 +1,63 @@
+/* ════════════════════════════════════════════════════════════════
+   AI CENTER – Top-level tab wrapper for RAG/Brain/Agents/Claude
+   ════════════════════════════════════════════════════════════════ */
+
+.aic-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.aic-tab-bar {
+  display: flex;
+  gap: 2px;
+  padding: 12px 24px 0;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.aic-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.45);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-bottom: -1px;
+}
+
+.aic-tab:hover {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.aic-tab--active {
+  color: #EAD068;
+  border-bottom-color: #D4A843;
+}
+
+.aic-content {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Override sub-page min-height so they don't each claim 100vh */
+.aic-content > div {
+  min-height: auto !important;
+}
+
+.aic-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 80px;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 14px;
+}

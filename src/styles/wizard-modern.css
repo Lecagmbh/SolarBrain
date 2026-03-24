@@ -1,0 +1,1400 @@
+/* ========================================================================
+   WIZARD MODERN – GLOBAL LAYOUT
+   ======================================================================== */
+
+.wizard-modern-wrapper,
+.wizard-modern-wrapper * {
+  box-sizing: border-box;
+}
+
+.wizard-modern-page {
+  min-height: 100vh;
+  padding: 32px;
+  background: radial-gradient(circle at top, #0f172a, #020617 45%, #000);
+  color: #e5e7eb;
+  display: flex;
+  justify-content: center;
+}
+
+.wizard-modern-content {
+  display: flex;
+  gap: 28px;
+  width: 100%;
+  max-width: 1450px;
+}
+
+/* ========================================================================
+   SIDEBAR
+   ======================================================================== */
+
+.wizard-modern-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+}
+
+.wizard-modern-sidebar .step-entry {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.wizard-modern-sidebar .step-entry:hover {
+  background: rgba(56, 189, 248, 0.25);
+  transform: translateX(4px);
+}
+
+.wizard-modern-sidebar .step-entry.active {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.55);
+}
+
+/* ========================================================================
+   MAIN CARD
+   ======================================================================== */
+
+.wizard-modern-main {
+  flex-grow: 1;
+}
+
+.wizard-modern-card {
+  background: rgba(15, 23, 42, 0.75);
+  border-radius: 20px;
+  padding: 28px 32px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(148, 163, 184, 0.12),
+    0 18px 40px rgba(15, 23, 42, 0.85);
+}
+
+/* STEP WRAPPER (innerhalb der Main Card) */
+
+.wizard-modern-step-card {
+  background: radial-gradient(circle at top left, #0b1220 0%, #020617 55%);
+  border-radius: 18px;
+  padding: 22px 24px 26px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.9),
+    0 18px 38px rgba(15, 23, 42, 0.9);
+}
+
+/* HEADER IM STEP */
+
+.wizard-rt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.wizard-step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  font-size: 12px;
+  color: #cbd5f5;
+  margin-bottom: 6px;
+}
+
+.wizard-step-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #22c55e, #16a34a);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.85);
+}
+
+/* Titel & Untertitel */
+
+.wizard-section-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.wizard-section-sub {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #94a3b8;
+  max-width: 680px;
+}
+
+/* kleinere Varianten für Unterabschnitte */
+
+.wizard-section-title-sm {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.wizard-section-title-xs {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.wizard-section-sub-sm {
+  font-size: 13px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+/* ========================================================================
+   PANEL-GRID: Formular links, Info rechts
+   ======================================================================== */
+
+.wizard-panel-grid {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-top: 22px;
+}
+
+.wizard-panel {
+  background: radial-gradient(circle at top left, #020617 0%, #020617 85%);
+  border-radius: 16px;
+  padding: 18px 18px 20px;
+  border: 1px solid rgba(30, 64, 175, 0.4);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.9);
+}
+
+/* Linkes Hauptpanel nimmt mehr Platz */
+
+.wizard-panel:first-child {
+  flex: 1 1 auto;
+}
+
+/* ========================================================================
+   MINI-AI/CONTEXT-PANEL RECHTS
+   ======================================================================== */
+
+.wizard-ai-panel-mini {
+  flex: 0 0 320px;
+  max-width: 340px;
+  background: radial-gradient(circle at top, #020617, #020617 65%);
+  border-radius: 16px;
+  padding: 18px 18px 20px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.9),
+    0 16px 36px rgba(15, 23, 42, 0.95);
+}
+
+.wizard-ai-mini-meta {
+  margin-top: 10px;
+  padding: 10px 10px 8px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(37, 99, 235, 0.6);
+}
+
+.wizard-ai-mini-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+.wizard-ai-mini-row + .wizard-ai-mini-row {
+  border-top: 1px dashed rgba(55, 65, 81, 0.9);
+  margin-top: 3px;
+  padding-top: 7px;
+}
+
+.wizard-ai-mini-label {
+  color: #9ca3af;
+}
+
+.wizard-ai-mini-value {
+  color: #e5e7eb;
+  font-weight: 500;
+  text-align: right;
+}
+
+.wizard-ai-mini-hints-title {
+  margin-top: 16px;
+}
+
+.wizard-ai-mini-list {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.wizard-ai-mini-list li + li {
+  margin-top: 4px;
+}
+
+/* ========================================================================
+   SECTION-BLOCKS
+   ======================================================================== */
+
+.wizard-section-block {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(30, 64, 175, 0.5);
+}
+
+.wizard-section-block--first {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* ========================================================================
+   KUNDENTYP-KARTEN
+   ======================================================================== */
+
+.wizard-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+/* HELLERE, DEUTLICHERE BASIS-KARTE (UNSELECTED) */
+
+.wizard-choice-card {
+  position: relative;
+  text-align: left;
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: radial-gradient(
+    circle at top left,
+    rgba(56, 189, 248, 0.14),
+    rgba(15, 23, 42, 0.92)
+  );
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.95),
+    0 10px 22px rgba(15, 23, 42, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wizard-choice-card:hover {
+  transform: translateY(-2px);
+  border-color: #22c55e;
+  box-shadow:
+    0 0 0 1px rgba(34, 197, 94, 0.4),
+    0 16px 28px rgba(15, 23, 42, 0.95);
+}
+
+/* ACTIVE STATE bleibt satt grün */
+
+.wizard-choice-card--active {
+  background: radial-gradient(circle at top, #22c55e 0%, #166534 70%);
+  border-color: #22c55e;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.65);
+  color: #f9fafb;
+}
+
+.wizard-choice-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(148, 163, 184, 0.9);
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.wizard-choice-card--active .wizard-choice-icon {
+  background: rgba(15, 23, 42, 0.95);
+  border-color: rgba(209, 250, 229, 0.9);
+}
+
+.wizard-choice-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.wizard-choice-desc {
+  font-size: 12px;
+  color: #a5b4fc;
+}
+
+.wizard-choice-card--active .wizard-choice-desc {
+  color: #e5e7eb;
+}
+
+/* ========================================================================
+   FORM-FELDER
+   ======================================================================== */
+
+.wizard-field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px 16px;
+  margin-top: 12px;
+}
+
+.wizard-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.wizard-field-label {
+  font-size: 13px;
+  color: #cbd5f5;
+  margin-bottom: 4px;
+}
+
+.wizard-input {
+  width: 100%;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 14px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  color: #e5e7eb;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.wizard-input:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.5);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.wizard-input::placeholder {
+  color: #6b7280;
+}
+
+/* Checkbox */
+
+.wizard-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #cbd5f5;
+}
+
+.wizard-checkbox input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+/* ========================================================================
+   CATEGORY TABS (Art der Anmeldung)
+   ======================================================================== */
+
+.wizard-rt-tabs {
+  display: flex;
+  gap: 14px;
+  margin: 22px 0 22px;
+  flex-wrap: wrap;
+}
+
+.wizard-rt-tab {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #e5e7eb;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wizard-rt-tab:hover {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.wizard-rt-tab--active {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border-color: #22c55e;
+  color: #fff;
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.45);
+}
+
+/* GRID – Karten nebeneinander (kompakt) */
+
+.wizard-rt-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 6px;
+}
+
+/* CASE CARDS – kompakt, kein Clipping, sauber */
+
+.wizard-rt-item {
+  position: relative;
+  text-align: left;
+  border-radius: 14px;
+  padding: 14px 16px;
+  min-height: 90px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+  overflow: visible;
+}
+
+.wizard-rt-item:hover {
+  transform: translateY(-3px);
+  border-color: #22c55e;
+  box-shadow:
+    0 0 0 1px rgba(34, 197, 94, 0.35),
+    0 14px 24px rgba(15, 23, 42, 0.75);
+}
+
+.wizard-rt-item--selected {
+  background: radial-gradient(circle at top, #22c55e 0%, #166534 70%);
+  border-color: #22c55e;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+  color: #fff;
+}
+
+.wizard-rt-item-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e5e7eb;
+  line-height: 1.35;
+  white-space: normal;
+}
+
+.wizard-rt-item-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #9ca3af;
+  line-height: 1.35;
+  white-space: normal;
+}
+/* ========================================================================
+   FOOTER BUTTONS (global)
+   ======================================================================== */
+
+.wizard-footer {
+  margin-top: 32px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.wizard-footer--spaced {
+  margin-top: 28px;
+}
+
+.wizard-btn {
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  border: none;
+}
+
+.wizard-btn-primary {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.5);
+}
+
+.wizard-btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 0 26px rgba(34, 197, 94, 0.8);
+}
+
+.wizard-btn-secondary {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  color: #e5e7eb;
+}
+
+.wizard-btn-secondary:hover {
+  background: rgba(30, 64, 175, 0.55);
+  border-color: rgba(129, 140, 248, 0.7);
+}
+
+/* ========================================================================
+   ANIMATION
+   ======================================================================== */
+
+.slide-in {
+  animation: slideIn 0.35s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================================================
+   RESPONSIVE
+   ======================================================================== */
+
+@media (max-width: 1100px) {
+  .wizard-panel-grid {
+    flex-direction: column;
+  }
+
+  .wizard-ai-panel-mini {
+    flex-basis: auto;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .wizard-modern-page {
+    padding: 20px;
+  }
+
+  .wizard-modern-card {
+    padding: 20px 18px;
+  }
+
+  .wizard-modern-step-card {
+    padding: 18px 16px 20px;
+  }
+}
+/* ==========================================================
+   FIX FOR STEP TECHNICAL — verhindert Fokusverlust & Abschneiden
+   ========================================================== */
+
+.wizard-modern-step-card input,
+.wizard-modern-step-card select,
+.wizard-modern-step-card textarea {
+  pointer-events: auto !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.wizard-modern-step-card input:focus,
+.wizard-modern-step-card select:focus,
+.wizard-modern-step-card textarea:focus {
+  outline: none !important;
+  border-color: #22c55e !important;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.35) !important;
+}
+
+/* verhindert dass globale Hover-Effekte die Felder "wegschieben" */
+
+.wizard-modern-step-card .tfield input:hover {
+  transform: none !important;
+}
+
+/* Number Input Fix */
+
+.wizard-modern-step-card input[type="number"] {
+  -moz-appearance: textfield !important;
+}
+
+.wizard-modern-step-card input[type="number"]::-webkit-inner-spin-button,
+.wizard-modern-step-card input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+}
+
+/* Floating Label Fix */
+
+.wizard-modern-step-card .tfield label {
+  pointer-events: none !important;
+}
+/* ========================================================================
+   TECHNICAL STEP – PREMIUM PANELS & FLOATING INPUTS
+   ======================================================================== */
+
+/* --- GRID --------------------------------------------------------------- */
+
+.tgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+  margin-top: 26px;
+}
+
+.tgrid-full {
+  grid-column: span 2;
+}
+
+/* --- CARD BLOCK --------------------------------------------------------- */
+
+.tcard {
+  background: radial-gradient(
+    circle at top left,
+    rgba(30, 41, 59, 0.65),
+    rgba(2, 6, 23, 0.88)
+  );
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 16px;
+  padding: 18px 20px 20px;
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.8),
+    0 12px 28px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tcard:hover {
+  border-color: #22c55e;
+  box-shadow:
+    0 0 0 1px rgba(34, 197, 94, 0.45),
+    0 18px 36px rgba(0, 0, 0, 0.45);
+}
+
+.tcard-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin-bottom: 14px;
+}
+
+.tcard-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+}
+
+/* --- FLOATING INPUT FIELDS (konsolidiert + Fixes) ----------------------- */
+
+.tfield {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.tfield input {
+  width: 100%;
+  padding: 12px 10px 6px;
+  font-size: 14px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  color: #e5e7eb;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.tfield input:focus {
+  border-color: #22c55e;
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.45);
+}
+
+.tfield label {
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  font-size: 13px;
+  color: #94a3b8;
+  pointer-events: none;
+  transition: all 0.18s ease;
+  background: transparent;
+}
+
+/* wenn Wert vorhanden */
+
+.tfield label.filled {
+  top: -8px;
+  font-size: 11px;
+  color: #22c55e;
+  background: #0f172a;
+  padding: 0 4px;
+}
+
+/* wenn im Fokus */
+
+.tfield input:focus + label {
+  top: -8px;
+  font-size: 11px;
+  color: #22c55e;
+  background: #0f172a;
+  padding: 0 4px;
+}
+
+/* --- FOOTER ------------------------------------------------------------- */
+
+.technical-step .wizard-footer {
+  margin-top: 36px;
+}
+
+/* Badge für Nachreichen */
+.wu-badge-later {
+  background: rgba(234, 179, 8, 0.16);
+  border-color: rgba(234, 179, 8, 0.8);
+  color: #facc15;
+}
+
+/* Checkbox-Zeile „Nachreichen“ */
+.wu-later-option {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #e5e7eb;
+}
+
+.wu-later-option input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+/* optional: kleine Zusatzinfo unter der Progress-Bar */
+.wu-progress-subinfo {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #facc15;
+}
+/* Badge für "Nachreichen" (Pflichtdokument, aber später) */
+.wu-badge-later {
+  background: rgba(234, 179, 8, 0.16);
+  border-color: rgba(234, 179, 8, 0.8);
+  color: #facc15;
+}
+
+/* Badge für Empfehlung */
+.wu-badge-rec {
+  background: rgba(59, 130, 246, 0.14);
+  border-color: rgba(59, 130, 246, 0.9);
+  color: #bfdbfe;
+}
+
+/* Risiko-Hinweis im Card-Body */
+.wu-card-risk {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #fbbf24;
+  max-width: 520px;
+}
+
+/* Zusatzinfo unter der Progress-Bar */
+.wu-progress-subinfo {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #facc15;
+}
+/* ========================================================================
+   SUMMARY STEP – HIGH-END LAYOUT
+   ======================================================================== */
+
+.wizard-summary-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+
+@media (min-width: 1100px) {
+  .wizard-summary-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.wizard-summary-card {
+  border-radius: 16px;
+  padding: 16px 18px 18px;
+  background: radial-gradient(
+    circle at top left,
+    rgba(30, 41, 59, 0.9),
+    rgba(15, 23, 42, 0.98)
+  );
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.9),
+    0 14px 30px rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+}
+
+.wizard-summary-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5e7eb;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.wizard-summary-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wizard-summary-row-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  margin-bottom: 2px;
+}
+
+.wizard-summary-row-value {
+  font-size: 13px;
+  color: #e5e7eb;
+}
+
+.wizard-summary-row-value--muted {
+  color: #6b7280;
+}
+
+/* Footer rechtsbündig für Summary & ähnliche Steps */
+
+.wizard-footer--right {
+  justify-content: flex-end;
+  gap: 12px;
+}
+/* ========================================================================
+   PREMIUM AI PANEL – ACCORDION / TOOLTIP / CHART / LAYOUT
+   ======================================================================== */
+
+/* Sticky panel scroll styling */
+.wizard-ai-panel-mini {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100,116,139,0.4) rgba(15,23,42,0.4);
+}
+
+.wizard-ai-panel-mini::-webkit-scrollbar {
+  width: 6px;
+}
+
+.wizard-ai-panel-mini::-webkit-scrollbar-thumb {
+  background: rgba(100,116,139,0.4);
+  border-radius: 4px;
+}
+
+.wizard-ai-panel-mini::-webkit-scrollbar-thumb:hover {
+  background: rgba(148,163,184,0.6);
+}
+
+/* ------------------------------
+   Accordion Animation
+--------------------------------*/
+.ai-accordion-section {
+  overflow: hidden;
+  transition: max-height 0.28s ease, opacity 0.18s ease;
+}
+
+.ai-accordion-title {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.ai-accordion-title:hover {
+  color: #22c55e;
+}
+
+/* Smooth fade */
+.ai-fade-enter {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.ai-fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.25s ease;
+}
+
+/* ------------------------------
+   Tooltip
+--------------------------------*/
+.ai-tooltip {
+  position: absolute;
+  z-index: 999;
+  background: rgba(15,23,42,0.95);
+  border: 1px solid rgba(148,163,184,0.4);
+  padding: 6px 10px;
+  color: #cbd5f5;
+  border-radius: 8px;
+  font-size: 12px;
+  width: max-content;
+  max-width: 260px;
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.8),
+    0 8px 14px rgba(0,0,0,0.55);
+  animation: tooltipFade 0.18s ease-out;
+}
+
+@keyframes tooltipFade {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ------------------------------
+   Insight Card Hover Effect
+--------------------------------*/
+.wizard-ai-panel-mini .insight-card:hover {
+  border-color: #22c55e;
+  box-shadow:
+    0 0 0 1px rgba(34,197,94,0.45),
+    0 16px 32px rgba(0,0,0,0.35);
+  transition: all 0.22s ease;
+}
+
+/* ------------------------------
+   Chart Polish (Radar + Donut)
+--------------------------------*/
+svg text {
+  font-family: inherit;
+  font-weight: 500;
+}
+
+svg circle {
+  transition: stroke 0.25s ease;
+}
+
+/* Radar chart polygon hover effect (optional) */
+svg polygon:hover {
+  fill: rgba(34,197,94,0.35);
+  transition: 0.25s ease;
+}
+
+/* ------------------------------
+   Badge Glow
+--------------------------------*/
+.badge-glow-green {
+  box-shadow: 0 0 12px rgba(34,197,94,0.45);
+}
+
+.badge-glow-yellow {
+  box-shadow: 0 0 12px rgba(250,204,21,0.45);
+}
+
+.badge-glow-red {
+  box-shadow: 0 0 12px rgba(239,68,68,0.45);
+}
+
+/* ------------------------------
+   Section spacing & Typography
+--------------------------------*/
+.wizard-ai-panel-mini h3 {
+  margin-bottom: 6px;
+}
+
+.wizard-ai-panel-mini p,
+.wizard-ai-panel-mini li {
+  line-height: 1.45;
+}
+
+.wizard-ai-panel-mini li + li {
+  margin-top: 4px;
+}
+
+/* ------------------------------
+   Accordion Card Base
+--------------------------------*/
+.ai-card {
+  background: rgba(2,6,23,0.82);
+  border: 1px solid rgba(148,163,184,0.25);
+  border-radius: 14px;
+  padding: 12px 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover highlight */
+.ai-card:hover {
+  border-color: rgba(34,197,94,0.45);
+}
+
+/* ------------------------------
+   Chevron animation
+--------------------------------*/
+.ai-chevron {
+  display:flex;
+  align-items:center;
+  transition: transform 0.22s ease;
+}
+
+.ai-chevron-open {
+  transform: rotate(90deg);
+}
+
+/* ------------------------------
+   Divider Line
+--------------------------------*/
+.ai-divider {
+  border-top: 1px solid rgba(148,163,184,0.25);
+  margin: 10px 0;
+}
+/* RIGHT PANEL LAYOUT (340px Premium) */
+.wizard-modern-right {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+/* OVERVIEW PANEL */
+.overview-panel {
+  background: rgba(15, 23, 42, 0.75);
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  box-shadow: 0 0 22px rgba(34, 197, 94, 0.15);
+}
+
+.overview-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #d1fae5;
+  margin-bottom: 10px;
+}
+
+.overview-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.overview-label {
+  color: #9ca3af;
+}
+
+/* AI PANEL */
+.ai-panel {
+  background: rgba(15, 23, 42, 0.75);
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* AI CARDS */
+.ai-card {
+  background: rgba(2, 6, 23, 0.85);
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+
+.ai-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d1fae5;
+  margin-bottom: 6px;
+}
+
+.ai-card-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ai-card-body {
+  font-size: 13px;
+  color: #cbd5f5;
+  line-height: 1.45;
+}
+
+.ai-list {
+  padding-left: 18px;
+}
+
+.ai-list li {
+  margin-bottom: 6px;
+}
+/* ---------------------------------------------
+   PREMIUM SIDEBAR – LECA GLOW STYLE
+----------------------------------------------*/
+
+.wizard-sidebar-premium {
+  width: 260px;
+  padding-right: 8px;
+}
+
+.wizard-nav-title {
+  font-size: 15px;
+  color: #d1fae5;
+  font-weight: 600;
+  margin-bottom: 12px;
+  letter-spacing: 0.4px;
+}
+
+.wizard-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wizard-nav-item-premium {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  border: 1px solid transparent;
+}
+
+.wizard-nav-item-premium:hover {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.4);
+  transform: translateX(3px);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+}
+
+.wizard-nav-active {
+  background: rgba(34, 197, 94, 0.25);
+  border-color: rgba(34, 197, 94, 0.55);
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.55);
+}
+
+.wizard-nav-dot {
+  font-size: 16px;
+  width: 18px;
+  text-align: center;
+}
+/* RIGHT PANEL LAYOUT */
+.wizard-modern-right {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: sticky;
+  top: 20px;
+}
+
+/* OVERVIEW PANEL */
+.overview-panel {
+  background: rgba(15, 23, 42, 0.75);
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  box-shadow: 0 0 22px rgba(34, 197, 94, 0.15);
+}
+
+.overview-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #d1fae5;
+  margin-bottom: 10px;
+}
+
+.overview-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.overview-label {
+  color: #9ca3af;
+}
+
+/* AI PANEL */
+.ai-panel {
+  background: rgba(15, 23, 42, 0.75);
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* AI CARDS */
+.ai-card {
+  background: rgba(2, 6, 23, 0.85);
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+
+.ai-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d1fae5;
+  margin-bottom: 6px;
+}
+
+.ai-card-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ai-card-body {
+  font-size: 13px;
+  color: #cbd5f5;
+}
+
+.ai-list {
+  padding-left: 18px;
+}
+
+.ai-list li {
+  margin-bottom: 6px;
+}
+
+/* PREMIUM SIDEBAR STYLE */
+.wizard-sidebar-premium {
+  width: 260px;
+  padding-right: 8px;
+}
+
+.wizard-nav-title {
+  font-size: 15px;
+  color: #d1fae5;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.wizard-nav-item-premium {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  border: 1px solid transparent;
+}
+
+.wizard-nav-item-premium:hover {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.45);
+  transform: translateX(3px);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+}
+
+.wizard-nav-active {
+  background: rgba(34, 197, 94, 0.25);
+  border-color: rgba(34, 197, 94, 0.55);
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.55);
+}
+
+.wizard-nav-dot {
+  font-size: 16px;
+  width: 18px;
+  text-align: center;
+}
+/* ========================================================================
+   SUMMARY STEP – KARTEN & TYPO
+   ======================================================================== */
+
+.summary-card {
+  background: radial-gradient(
+    circle at top left,
+    rgba(30, 64, 175, 0.25),
+    rgba(15, 23, 42, 0.95)
+  );
+  border-radius: 18px;
+  padding: 16px 18px 18px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.9),
+    0 16px 32px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.summary-card h3.summary-title {
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #cbd5f5;
+  margin-bottom: 8px;
+}
+
+.summary-subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin: 4px 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Zeilen: Label links, Wert rechts */
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 2px 0;
+}
+
+.summary-row label {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.summary-row span {
+  color: #e5e7eb;
+  text-align: right;
+}
+
+/* leichte Trennung zwischen Blöcken */
+
+.summary-card p {
+  font-size: 13px;
+  color: #e5e7eb;
+  margin: 2px 0;
+}
+
+/* responsive: untereinander bei schmalen Viewports */
+
+@media (max-width: 960px) {
+  .wizard-modern-step-card > div[style*="grid"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Wizard Sidebar locked steps (ENDLVL) */
+.wizard-nav-item-premium.wizard-nav-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

@@ -1,0 +1,79 @@
+/* ═══════════════════════════════════════════════════════════════
+   Portal Design Tokens
+   Shared CSS custom properties for the Endkunden-Portal
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Primary (Indigo) ── */
+  --portal-primary: #D4A843;
+  --portal-primary-light: #EAD068;
+  --portal-primary-dark: #4f46e5;
+  --portal-primary-glow: rgba(212, 168, 67, 0.3);
+  --portal-primary-bg: rgba(212, 168, 67, 0.08);
+  --portal-primary-bg-hover: rgba(212, 168, 67, 0.15);
+  --portal-primary-border: rgba(212, 168, 67, 0.2);
+
+  /* ── Accent (Violet) ── */
+  --portal-accent: #EAD068;
+  --portal-accent-light: #a78bfa;
+
+  /* ── Error (Red) ── */
+  --portal-error: #ef4444;
+  --portal-error-light: #f87171;
+  --portal-error-text: #fca5a5;
+  --portal-error-bg: rgba(239, 68, 68, 0.1);
+  --portal-error-border: rgba(239, 68, 68, 0.2);
+
+  /* ── Success (Green) ── */
+  --portal-success: #22c55e;
+  --portal-success-light: #4ade80;
+  --portal-success-bg: rgba(34, 197, 94, 0.1);
+  --portal-success-border: rgba(34, 197, 94, 0.2);
+
+  /* ── Warning (Amber) ── */
+  --portal-warning: #f59e0b;
+  --portal-warning-light: #fbbf24;
+  --portal-warning-bg: rgba(245, 158, 11, 0.1);
+
+  /* ── Background ── */
+  --portal-bg: #0a0a0f;
+  --portal-bg-secondary: #0d0d1a;
+  --portal-bg-tertiary: #0a0f1a;
+
+  /* ── Surface (glass panels) ── */
+  --portal-surface: rgba(255, 255, 255, 0.03);
+  --portal-surface-hover: rgba(255, 255, 255, 0.05);
+  --portal-surface-active: rgba(255, 255, 255, 0.08);
+
+  /* ── Borders ── */
+  --portal-border: rgba(255, 255, 255, 0.08);
+  --portal-border-light: rgba(255, 255, 255, 0.06);
+  --portal-border-hover: rgba(255, 255, 255, 0.12);
+
+  /* ── Text ── */
+  --portal-text: #ffffff;
+  --portal-text-secondary: rgba(255, 255, 255, 0.6);
+  --portal-text-tertiary: rgba(255, 255, 255, 0.4);
+  --portal-text-muted: rgba(255, 255, 255, 0.3);
+  --portal-text-placeholder: rgba(255, 255, 255, 0.35);
+
+  /* ── Typography ── */
+  --portal-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --portal-radius-sm: 8px;
+  --portal-radius-md: 10px;
+  --portal-radius-lg: 12px;
+  --portal-radius-xl: 16px;
+  --portal-radius-2xl: 20px;
+
+  /* ── Blur ── */
+  --portal-blur: blur(20px);
+  --portal-blur-heavy: blur(40px);
+
+  /* ── Gradients ── */
+  --portal-gradient-primary: linear-gradient(135deg, #D4A843 0%, #EAD068 100%);
+  --portal-gradient-bg: linear-gradient(135deg, #0a0a0f 0%, #0d0d1a 50%, #0a0f1a 100%);
+
+  /* ── Sidebar ── */
+  --portal-sidebar-width: 260px;
+  --portal-sidebar-collapsed: 72px;
+}

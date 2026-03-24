@@ -1,0 +1,1 @@
+export { FinanzenPage } from "./FinanzenPage";

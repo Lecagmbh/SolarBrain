@@ -1,0 +1,123 @@
+/* Admin Shell */
+
+.admin-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  background: radial-gradient(circle at top, #020617 0, #000 65%);
+}
+
+/* Sidebar */
+
+.admin-sidebar {
+  background: linear-gradient(to bottom, #020617, #020617 40%, #020617 100%);
+  border-right: 1px solid #020b29;
+  padding: 1.2rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.admin-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: radial-gradient(circle at top left, #22c55e, #16a34a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0b1120;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.admin-sidebar-title {
+  display: flex;
+  flex-direction: column;
+}
+.admin-sidebar-title strong {
+  font-size: 0.95rem;
+}
+.admin-sidebar-title span {
+  font-size: 0.75rem;
+  color: var(--admin-text-soft);
+}
+
+/* Nav */
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.admin-nav-link {
+  border-radius: 999px;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--admin-text-soft);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.admin-nav-link span.icon {
+  font-size: 0.95rem;
+}
+
+.admin-nav-link:hover {
+  background: rgba(15, 23, 42, 0.8);
+  color: var(--admin-text);
+}
+
+.admin-nav-link--active {
+  background: radial-gradient(circle at top left, #22c55e, #15803d);
+  color: #0b1120;
+  border-color: rgba(34, 197, 94, 0.6);
+}
+
+/* Main */
+
+.admin-main {
+  padding: 1.75rem 2.2rem 2.5rem;
+}
+
+/* Header Zeile */
+
+.admin-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.6rem;
+}
+
+.admin-page-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--admin-text-soft);
+}
+
+/* Panels generisch */
+
+.admin-panel {
+  background: radial-gradient(circle at top left, #020b29, #020617 70%);
+  border-radius: var(--admin-radius-lg);
+  border: 1px solid rgba(15, 23, 42, 0.95);
+  box-shadow: var(--admin-shadow-soft);
+  padding: 1.3rem 1.4rem;
+}
+
+.admin-panel + .admin-panel {
+  margin-top: 1.3rem;
+}

@@ -1,0 +1,1704 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ARCHIV PAGE V3 - ULTRA ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.archiv-container {
+  min-height: 100vh;
+  background: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(139, 92, 246, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(34, 197, 94, 0.08), transparent),
+    linear-gradient(180deg, #06060a 0%, #0a0a12 50%, #080810 100%);
+  color: #e2e8f0;
+  padding-bottom: 60px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.archiv-header {
+  position: relative;
+  padding: 32px 24px 24px;
+  margin: 16px;
+  background: linear-gradient(145deg, rgba(20, 20, 35, 0.9), rgba(15, 15, 25, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  overflow: hidden;
+  animation: archivSlideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes archivSlideDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.archiv-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2) 50%, transparent);
+}
+
+.archiv-header-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.archiv-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+}
+
+.archiv-orb--1 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.5), transparent 60%);
+  top: -150px;
+  right: 10%;
+  animation: archivOrbFloat 12s ease-in-out infinite;
+}
+
+.archiv-orb--2 {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.4), transparent 60%);
+  bottom: -100px;
+  left: 20%;
+  animation: archivOrbFloat 15s ease-in-out infinite reverse;
+}
+
+.archiv-orb--3 {
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent 60%);
+  top: 50%;
+  right: 40%;
+  animation: archivOrbFloat 10s ease-in-out infinite;
+}
+
+@keyframes archivOrbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+  50% { transform: translate(30px, -30px) scale(1.1); opacity: 0.7; }
+}
+
+.archiv-header-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.archiv-header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.archiv-header-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 20px;
+  color: #a78bfa;
+  animation: archivIconPulse 3s ease-in-out infinite;
+}
+
+@keyframes archivIconPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.4); }
+}
+
+.archiv-header-left h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0;
+  background: linear-gradient(135deg, #fff, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.archiv-header-left p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* KPI Stats */
+.archiv-kpis {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.archiv-kpi {
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  min-width: 110px;
+  animation: archivKpiIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--delay) * 80ms);
+  transition: all 0.3s;
+}
+
+.archiv-kpi:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes archivKpiIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.archiv-kpi-value {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.archiv-kpi-value small {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.6;
+}
+
+.archiv-kpi-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+.archiv-kpi--green .archiv-kpi-value { color: #22c55e; }
+.archiv-kpi--yellow .archiv-kpi-value { color: #f59e0b; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   YEAR STATS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.archiv-years {
+  margin: 0 16px 16px;
+  background: linear-gradient(145deg, rgba(20, 20, 35, 0.8), rgba(15, 15, 25, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  overflow: hidden;
+  animation: archivFadeIn 0.5s 0.2s both;
+}
+
+@keyframes archivFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.archiv-years-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-weight: 800;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.archiv-years-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.archiv-year-card {
+  padding: 18px 20px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  transition: all 0.3s;
+  animation: archivYearIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--delay) * 60ms + 300ms);
+}
+
+@keyframes archivYearIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.archiv-year-card:last-child { border-right: none; }
+
+.archiv-year-card:hover {
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.archiv-year-card--active {
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.archiv-year-value {
+  display: block;
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  transition: color 0.3s;
+}
+
+.archiv-year-card--active .archiv-year-value { color: #38bdf8; }
+
+.archiv-year-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.archiv-year-stats > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.archiv-year-stats span {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.archiv-year-stats small {
+  font-size: 10px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.archiv-year-revenue span { color: #22c55e; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOOLBAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.archiv-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px 16px;
+  flex-wrap: wrap;
+  animation: archivFadeIn 0.5s 0.3s both;
+}
+
+.archiv-search {
+  flex: 1;
+  min-width: 240px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  background: rgba(10, 10, 20, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  transition: all 0.3s;
+}
+
+.archiv-search:focus-within {
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+}
+
+.archiv-search svg { color: #64748b; flex-shrink: 0; }
+
+.archiv-search input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 14px 0;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+}
+
+.archiv-search input::placeholder { color: #475569; }
+
+.archiv-search-clear {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  transition: color 0.2s;
+}
+
+.archiv-search-clear:hover { color: #ef4444; }
+
+.archiv-select {
+  padding: 14px 16px;
+  background: rgba(10, 10, 20, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  color: #e2e8f0;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.archiv-select:focus {
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.archiv-select option {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+.archiv-view-toggle {
+  display: flex;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.archiv-view-toggle button {
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.archiv-view-toggle button.active {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+.archiv-count {
+  font-size: 12px;
+  color: #64748b;
+  margin-left: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOADING / EMPTY
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.archiv-loading, .archiv-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  color: #64748b;
+  text-align: center;
+}
+
+.archiv-spin { animation: archivSpin 1s linear infinite; }
+@keyframes archivSpin { to { transform: rotate(360deg); } }
+
+.archiv-empty h3 { margin: 16px 0 8px; font-size: 18px; color: #94a3b8; }
+.archiv-empty p { margin: 0; font-size: 14px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.archiv-table-wrap {
+  margin: 0 16px;
+  background: linear-gradient(145deg, rgba(20, 20, 35, 0.9), rgba(15, 15, 25, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  overflow: hidden;
+  animation: archivFadeIn 0.5s 0.4s both;
+}
+
+.archiv-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.archiv-table th {
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.archiv-table tbody tr {
+  cursor: pointer;
+  transition: all 0.3s;
+  animation: archivRowIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--delay) * 30ms + 500ms);
+}
+
+@keyframes archivRowIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.archiv-table tbody tr:hover {
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.08), transparent 50%);
+}
+
+.archiv-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.archiv-table td strong {
+  display: block;
+  font-weight: 700;
+  color: #fff;
+}
+
+.archiv-table td small {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.archiv-id {
+  font-family: 'SF Mono', monospace;
+  font-size: 12px;
+  font-weight: 800;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.archiv-kwp {
+  font-weight: 800;
+  color: #f59e0b;
+}
+
+.archiv-revenue {
+  font-weight: 800;
+  color: #22c55e;
+}
+
+.archiv-rating {
+  color: #f59e0b;
+  font-weight: 800;
+}
+
+.archiv-muted {
+  color: #475569;
+}
+
+.archiv-open-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.archiv-open-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  transform: translateX(4px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CARDS GRID
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.archiv-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  padding: 0 16px;
+  animation: archivFadeIn 0.5s 0.4s both;
+}
+
+.archiv-card {
+  background: linear-gradient(145deg, rgba(20, 20, 35, 0.9), rgba(15, 15, 25, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: archivCardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--delay) * 40ms + 500ms);
+}
+
+@keyframes archivCardIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.archiv-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(56, 189, 248, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 30px rgba(56, 189, 248, 0.1);
+}
+
+.archiv-card-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 20px;
+  background: rgba(56, 189, 248, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.archiv-card-header h4 {
+  margin: 6px 0 4px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.archiv-card-header span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.archiv-card-kwp {
+  text-align: right;
+}
+
+.archiv-card-kwp span {
+  display: block;
+  font-size: 24px;
+  font-weight: 900;
+  color: #f59e0b;
+}
+
+.archiv-card-kwp small {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.archiv-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODAL
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.archiv-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px 16px;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.archiv-modal-overlay--open {
+  background: radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.08), transparent 50%), rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(12px);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.archiv-modal {
+  width: min(1000px, 95vw);
+  background: linear-gradient(145deg, rgba(20, 20, 35, 0.98), rgba(12, 12, 22, 0.99));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+  transform: translateY(50px) scale(0.95);
+  opacity: 0;
+  animation: archivModalIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+@keyframes archivModalIn {
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.archiv-modal-header {
+  position: relative;
+  padding: 24px 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.archiv-modal-header-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.archiv-modal-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+}
+
+.archiv-modal-orb--1 {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.4), transparent 60%);
+  top: -100px;
+  right: 10%;
+  animation: archivOrbFloat 10s ease-in-out infinite;
+}
+
+.archiv-modal-orb--2 {
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.3), transparent 60%);
+  bottom: -80px;
+  left: 15%;
+  animation: archivOrbFloat 12s ease-in-out infinite reverse;
+}
+
+.archiv-modal-header-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.archiv-modal-title {
+  display: flex;
+  gap: 16px;
+}
+
+.archiv-modal-icon {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 16px;
+  color: #22c55e;
+  animation: archivIconPulse 3s ease-in-out infinite;
+}
+
+.archiv-modal-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.archiv-modal-title-row code {
+  font-family: 'SF Mono', monospace;
+  font-size: 16px;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.archiv-badge-archived {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #22c55e;
+}
+
+.archiv-modal-title h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.archiv-modal-title p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.archiv-modal-close {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.archiv-modal-close:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  transform: rotate(90deg);
+}
+
+/* Modal Tabs */
+.archiv-modal-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 14px 28px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.archiv-modal-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  animation: archivTabIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--delay) * 60ms + 200ms);
+}
+
+@keyframes archivTabIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.archiv-modal-tab:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: #94a3b8;
+}
+
+.archiv-modal-tab--active {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.25);
+  color: #38bdf8;
+}
+
+.archiv-tab-badge {
+  padding: 2px 8px;
+  background: rgba(56, 189, 248, 0.2);
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+/* Modal Content */
+.archiv-modal-content {
+  padding: 28px;
+  max-height: calc(100vh - 280px);
+  overflow-y: auto;
+}
+
+.archiv-modal-loading {
+  padding: 20px 0;
+}
+
+.archiv-skeleton {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.03) 75%);
+  background-size: 200% 100%;
+  animation: archivShimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes archivShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.archiv-skeleton--title {
+  height: 24px;
+  width: 60%;
+  margin-bottom: 20px;
+}
+
+.archiv-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.archiv-skeleton--box {
+  height: 120px;
+}
+
+/* Detail Grid */
+.archiv-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.archiv-section {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.02), transparent);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 20px;
+  animation: archivSectionIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--delay) * 80ms + 100ms);
+}
+
+@keyframes archivSectionIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.archiv-section--full {
+  grid-column: 1 / -1;
+}
+
+.archiv-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 16px;
+}
+
+.archiv-section h4 svg {
+  color: #64748b;
+}
+
+/* Fields */
+.archiv-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.archiv-fields--row {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.archiv-field {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.archiv-field:hover {
+  background: rgba(0, 0, 0, 0.3);
+  transform: translateX(4px);
+}
+
+.archiv-field--highlight {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(56, 189, 248, 0.03));
+  border: 1px solid rgba(56, 189, 248, 0.15);
+}
+
+.archiv-field-icon {
+  color: #64748b;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.archiv-field-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.archiv-field-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.archiv-field-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e2e8f0;
+  word-break: break-word;
+}
+
+.archiv-field--highlight .archiv-field-value {
+  color: #38bdf8;
+}
+
+/* Tech Card */
+.archiv-tech-card {
+  display: flex;
+  gap: 20px;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+}
+
+.archiv-tech-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.archiv-tech-rows {
+  flex: 1;
+}
+
+.archiv-tech-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.archiv-tech-row:last-child {
+  border-bottom: none;
+}
+
+.archiv-tech-label {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.archiv-tech-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.archiv-tech-row--highlight .archiv-tech-value {
+  font-weight: 800;
+}
+
+/* No Data */
+.archiv-no-data {
+  padding: 24px;
+  text-align: center;
+  color: #64748b;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+}
+
+.archiv-no-data--large {
+  padding: 60px 40px;
+}
+
+.archiv-no-data--large svg {
+  opacity: 0.3;
+  margin-bottom: 16px;
+}
+
+/* Docs Grid */
+.archiv-docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.archiv-doc-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  transition: all 0.3s;
+  animation: archivDocIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--delay) * 50ms);
+}
+
+@keyframes archivDocIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.archiv-doc-card:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(59, 130, 246, 0.2);
+  transform: translateX(6px);
+}
+
+.archiv-doc-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+  border-radius: 12px;
+  color: #3b82f6;
+  flex-shrink: 0;
+}
+
+.archiv-doc-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.archiv-doc-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.archiv-doc-meta {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 3px;
+}
+
+.archiv-doc-download {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.archiv-doc-download:hover {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+/* Tech List */
+.archiv-tech-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* KWP Summary */
+.archiv-kwp-summary {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 16px;
+}
+
+.archiv-kwp-summary svg {
+  color: #f59e0b;
+}
+
+.archiv-kwp-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.archiv-kwp-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.archiv-kwp-value {
+  font-size: 28px;
+  font-weight: 900;
+  color: #f59e0b;
+}
+
+/* Timeline */
+.archiv-timeline {
+  max-width: 600px;
+}
+
+.archiv-timeline-item {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  padding-bottom: 24px;
+  animation: archivTimelineIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--delay) * 150ms);
+}
+
+@keyframes archivTimelineIn {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.archiv-timeline-line {
+  position: absolute;
+  left: 15px;
+  top: 36px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--color), transparent);
+}
+
+.archiv-timeline-dot {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color);
+  border-radius: 50%;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color) 50%, transparent);
+  animation: archivDotPulse 2s ease-in-out infinite;
+  animation-delay: calc(var(--delay) * 150ms);
+}
+
+@keyframes archivDotPulse {
+  0%, 100% { box-shadow: 0 0 15px color-mix(in srgb, var(--color) 40%, transparent); }
+  50% { box-shadow: 0 0 30px color-mix(in srgb, var(--color) 60%, transparent); }
+}
+
+.archiv-timeline-content {
+  padding-top: 4px;
+}
+
+.archiv-timeline-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.archiv-timeline-date {
+  display: block;
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  .archiv-detail-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .archiv-fields {
+    grid-template-columns: 1fr;
+  }
+  
+  .archiv-fields--row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .archiv-header {
+    padding: 20px 16px;
+    margin: 12px;
+  }
+  
+  .archiv-kpis {
+    gap: 8px;
+  }
+  
+  .archiv-kpi {
+    padding: 12px 14px;
+    min-width: 90px;
+  }
+  
+  .archiv-modal {
+    border-radius: 20px;
+  }
+  
+  .archiv-modal-content {
+    padding: 20px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ADDITIONAL STYLES V4 - Enhanced
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Refresh Button */
+.archiv-refresh-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.archiv-refresh-btn:hover {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+}
+
+.archiv-refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.archiv-refresh-btn .spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* KPI Red */
+.archiv-kpi--red .archiv-kpi-value { color: #ef4444; }
+
+/* Clear Button */
+.archiv-clear-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 10px;
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.archiv-clear-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* Card Company */
+.archiv-card-company {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: rgba(212, 168, 67, 0.1);
+  border-radius: 8px;
+  font-size: 11px;
+  color: #a5b4fc;
+}
+
+/* Card Status Badge */
+.archiv-card-status {
+  padding: 4px 10px;
+  border: 1px solid;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Table Styles */
+.archiv-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 4px;
+}
+
+.archiv-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.archiv-table th {
+  padding: 14px 16px;
+  background: rgba(15, 15, 25, 0.95);
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.archiv-table th:first-child { border-radius: 12px 0 0 12px; }
+.archiv-table th:last-child { border-radius: 0 12px 12px 0; }
+
+.archiv-table tbody tr {
+  cursor: pointer;
+  animation: archivRowIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--delay) * 30ms);
+}
+
+@keyframes archivRowIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.archiv-table tbody tr:hover td {
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.archiv-table td {
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 13px;
+  color: #e2e8f0;
+  transition: background 0.2s;
+}
+
+.archiv-table td:first-child { border-radius: 10px 0 0 10px; }
+.archiv-table td:last-child { border-radius: 0 10px 10px 0; }
+
+.archiv-table code {
+  padding: 4px 8px;
+  background: rgba(139, 92, 246, 0.15);
+  border-radius: 6px;
+  font-size: 11px;
+  color: #a78bfa;
+}
+
+.archiv-table-name {
+  font-weight: 600;
+  color: #fff;
+}
+
+.archiv-table-revenue {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.archiv-table-company {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.archiv-table-status {
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* Error State */
+.archiv-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  text-align: center;
+}
+
+.archiv-error svg {
+  color: #ef4444;
+  opacity: 0.5;
+  margin-bottom: 20px;
+}
+
+.archiv-error p {
+  color: #ef4444;
+  margin: 0 0 20px;
+}
+
+.archiv-error button {
+  padding: 12px 24px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  color: #ef4444;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.archiv-error button:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* Empty State */
+.archiv-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 40px;
+  text-align: center;
+}
+
+.archiv-empty svg {
+  color: #64748b;
+  opacity: 0.3;
+  margin-bottom: 24px;
+}
+
+.archiv-empty h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: #e2e8f0;
+}
+
+.archiv-empty p {
+  margin: 0 0 24px;
+  color: #64748b;
+}
+
+.archiv-empty button {
+  padding: 12px 24px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  color: #38bdf8;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.archiv-empty button:hover {
+  background: rgba(56, 189, 248, 0.2);
+}
+
+/* Loading State */
+.archiv-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 40px;
+}
+
+.archiv-loading svg {
+  color: #38bdf8;
+  margin-bottom: 20px;
+}
+
+.archiv-loading p {
+  color: #64748b;
+}
+
+/* Detail Loading */
+.archiv-detail-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+}
+
+.archiv-detail-loading svg {
+  color: #38bdf8;
+  margin-bottom: 16px;
+}
+
+.archiv-detail-loading p {
+  color: #64748b;
+  margin: 0;
+}
+
+/* List View Container */
+.archiv-list {
+  margin: 0 16px;
+  padding: 16px;
+  background: linear-gradient(145deg, rgba(20, 20, 35, 0.8), rgba(15, 15, 25, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  overflow-x: auto;
+}
+
+/* Modal Status */
+.archiv-modal-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Cards Grid Enhancement */
+.archiv-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  padding: 0 16px;
+}
+
+.archiv-card {
+  background: linear-gradient(145deg, rgba(20, 20, 35, 0.9), rgba(15, 15, 25, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: archivCardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--delay) * 40ms);
+}
+
+@keyframes archivCardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.archiv-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(56, 189, 248, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(56, 189, 248, 0.1);
+}
+
+.archiv-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.archiv-card-id {
+  padding: 4px 10px;
+  background: rgba(139, 92, 246, 0.15);
+  border-radius: 8px;
+  font-size: 11px;
+  color: #a78bfa;
+}
+
+.archiv-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 10px;
+}
+
+.archiv-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.archiv-card-meta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.archiv-card-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.archiv-card-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #f59e0b;
+}
+
+.archiv-card-stat svg {
+  opacity: 0.8;
+}
+
+.archiv-card-stat--revenue {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.archiv-card-footer {
+  display: flex;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 12px;
+}
+
+.archiv-card-footer span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .archiv-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .archiv-toolbar {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .archiv-search {
+    width: 100%;
+  }
+}

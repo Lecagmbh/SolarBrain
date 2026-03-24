@@ -1,0 +1,1 @@
+export { useInstallationDetail } from "./useInstallationDetail";

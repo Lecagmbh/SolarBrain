@@ -1,0 +1,411 @@
+/* ═══════════════════════════════════════════════════════════════
+   MaStR Admin Page Styles
+   Dark Theme, konsistent mit Baunity Design
+   ═══════════════════════════════════════════════════════════════ */
+
+.mastr-page {
+  padding: 24px 32px;
+  min-height: 100vh;
+  color: #fafaf9;
+  position: relative;
+}
+
+/* ─── Header ───────────────────────────────────────────────────────── */
+
+.mastr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.mastr-header__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fafaf9;
+  margin: 0;
+}
+
+.mastr-header__subtitle {
+  font-size: 0.875rem;
+  color: #71717a;
+  margin: 4px 0 0;
+}
+
+.mastr-header__right {
+  flex-shrink: 0;
+}
+
+/* ─── Stats Bar ────────────────────────────────────────────────────── */
+
+.mastr-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.mastr-stat {
+  background: #18181b;
+  border: 1px solid #27272e;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mastr-stat__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #71717a;
+}
+
+.mastr-stat__value {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.mastr-stat--green { border-color: #166534; }
+.mastr-stat--green .mastr-stat__value { color: #4ade80; }
+.mastr-stat--yellow { border-color: #854d0e; }
+.mastr-stat--yellow .mastr-stat__value { color: #facc15; }
+.mastr-stat--red { border-color: #991b1b; }
+.mastr-stat--red .mastr-stat__value { color: #f87171; }
+.mastr-stat--blue { border-color: #1e3a5f; }
+.mastr-stat--blue .mastr-stat__value { color: #60a5fa; }
+
+/* ─── Tabs ─────────────────────────────────────────────────────────── */
+
+.mastr-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid #27272e;
+  margin-bottom: 24px;
+}
+
+.mastr-tab {
+  padding: 10px 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #71717a;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mastr-tab:hover {
+  color: #a1a1aa;
+}
+
+.mastr-tab--active {
+  color: #D4A843;
+  border-bottom-color: #D4A843;
+}
+
+/* ─── Content ──────────────────────────────────────────────────────── */
+
+.mastr-content {
+  min-height: 300px;
+}
+
+.mastr-loading,
+.mastr-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: #71717a;
+  gap: 12px;
+}
+
+.mastr-section {
+  margin-bottom: 32px;
+}
+
+.mastr-section__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #d4d4d8;
+  margin: 0 0 12px;
+}
+
+/* ─── Table ────────────────────────────────────────────────────────── */
+
+.mastr-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #27272e;
+  border-radius: 10px;
+}
+
+.mastr-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.mastr-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #71717a;
+  background: #18181b;
+  border-bottom: 1px solid #27272e;
+  white-space: nowrap;
+}
+
+.mastr-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #1c1c20;
+  color: #d4d4d8;
+}
+
+.mastr-table tbody tr:hover {
+  background: rgba(212, 168, 67, 0.04);
+}
+
+.mastr-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.mastr-mono {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.8125rem;
+  color: #a78bfa;
+}
+
+.mastr-highlight {
+  color: #4ade80;
+  font-weight: 600;
+}
+
+.mastr-error-cell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #f87171;
+  font-size: 0.75rem;
+}
+
+/* ─── Badges ───────────────────────────────────────────────────────── */
+
+.mastr-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.mastr-badge--green { background: rgba(74, 222, 128, 0.12); color: #4ade80; }
+.mastr-badge--yellow { background: rgba(250, 204, 21, 0.12); color: #facc15; }
+.mastr-badge--red { background: rgba(248, 113, 113, 0.12); color: #f87171; }
+.mastr-badge--blue { background: rgba(96, 165, 250, 0.12); color: #60a5fa; }
+.mastr-badge--gray { background: rgba(113, 113, 122, 0.12); color: #a1a1aa; }
+
+/* ─── Suche ────────────────────────────────────────────────────────── */
+
+.mastr-suche__form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  max-width: 500px;
+}
+
+.mastr-input {
+  flex: 1;
+  padding: 10px 14px;
+  background: #18181b;
+  border: 1px solid #27272e;
+  border-radius: 8px;
+  color: #fafaf9;
+  font-size: 0.875rem;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.mastr-input:focus {
+  border-color: #D4A843;
+}
+
+.mastr-input::placeholder {
+  color: #52525b;
+}
+
+.mastr-suche__error {
+  padding: 12px;
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  border-radius: 8px;
+  color: #f87171;
+  font-size: 0.8125rem;
+  margin-bottom: 16px;
+}
+
+.mastr-suche__result {
+  background: #18181b;
+  border: 1px solid #27272e;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+/* ─── Detail Grid ──────────────────────────────────────────────────── */
+
+.mastr-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.mastr-detail-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mastr-detail-row__label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #71717a;
+}
+
+.mastr-detail-row__value {
+  font-size: 0.875rem;
+  color: #d4d4d8;
+}
+
+/* ─── Buttons ──────────────────────────────────────────────────────── */
+
+.mastr-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.mastr-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mastr-btn--primary {
+  background: #D4A843;
+  color: white;
+}
+
+.mastr-btn--primary:hover:not(:disabled) {
+  background: #4f46e5;
+}
+
+.mastr-btn--secondary {
+  background: #27272a;
+  color: #d4d4d8;
+  border: 1px solid #3f3f46;
+}
+
+.mastr-btn--secondary:hover:not(:disabled) {
+  background: #3f3f46;
+}
+
+/* ─── Spinner ──────────────────────────────────────────────────────── */
+
+.mastr-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: mastr-spin 0.6s linear infinite;
+}
+
+@keyframes mastr-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Toasts ───────────────────────────────────────────────────────── */
+
+.mastr-toasts {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mastr-toast {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  animation: mastr-toast-in 0.3s ease-out;
+  max-width: 400px;
+}
+
+.mastr-toast--success {
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  color: #4ade80;
+}
+
+.mastr-toast--error {
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  color: #f87171;
+}
+
+.mastr-toast--info {
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  color: #60a5fa;
+}
+
+@keyframes mastr-toast-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Responsive ───────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .mastr-page {
+    padding: 16px;
+  }
+
+  .mastr-header {
+    flex-direction: column;
+  }
+
+  .mastr-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mastr-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,95 @@
+/* ========== GRIDNETZ WIZARD - PORSCHE LUXURY ========== */
+
+@import './styles/variables.css';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+/* Selection */
+::selection {
+  background: var(--gold-muted);
+  color: var(--text-primary);
+}
+
+/* Focus Outline */
+:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Container */
+.wizard-container {
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+/* Glass Card - Jetzt flach/luxury */
+.glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0;
+  padding: var(--space-xl);
+}
+
+/* Überschriften */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+}
+
+h1 { font-size: 42px; }
+h2 { font-size: 32px; }
+h3 { font-size: 24px; }
+h4 { font-size: 18px; }
+
+/* Bold in Headlines */
+h1 strong, h2 strong, h3 strong {
+  font-weight: 600;
+}
+
+/* Section Labels */
+.section-label,
+.overline {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: var(--space-md);
+}
+
+/* Paragraphs */
+p {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.7;
+}

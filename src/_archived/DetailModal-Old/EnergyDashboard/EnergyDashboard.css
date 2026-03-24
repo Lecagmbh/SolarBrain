@@ -1,0 +1,933 @@
+/**
+ * ENERGY DASHBOARD - Premium Energy Flow Visualization
+ * ====================================================
+ * Next-level Glassmorphism with animated energy flow
+ * Professional dark theme with vibrant accent colors
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   CSS VARIABLES - Color Palette
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --energy-solar: #f59e0b;
+  --energy-solar-rgb: 245, 158, 11;
+  --energy-solar-light: #fbbf24;
+
+  --energy-battery: #22c55e;
+  --energy-battery-rgb: 34, 197, 94;
+  --energy-battery-light: #4ade80;
+
+  --energy-consumption: #EAD068;
+  --energy-consumption-rgb: 139, 92, 246;
+  --energy-consumption-light: #a78bfa;
+
+  --energy-grid: #3b82f6;
+  --energy-grid-rgb: 59, 130, 246;
+  --energy-grid-light: #60a5fa;
+
+  --energy-wallbox: #06b6d4;
+  --energy-wallbox-rgb: 6, 182, 212;
+  --energy-wallbox-light: #22d3ee;
+
+  --energy-heatpump: #ef4444;
+  --energy-heatpump-rgb: 239, 68, 68;
+  --energy-heatpump-light: #f87171;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTAINER
+   ═══════════════════════════════════════════════════════════════ */
+
+.energy-dashboard {
+  position: relative;
+  width: 100%;
+  min-height: 600px;
+  padding: 40px;
+  background: linear-gradient(145deg,
+    #050810 0%,
+    #0a0f1a 25%,
+    #0d1424 50%,
+    #111827 75%,
+    #0a0f1a 100%
+  );
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Animated gradient orbs */
+.energy-dashboard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 15% 15%, rgba(245, 158, 11, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 500px 300px at 85% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse 400px 400px at 50% 70%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 300px 300px at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  animation: orbPulse 10s ease-in-out infinite;
+}
+
+/* Subtle grid pattern overlay */
+.energy-dashboard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+@keyframes orbPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER STATS BAR - Premium Style
+   ═══════════════════════════════════════════════════════════════ */
+
+.energy-dashboard__header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  margin-bottom: 40px;
+  padding: 24px 40px;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 2;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Header dividers - auto-hide when only one stat */
+.energy-dashboard__header::before,
+.energy-dashboard__header::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  bottom: 20%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.energy-dashboard__header::before {
+  left: 33%;
+}
+
+.energy-dashboard__header::after {
+  left: 66%;
+}
+
+/* Show dividers when header has multiple children */
+.energy-dashboard__header:has(.energy-dashboard__stat:nth-child(2))::before {
+  opacity: 1;
+}
+
+.energy-dashboard__header:has(.energy-dashboard__stat:nth-child(3))::after {
+  opacity: 1;
+}
+
+.energy-dashboard__stat {
+  text-align: center;
+  position: relative;
+  flex: 1;
+  padding: 0 20px;
+}
+
+.energy-dashboard__stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.energy-dashboard__stat-label::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: statDot 2s ease-in-out infinite;
+}
+
+.energy-dashboard__stat--solar .energy-dashboard__stat-label::before {
+  background: var(--energy-solar);
+  box-shadow: 0 0 12px var(--energy-solar);
+}
+
+.energy-dashboard__stat--battery .energy-dashboard__stat-label::before {
+  background: var(--energy-battery);
+  box-shadow: 0 0 12px var(--energy-battery);
+  animation-delay: 0.3s;
+}
+
+.energy-dashboard__stat--grid .energy-dashboard__stat-label::before {
+  background: var(--energy-grid);
+  box-shadow: 0 0 12px var(--energy-grid);
+  animation-delay: 0.6s;
+}
+
+@keyframes statDot {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.energy-dashboard__stat-value {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 20px rgba(255, 255, 255, 0.1);
+}
+
+.energy-dashboard__stat--solar .energy-dashboard__stat-value {
+  background: linear-gradient(180deg, var(--energy-solar-light) 0%, var(--energy-solar) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.energy-dashboard__stat--battery .energy-dashboard__stat-value {
+  background: linear-gradient(180deg, var(--energy-battery-light) 0%, var(--energy-battery) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.energy-dashboard__stat--grid .energy-dashboard__stat-value {
+  background: linear-gradient(180deg, var(--energy-grid-light) 0%, var(--energy-grid) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MESSKONZEPT BADGE - Premium
+   ═══════════════════════════════════════════════════════════════ */
+
+.energy-dashboard__badge {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg,
+    rgba(59, 130, 246, 0.2) 0%,
+    rgba(59, 130, 246, 0.1) 100%
+  );
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--energy-grid-light);
+  letter-spacing: 2px;
+  z-index: 2;
+  box-shadow:
+    0 4px 20px rgba(59, 130, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: badgePulse 3s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+  50% { box-shadow: 0 4px 30px rgba(59, 130, 246, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GRID LAYOUT
+   ═══════════════════════════════════════════════════════════════ */
+
+.energy-dashboard__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto auto;
+  gap: 32px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* Solar card - top center */
+.energy-dashboard__grid .energy-card--solar {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* Middle row: Battery, House, Grid */
+.energy-dashboard__grid .energy-card--battery {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.energy-dashboard__grid .energy-card--house {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.energy-dashboard__grid .energy-card--grid {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+/* Bottom row: Wallbox, Heatpump */
+.energy-dashboard__grid .energy-card--wallbox {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.energy-dashboard__grid .energy-card--heatpump {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ENERGY CARD - Premium Glassmorphism
+   ═══════════════════════════════════════════════════════════════ */
+
+.energy-card {
+  --accent: #ffffff;
+  --accent-rgb: 255, 255, 255;
+  --accent-light: #ffffff;
+
+  position: relative;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  padding: 32px 28px;
+  text-align: center;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: cardFadeIn 0.6s ease-out backwards;
+}
+
+/* Staggered animation for cards */
+.energy-card--solar { animation-delay: 0.1s; }
+.energy-card--battery { animation-delay: 0.2s; }
+.energy-card--house { animation-delay: 0.3s; }
+.energy-card--grid { animation-delay: 0.4s; }
+.energy-card--wallbox { animation-delay: 0.5s; }
+.energy-card--heatpump { animation-delay: 0.6s; }
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Top gradient border glow */
+.energy-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 28px;
+  padding: 1px;
+  background: linear-gradient(135deg,
+    rgba(var(--accent-rgb), 0.5) 0%,
+    rgba(var(--accent-rgb), 0.1) 30%,
+    transparent 50%,
+    rgba(var(--accent-rgb), 0.1) 70%,
+    rgba(var(--accent-rgb), 0.3) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.7;
+  transition: opacity 0.4s ease;
+}
+
+/* Outer glow effect */
+.energy-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  box-shadow:
+    0 0 50px rgba(var(--accent-rgb), 0.15),
+    0 0 100px rgba(var(--accent-rgb), 0.08),
+    0 20px 60px rgba(0, 0, 0, 0.3);
+  opacity: 0.8;
+  transition: all 0.4s ease;
+  pointer-events: none;
+}
+
+/* Hover effects */
+.energy-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(var(--accent-rgb), 0.25);
+}
+
+.energy-card:hover::before {
+  opacity: 1;
+}
+
+.energy-card:hover::after {
+  opacity: 1;
+  box-shadow:
+    0 0 70px rgba(var(--accent-rgb), 0.25),
+    0 0 120px rgba(var(--accent-rgb), 0.12),
+    0 30px 80px rgba(0, 0, 0, 0.4);
+}
+
+/* Color variants - Direct values for proper CSS variable interpolation */
+.energy-card--solar {
+  --accent: #f59e0b;
+  --accent-rgb: 245, 158, 11;
+  --accent-light: #fbbf24;
+}
+
+.energy-card--battery {
+  --accent: #22c55e;
+  --accent-rgb: 34, 197, 94;
+  --accent-light: #4ade80;
+}
+
+.energy-card--wallbox {
+  --accent: #06b6d4;
+  --accent-rgb: 6, 182, 212;
+  --accent-light: #22d3ee;
+}
+
+.energy-card--heatpump {
+  --accent: #ef4444;
+  --accent-rgb: 239, 68, 68;
+  --accent-light: #f87171;
+}
+
+.energy-card--grid {
+  --accent: #3b82f6;
+  --accent-rgb: 59, 130, 246;
+  --accent-light: #60a5fa;
+}
+
+.energy-card--house {
+  --accent: #EAD068;
+  --accent-rgb: 139, 92, 246;
+  --accent-light: #a78bfa;
+}
+
+.energy-card--inverter {
+  --accent: #a855f7;
+  --accent-rgb: 168, 85, 247;
+  --accent-light: #c084fc;
+}
+
+/* Disabled/empty state */
+.energy-card--empty {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.energy-card--empty::after {
+  display: none;
+}
+
+.energy-card--empty .energy-card__icon {
+  animation: none;
+  filter: grayscale(0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD CONTENT
+   ═══════════════════════════════════════════════════════════════ */
+
+.energy-card__icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: iconPulse 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 25px rgba(var(--accent-rgb), 0.6));
+  position: relative;
+}
+
+.energy-card__svg-icon {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+/* Icon inner element animations */
+.energy-card__icon-core {
+  filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.5));
+}
+
+.energy-card__icon-rays {
+  animation: rayRotate 20s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes rayRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.energy-card__icon-bolt {
+  animation: boltFlash 2s ease-in-out infinite;
+}
+
+@keyframes boltFlash {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); }
+}
+
+.energy-card__icon-fill {
+  animation: fillPulse 2s ease-in-out infinite;
+}
+
+@keyframes fillPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.energy-card__icon-wave {
+  animation: waveFloat 1.5s ease-in-out infinite;
+}
+
+@keyframes waveFloat {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-3px); opacity: 0.8; }
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 25px rgba(var(--accent-rgb), 0.6));
+  }
+  50% {
+    transform: translateY(-6px) scale(1.08);
+    filter: drop-shadow(0 0 35px rgba(var(--accent-rgb), 0.8));
+  }
+}
+
+.energy-card__label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+  opacity: 1;
+  text-shadow: 0 0 20px rgba(var(--accent-rgb), 0.4);
+}
+
+.energy-card__value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.energy-card__number {
+  font-size: 52px;
+  font-weight: 900;
+  line-height: 1;
+  font-feature-settings: 'tnum' 1;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.85) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 10px rgba(var(--accent-rgb), 0.3));
+}
+
+.energy-card__unit {
+  font-size: 20px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  margin-left: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PROGRESS BAR - Premium
+   ═══════════════════════════════════════════════════════════════ */
+
+.energy-card__progress {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  margin-top: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.energy-card__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg,
+    var(--accent) 0%,
+    var(--accent-light) 50%,
+    var(--accent) 100%
+  );
+  border-radius: 4px;
+  position: relative;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 0 20px rgba(var(--accent-rgb), 0.5),
+    0 0 40px rgba(var(--accent-rgb), 0.3);
+}
+
+/* Shimmer animation */
+.energy-card__progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD DETAILS
+   ═══════════════════════════════════════════════════════════════ */
+
+.energy-card__details {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.energy-card__detail {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.energy-card__detail-icon {
+  font-size: 8px;
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ENERGY FLOW LINES (SVG) - Premium
+   ═══════════════════════════════════════════════════════════════ */
+
+.energy-flow-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.flow-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Base line glow */
+.flow-line-glow {
+  stroke-width: 12;
+  opacity: 0.15;
+}
+
+/* Main flow line */
+.flow-line-main {
+  stroke-width: 3;
+  opacity: 0.8;
+}
+
+/* Animated dashed overlay */
+.flow-line-animated {
+  stroke-width: 3;
+  stroke-dasharray: 12 18;
+  animation: flowDash 1.5s linear infinite;
+  opacity: 0.9;
+}
+
+@keyframes flowDash {
+  0% { stroke-dashoffset: 30; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* Flow particles */
+.flow-particle {
+  filter: url(#particleGlow);
+}
+
+.flow-particle--solar { fill: var(--energy-solar-light); }
+.flow-particle--battery { fill: var(--energy-battery-light); }
+.flow-particle--grid { fill: var(--energy-grid-light); }
+.flow-particle--consumption { fill: var(--energy-consumption-light); }
+.flow-particle--wallbox { fill: var(--energy-wallbox-light); }
+.flow-particle--heatpump { fill: var(--energy-heatpump-light); }
+
+/* Particle trail effect */
+.flow-particle-trail {
+  opacity: 0.4;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  .energy-dashboard {
+    padding: 28px;
+    min-height: auto;
+    border-radius: 24px;
+  }
+
+  .energy-dashboard__header {
+    gap: 24px;
+    padding: 20px 28px;
+  }
+
+  .energy-dashboard__header::before,
+  .energy-dashboard__header::after {
+    display: none;
+  }
+
+  .energy-dashboard__stat-value {
+    font-size: 22px;
+  }
+
+  .energy-dashboard__grid {
+    gap: 24px;
+  }
+
+  .energy-card {
+    padding: 24px 20px;
+    border-radius: 22px;
+  }
+
+  .energy-card__icon {
+    font-size: 52px;
+  }
+
+  .energy-card__number {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .energy-dashboard {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .energy-dashboard__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .energy-dashboard__grid .energy-card--solar {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .energy-dashboard__grid .energy-card--battery {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .energy-dashboard__grid .energy-card--house {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .energy-dashboard__grid .energy-card--grid {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .energy-dashboard__grid .energy-card--wallbox {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .energy-dashboard__grid .energy-card--heatpump {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+
+  .energy-card {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+
+  .energy-card__icon {
+    font-size: 44px;
+    margin-bottom: 12px;
+  }
+
+  .energy-card__label {
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  .energy-card__number {
+    font-size: 34px;
+  }
+
+  .energy-card__unit {
+    font-size: 16px;
+  }
+
+  .energy-dashboard__header {
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+
+  .energy-dashboard__stat-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
+  .energy-dashboard__stat-value {
+    font-size: 18px;
+  }
+
+  .energy-flow-svg {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .energy-dashboard {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .energy-dashboard__grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .energy-dashboard__grid .energy-card--solar,
+  .energy-dashboard__grid .energy-card--battery,
+  .energy-dashboard__grid .energy-card--house,
+  .energy-dashboard__grid .energy-card--grid,
+  .energy-dashboard__grid .energy-card--wallbox,
+  .energy-dashboard__grid .energy-card--heatpump {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .energy-card {
+    padding: 18px 14px;
+    border-radius: 16px;
+  }
+
+  .energy-card__icon {
+    font-size: 38px;
+  }
+
+  .energy-card__number {
+    font-size: 28px;
+  }
+
+  .energy-card__unit {
+    font-size: 14px;
+  }
+
+  .energy-dashboard__header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .energy-dashboard__badge {
+    position: static;
+    margin-bottom: 12px;
+    align-self: center;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .energy-card__icon,
+  .energy-card__progress-fill::after,
+  .flow-line-animated,
+  .energy-dashboard::before,
+  .energy-dashboard__badge,
+  .energy-dashboard__stat-label::before,
+  .energy-card__icon-rays,
+  .energy-card__icon-bolt,
+  .energy-card__icon-fill,
+  .energy-card__icon-wave {
+    animation: none;
+  }
+
+  .energy-card {
+    animation: none;
+  }
+
+  .energy-card:hover {
+    transform: none;
+  }
+}

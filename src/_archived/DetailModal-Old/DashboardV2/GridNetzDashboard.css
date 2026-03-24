@@ -1,0 +1,28 @@
+/* Baunity Dashboard V2 — Minimal CSS
+   Only root scope, scrollbars, and keyframes.
+   All visual styles are inline in TSX. */
+
+.gnz-dashboard {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styling (can't be done inline) */
+.gnz-scroll::-webkit-scrollbar { width: 4px; }
+.gnz-scroll::-webkit-scrollbar-track { background: transparent; }
+.gnz-scroll::-webkit-scrollbar-thumb { background: #222230; border-radius: 2px; }
+.gnz-scroll::-webkit-scrollbar-thumb:hover { background: #2A2A3A; }
+.gnz-scroll { scrollbar-width: thin; scrollbar-color: #222230 transparent; }
+
+/* Animations */
+@keyframes gnz-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.gnz-spin { animation: gnz-spin 1s linear infinite !important; }
+
+@keyframes gnz-flash {
+  0% { background: rgba(124,108,240,0.2); }
+  100% { background: rgba(124,108,240,0.09); }
+}

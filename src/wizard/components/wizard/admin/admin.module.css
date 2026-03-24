@@ -1,0 +1,688 @@
+/**
+ * Admin Components - CSS Module
+ * =============================
+ * Stripe/Vercel Design System - Dark Theme
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   USER SELECTOR - Professionelle Benutzerauswahl
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.userSelector {
+  position: relative;
+  width: 100%;
+  z-index: 9999;
+}
+
+.selectorLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #a1a1aa;
+  letter-spacing: 0.3px;
+}
+
+.selectorLabel svg {
+  width: 16px;
+  height: 16px;
+  color: #3b82f6;
+}
+
+/* Search Input Wrapper */
+.searchWrapper {
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #52525b;
+  pointer-events: none;
+  transition: color 200ms ease;
+}
+
+.searchWrapper:focus-within .searchIcon {
+  color: #3b82f6;
+}
+
+.searchInput {
+  width: 100%;
+  height: 48px;
+  padding: 0 48px 0 44px;
+  background: #09090b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fafafa;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: all 200ms ease;
+}
+
+.searchInput::placeholder {
+  color: #52525b;
+}
+
+.searchInput:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.searchInput:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.searchInput:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Loading Spinner */
+.spinnerWrapper {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Clear Button */
+.clearButton {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #71717a;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms ease;
+}
+
+.clearButton:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   DROPDOWN
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  min-width: 400px;
+  background: #1f1f23;
+  border: 2px solid rgba(59, 130, 246, 0.4);
+  border-radius: 12px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.5),
+    0 10px 20px -5px rgba(0, 0, 0, 0.6),
+    0 20px 40px -10px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(59, 130, 246, 0.2);
+  z-index: 99999;
+  max-height: 450px;
+  overflow: hidden;
+  animation: dropdownEnter 150ms ease-out;
+}
+
+@keyframes dropdownEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownHeader {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #252529;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1;
+}
+
+.dropdownTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: #52525b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dropdownCount {
+  font-size: 11px;
+  font-weight: 500;
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.12);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.dropdownList {
+  overflow-y: auto;
+  max-height: 380px;
+  padding: 6px;
+}
+
+/* Custom Scrollbar */
+.dropdownList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdownList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dropdownList::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.dropdownList::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   USER ITEM
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.userItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 12px;
+  margin: 2px 0;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 120ms ease;
+  border: 1px solid transparent;
+}
+
+.userItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.userItemHighlighted {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.userItemHighlighted:hover {
+  background: rgba(59, 130, 246, 0.25);
+}
+
+.userAvatar {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.12) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #60a5fa;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.userInfo {
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.userNameRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fafafa;
+  line-height: 1.3;
+}
+
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 4px;
+  font-size: 13px;
+  color: #a1a1aa;
+}
+
+.userEmail {
+  color: #71717a;
+  word-break: break-all;
+}
+
+.userCompany {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #3b82f6;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.userCompany::before {
+  content: "🏢";
+  font-size: 11px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ROLE BADGES
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.roleBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.roleAdmin {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.roleMitarbeiter {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+.roleKunde {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.roleSubunternehmer {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+  border-color: rgba(168, 85, 247, 0.25);
+}
+
+.roleHandelsvertreter {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+.roleDefault {
+  background: rgba(161, 161, 170, 0.12);
+  color: #a1a1aa;
+  border-color: rgba(161, 161, 170, 0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SELECTED USER DISPLAY
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.selectedUser {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.06) 0%, rgba(59, 130, 246, 0.04) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.selectedUser:hover {
+  border-color: rgba(34, 197, 94, 0.35);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(59, 130, 246, 0.06) 100%);
+}
+
+.selectedUserDisabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.selectedAvatar {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(59, 130, 246, 0.15) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #4ade80;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.selectedInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.selectedName {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fafafa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selectedEmail {
+  font-size: 13px;
+  color: #71717a;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selectedActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.changeButton {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #a1a1aa;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.changeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fafafa;
+}
+
+.removeButton {
+  width: 32px;
+  height: 32px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  color: #f87171;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms ease;
+}
+
+.removeButton:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   EMPTY STATE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.emptyIcon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.emptyIcon svg {
+  width: 24px;
+  height: 24px;
+  color: #52525b;
+}
+
+.emptyTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #a1a1aa;
+  margin-bottom: 4px;
+}
+
+.emptyDescription {
+  font-size: 13px;
+  color: #52525b;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   KEYBOARD HINT
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.keyboardHint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: #141416;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 11px;
+  color: #52525b;
+}
+
+.keyboardKey {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.keyboardKey kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 10px;
+  font-family: inherit;
+  color: #71717a;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ADMIN MODE PANEL
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.adminPanel {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 14px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: all 250ms ease;
+}
+
+.adminPanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.adminPanelHeader:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.adminPanelTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.adminPanelIcon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.adminPanelText h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fafafa;
+  margin: 0 0 2px 0;
+}
+
+.adminPanelText p {
+  font-size: 12px;
+  color: #71717a;
+  margin: 0;
+}
+
+.adminPanelToggle {
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #71717a;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms ease;
+}
+
+.adminPanelToggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fafafa;
+}
+
+.adminPanelToggle svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 200ms ease;
+}
+
+.adminPanelToggleOpen svg {
+  transform: rotate(180deg);
+}
+
+.adminPanelContent {
+  padding: 0 18px 18px;
+}
+
+.adminPanelCollapsed .adminPanelContent {
+  display: none;
+}
+
+/* Status Badge in Panel */
+.adminStatusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #4ade80;
+}
+
+.adminStatusBadge svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .selectedUser {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .selectedActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .keyboardHint {
+    display: none;
+  }
+}

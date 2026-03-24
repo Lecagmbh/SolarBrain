@@ -1,0 +1,548 @@
+/**
+ * WORK PRIORITY SECTIONS v3.0 - CSS
+ * ==================================
+ * Clean table-based design
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTAINER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.wps-empty,
+.wps-no-tasks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.wps-empty svg,
+.wps-no-tasks svg {
+  color: #22c55e;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.wps-empty h3,
+.wps-no-tasks h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+  margin: 0 0 8px 0;
+}
+
+.wps-empty p,
+.wps-no-tasks p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MAIN SECTION - "DEINE AUFGABEN HEUTE"
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wps-main-section {
+  background: rgba(17, 25, 40, 0.7);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.wps-main-section__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: rgba(239, 68, 68, 0.08);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.wps-main-section__icon {
+  font-size: 20px;
+}
+
+.wps-main-section__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ef4444;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+  flex: 1;
+}
+
+.wps-main-section__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 28px;
+  padding: 0 10px;
+  background: #ef4444;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 14px;
+}
+
+.wps-main-section__content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TASK GROUP (Untergruppen)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wps-task-group {
+  background: rgba(17, 25, 40, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.wps-task-group__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid var(--group-color, #64748b);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.wps-task-group__header:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.wps-task-group__icon {
+  color: var(--group-color, #64748b);
+  display: flex;
+  align-items: center;
+}
+
+.wps-task-group__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+  flex: 1;
+}
+
+.wps-task-group__count {
+  font-size: 12px;
+  color: var(--group-color, #64748b);
+  font-weight: 500;
+}
+
+.wps-task-group__toggle {
+  color: var(--text-secondary, #94a3b8);
+  display: flex;
+  align-items: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wps-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.wps-table--compact .wps-row td {
+  padding: 8px 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLE ROW
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wps-row {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.wps-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.wps-row td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: middle;
+}
+
+.wps-row:last-child td {
+  border-bottom: none;
+}
+
+.wps-row__checkbox {
+  width: 32px;
+  text-align: center;
+}
+
+.wps-row__checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #3b82f6;
+}
+
+.wps-row__name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary, #f8fafc);
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wps-row__location {
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+  white-space: nowrap;
+}
+
+.wps-row__kwp {
+  font-size: 12px;
+  font-weight: 500;
+  color: #fbbf24;
+  white-space: nowrap;
+}
+
+.wps-row__nb {
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wps-row__days {
+  font-size: 11px;
+  color: #f59e0b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.wps-row__extra {
+  white-space: nowrap;
+}
+
+.wps-row__action {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAGS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wps-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.wps-tag--error {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.wps-tag--success {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.wps-tag--info {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.wps-tag--purple {
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.12);
+}
+
+.wps-tag--warning {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BUTTONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wps-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary, #94a3b8);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.wps-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary, #f8fafc);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.wps-btn--small {
+  padding: 4px 10px;
+  font-size: 11px;
+}
+
+.wps-btn--primary {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.wps-btn--primary:hover {
+  background: rgba(59, 130, 246, 0.25);
+  color: #93c5fd;
+}
+
+.wps-btn--success {
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.wps-btn--success:hover {
+  background: rgba(34, 197, 94, 0.25);
+  color: #86efac;
+}
+
+.wps-btn--warning {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.wps-btn--warning:hover {
+  background: rgba(251, 191, 36, 0.25);
+  color: #fcd34d;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COLLAPSED SECTIONS (Beim NB, Abgeschlossen)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wps-collapsed-section {
+  background: rgba(17, 25, 40, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.wps-collapsed-section__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  border-left: 4px solid var(--section-color, #64748b);
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: left;
+}
+
+.wps-collapsed-section__header:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.wps-collapsed-section__emoji {
+  font-size: 18px;
+}
+
+.wps-collapsed-section__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+  flex: 1;
+}
+
+.wps-collapsed-section__count {
+  font-size: 13px;
+  color: var(--section-color, #64748b);
+  font-weight: 500;
+}
+
+.wps-collapsed-section__toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.wps-collapsed-section__content {
+  padding: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.wps-collapsed-section__more {
+  padding: 12px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   NB GROUPS (Beim Netzbetreiber)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.wps-nb-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wps-nb-group {
+  background: rgba(17, 25, 40, 0.4);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.wps-nb-group__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(245, 158, 11, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.wps-nb-group__header svg {
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.wps-nb-group__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+  flex: 1;
+}
+
+.wps-nb-group__stats {
+  font-size: 11px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.wps-nb-group__more {
+  padding: 8px 14px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-secondary, #94a3b8);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  .wps-row__nb {
+    display: none;
+  }
+
+  .wps-row__name {
+    max-width: 140px;
+  }
+}
+
+@media (max-width: 640px) {
+  .wps-container {
+    padding: 12px;
+  }
+
+  .wps-main-section__header {
+    padding: 12px 16px;
+  }
+
+  .wps-main-section__title {
+    font-size: 13px;
+  }
+
+  .wps-table {
+    display: block;
+  }
+
+  .wps-table tbody {
+    display: block;
+  }
+
+  .wps-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .wps-row td {
+    display: inline;
+    padding: 0;
+    border: none;
+  }
+
+  .wps-row__name {
+    width: 100%;
+    max-width: none;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .wps-row__location {
+    flex: 1;
+  }
+
+  .wps-row__extra {
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  .wps-row__action {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .wps-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px;
+  }
+}

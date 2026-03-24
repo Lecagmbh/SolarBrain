@@ -1,0 +1,823 @@
+/**
+ * DETAIL VIEW 3D - Premium Immersive CSS
+ * =======================================
+ * Glassmorphism panels with 3D effects
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* OVERLAY & BACKGROUND */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: #0a0a0f;
+  background: linear-gradient(145deg, #0a0a0f 0%, #1a1a2e 100%);
+  overflow-y: auto;
+  isolation: isolate;
+}
+
+.dv3d-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* CLOSE BUTTON */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-close {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s;
+}
+
+.dv3d-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* CONTAINER */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-container {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 32px 60px;
+  color: white;
+  pointer-events: auto;
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* HEADER */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.dv3d-header__id {
+  display: inline-block;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: "SF Mono", Monaco, monospace;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.dv3d-header__name {
+  font-size: 36px;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* PANELS GRID */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* FLOATING PANEL */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-panel {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 24px;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dv3d-panel:hover {
+  border-color: var(--panel-accent, rgba(255, 255, 255, 0.15));
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 40px color-mix(in srgb, var(--panel-accent) 15%, transparent);
+}
+
+.dv3d-panel__glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: radial-gradient(
+    ellipse at top,
+    color-mix(in srgb, var(--panel-accent) 10%, transparent) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.dv3d-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.dv3d-panel__icon {
+  color: var(--panel-accent);
+}
+
+.dv3d-panel__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--panel-accent);
+}
+
+.dv3d-panel__content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Communication Panel - Full Width */
+.dv3d-panel--comm {
+  grid-column: 1 / -1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* DIVIDER */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  margin: 16px 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* COPYABLE FIELD */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.dv3d-field--copyable {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dv3d-field--copyable:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dv3d-field__icon {
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.dv3d-field__value {
+  flex: 1;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dv3d-field__copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.dv3d-field__copy:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* CUSTOMER PANEL */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-customer__name {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.dv3d-system {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dv3d-system__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.dv3d-system__item--pv {
+  color: #fbbf24;
+}
+
+.dv3d-system__item--battery {
+  color: #22c55e;
+}
+
+.dv3d-system__item--wallbox {
+  color: #3b82f6;
+}
+
+.dv3d-system__empty {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+.dv3d-customer__type {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* TECHNICAL PANEL */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-tech__messkonzept {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, rgba(212, 168, 67, 0.15), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(212, 168, 67, 0.3);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #a5b4fc;
+  margin-bottom: 16px;
+}
+
+.dv3d-tech__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+
+.dv3d-tech__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 70px;
+}
+
+.dv3d-tech__stat svg {
+  opacity: 0.8;
+}
+
+.dv3d-tech__stat--pv { color: #fbbf24; }
+.dv3d-tech__stat--battery { color: #22c55e; }
+.dv3d-tech__stat--wallbox { color: #3b82f6; }
+.dv3d-tech__stat--heatpump { color: #f97316; }
+
+.dv3d-tech__stat-value {
+  font-size: 24px;
+  font-weight: 800;
+  background: linear-gradient(135deg, currentColor, color-mix(in srgb, currentColor 60%, white));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dv3d-tech__stat-unit {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.dv3d-tech__details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.dv3d-tech__details::-webkit-scrollbar {
+  width: 4px;
+}
+
+.dv3d-tech__details::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 2px;
+}
+
+.dv3d-tech__details::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.dv3d-tech__group {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+}
+
+.dv3d-tech__group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dv3d-tech__component {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+.dv3d-tech__component:last-child {
+  margin-bottom: 0;
+}
+
+.dv3d-tech__component-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.dv3d-tech__component-detail {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dv3d-tech__component-meta {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+.dv3d-tech__empty {
+  text-align: center;
+  padding: 24px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* STATUS PANEL */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-status {
+  margin-top: 20px;
+}
+
+.dv3d-status__current {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.dv3d-status__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 15px currentColor;
+}
+
+.dv3d-status__days {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 16px;
+}
+
+.dv3d-status__actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.dv3d-billing__label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 8px;
+}
+
+.dv3d-billing__status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.dv3d-billing__status--done {
+  color: #22c55e;
+}
+
+.dv3d-billing__status--pending {
+  color: #f59e0b;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* NB PANEL */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-nb {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dv3d-nb__name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+}
+
+.dv3d-nb__case {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dv3d-nb__case-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dv3d-nb__date,
+.dv3d-nb__wait {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* DOCUMENTS PANEL */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-docs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dv3d-doc {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.dv3d-doc__icon {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.dv3d-doc--done .dv3d-doc__icon {
+  color: #22c55e;
+}
+
+.dv3d-doc__name {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dv3d-doc--done .dv3d-doc__name {
+  color: white;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* COMMUNICATION PANEL */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-comm__item {
+  display: grid;
+  grid-template-columns: 80px 200px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dv3d-comm__item:last-child {
+  border-bottom: none;
+}
+
+.dv3d-comm__date {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dv3d-comm__subject {
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+}
+
+.dv3d-comm__preview {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dv3d-comm__empty {
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* BUTTONS */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dv3d-btn--primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.dv3d-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.dv3d-btn--success {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.dv3d-btn--success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+}
+
+.dv3d-btn--danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.dv3d-btn--danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+.dv3d-btn--gold {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+.dv3d-btn--gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+}
+
+.dv3d-btn--outline {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.dv3d-btn--outline:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+.dv3d-btn--full {
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* BACK BUTTON */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 40px auto 0;
+  padding: 14px 28px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.dv3d-back:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* LOADING & ERROR */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dv3d-loading,
+.dv3d-error {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.dv3d-loading__spinner {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dv3d-loading__text {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.dv3d-error {
+  color: #ef4444;
+}
+
+.dv3d-error p {
+  font-size: 18px;
+  margin: 0 0 20px 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* RESPONSIVE */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  .dv3d-container {
+    padding: 70px 20px 40px;
+  }
+
+  .dv3d-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dv3d-header__name {
+    font-size: 28px;
+  }
+
+  .dv3d-close {
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .dv3d-container {
+    padding: 60px 16px 32px;
+  }
+
+  .dv3d-panel {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .dv3d-header__name {
+    font-size: 24px;
+  }
+
+  .dv3d-status__actions {
+    flex-direction: column;
+  }
+
+  .dv3d-comm__item {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}

@@ -1,0 +1,764 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   OP-CENTER (Offene Posten) — Dark Theme, Glassmorphism
+   Prefix: opc-
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.opc-page {
+  min-height: 100vh;
+  padding: 24px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* ─── Header ──────────────────────────────────────────────────────────────── */
+
+.opc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.opc-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.opc-header-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(212, 168, 67, 0.2), rgba(139, 92, 246, 0.2));
+  border: 1px solid rgba(212, 168, 67, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #EAD068;
+}
+
+.opc-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+}
+
+.opc-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 2px 0 0;
+}
+
+.opc-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────────────── */
+
+.opc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.opc-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.opc-btn-ghost {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.opc-btn-ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.opc-btn-primary {
+  background: linear-gradient(135deg, #4f46e5, #D4A843);
+  color: white;
+  border: 1px solid rgba(212, 168, 67, 0.4);
+}
+
+.opc-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #4338ca, #4f46e5);
+}
+
+.opc-btn-danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.opc-btn-danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+.opc-btn-success {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.opc-btn-success:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.25);
+}
+
+.opc-btn-sm {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+/* ─── Stats Bar ───────────────────────────────────────────────────────────── */
+
+.opc-stats-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.opc-stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.opc-stat-icon {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.opc-stat-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.opc-stat-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+}
+
+.opc-stat-danger .opc-stat-value { color: #f87171; }
+.opc-stat-warning .opc-stat-value { color: #fbbf24; }
+.opc-stat-success .opc-stat-value { color: #4ade80; }
+.opc-stat-purple .opc-stat-value { color: #a78bfa; }
+
+/* ─── Tabs ────────────────────────────────────────────────────────────────── */
+
+.opc-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-x: auto;
+}
+
+.opc-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.opc-tab:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.opc-tab-active {
+  color: #EAD068;
+  border-bottom-color: #D4A843;
+}
+
+/* ─── KPI Grid ────────────────────────────────────────────────────────────── */
+
+.opc-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1200px) {
+  .opc-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .opc-kpi-grid { grid-template-columns: 1fr; }
+}
+
+.opc-kpi-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 20px;
+  transition: all 0.2s;
+}
+
+.opc-kpi-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(212, 168, 67, 0.2);
+}
+
+.opc-kpi-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.opc-kpi-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.opc-kpi-icon-blue {
+  background: rgba(212, 168, 67, 0.15);
+  color: #EAD068;
+}
+
+.opc-kpi-icon-red {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.opc-kpi-icon-orange {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+}
+
+.opc-kpi-icon-green {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+
+.opc-kpi-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.opc-kpi-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.2;
+}
+
+.opc-kpi-sub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 4px;
+}
+
+.opc-kpi-chips {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.opc-kpi-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ─── Filter Bar ──────────────────────────────────────────────────────────── */
+
+.opc-filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.opc-filter-input,
+.opc-filter-select {
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.opc-filter-input:focus,
+.opc-filter-select:focus {
+  border-color: rgba(212, 168, 67, 0.5);
+}
+
+.opc-filter-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.opc-filter-input { min-width: 200px; }
+.opc-filter-select { min-width: 140px; }
+.opc-filter-date { min-width: 140px; }
+
+.opc-filter-select option {
+  background: #1a1a2e;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ─── Table ───────────────────────────────────────────────────────────────── */
+
+.opc-table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.opc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.opc-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.opc-table th:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.opc-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+}
+
+.opc-table tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.opc-table tr:last-child td {
+  border-bottom: none;
+}
+
+.opc-summary-row td {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ─── Status Badges ───────────────────────────────────────────────────────── */
+
+.opc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.opc-badge-offen {
+  background: rgba(212, 168, 67, 0.15);
+  color: #EAD068;
+}
+
+.opc-badge-versendet {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+
+.opc-badge-ueberfaellig {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.opc-badge-mahnung {
+  background: rgba(251, 146, 60, 0.15);
+  color: #fb923c;
+}
+
+.opc-badge-bezahlt {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+
+/* Tage-Farbkodierung */
+.opc-tage-0 { color: #4ade80; }
+.opc-tage-warn { color: #fbbf24; }
+.opc-tage-orange { color: #fb923c; }
+.opc-tage-danger { color: #f87171; }
+
+/* Mahnstufe Badges */
+.opc-mahnstufe-0 { color: rgba(255, 255, 255, 0.3); }
+.opc-mahnstufe-1 { color: #fbbf24; }
+.opc-mahnstufe-2 { color: #fb923c; }
+.opc-mahnstufe-3 { color: #f87171; }
+
+/* Zahlungsmoral */
+.opc-moral-gut {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+.opc-moral-mittel {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+}
+.opc-moral-schlecht {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+.opc-moral-unbekannt {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ─── Pagination ──────────────────────────────────────────────────────────── */
+
+.opc-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding: 0 4px;
+}
+
+.opc-pagination-info {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.opc-pagination-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.opc-pagination-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.opc-pagination-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.opc-pagination-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.opc-pagination-btn-active {
+  background: rgba(212, 168, 67, 0.2);
+  border-color: rgba(212, 168, 67, 0.4);
+  color: #EAD068;
+}
+
+/* ─── Expandable Row ──────────────────────────────────────────────────────── */
+
+.opc-expand-trigger {
+  cursor: pointer;
+}
+
+.opc-expand-trigger:hover td {
+  background: rgba(212, 168, 67, 0.05);
+}
+
+.opc-expand-row td {
+  padding: 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.opc-expand-content {
+  padding: 12px 20px 16px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.opc-expand-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.opc-expand-table th {
+  padding: 6px 10px;
+  text-align: left;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.opc-expand-table td {
+  padding: 6px 10px;
+  color: rgba(255, 255, 255, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* ─── Mahnwesen Section ───────────────────────────────────────────────────── */
+
+.opc-mahnwesen-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .opc-mahnwesen-grid { grid-template-columns: 1fr; }
+}
+
+.opc-mahn-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.opc-mahn-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 16px;
+}
+
+.opc-mahn-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.opc-mahn-setting:last-child {
+  border-bottom: none;
+}
+
+.opc-mahn-setting-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.opc-mahn-setting-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.opc-mahn-active {
+  color: #4ade80;
+}
+
+.opc-mahn-inactive {
+  color: #f87171;
+}
+
+/* Mahnstufen-Balken */
+.opc-mahnstufen-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.opc-mahnstufe-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.opc-mahnstufe-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  min-width: 80px;
+}
+
+.opc-mahnstufe-bar-bg {
+  flex: 1;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.opc-mahnstufe-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  transition: width 0.3s ease;
+}
+
+.opc-mahnstufe-bar-0 { background: rgba(212, 168, 67, 0.6); }
+.opc-mahnstufe-bar-1 { background: rgba(251, 191, 36, 0.6); }
+.opc-mahnstufe-bar-2 { background: rgba(251, 146, 60, 0.6); }
+.opc-mahnstufe-bar-3 { background: rgba(239, 68, 68, 0.6); }
+
+.opc-mahnstufe-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  min-width: 40px;
+  text-align: right;
+}
+
+/* ─── Gesperrte Kunden Liste ──────────────────────────────────────────────── */
+
+.opc-gesperrt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.opc-gesperrt-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.1);
+  border-radius: 8px;
+}
+
+.opc-gesperrt-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.opc-gesperrt-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.opc-gesperrt-details {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ─── Loading & Empty ─────────────────────────────────────────────────────── */
+
+.opc-loading,
+.opc-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  color: rgba(255, 255, 255, 0.3);
+  gap: 10px;
+  font-size: 14px;
+}
+
+/* ─── Actions ─────────────────────────────────────────────────────────────── */
+
+.opc-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.opc-action-btn {
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.opc-action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.opc-action-btn-success:hover {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+
+/* ─── Sort indicator ──────────────────────────────────────────────────────── */
+
+.opc-sort-icon {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+/* ─── Mahnwesen Actions ───────────────────────────────────────────────────── */
+
+.opc-mahn-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}

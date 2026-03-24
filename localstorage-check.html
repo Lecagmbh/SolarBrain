@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body style="background:#111; color:#0f0; font-family:monospace; padding:20px;">
+<h2>localStorage Keys</h2>
+<pre id="out"></pre>
+<script>
+    const keys = Object.keys(localStorage);
+    document.getElementById("out").textContent =
+        "Gefundene Keys in localStorage:\n\n" + JSON.stringify(keys, null, 2);
+</script>
+</body>
+</html>

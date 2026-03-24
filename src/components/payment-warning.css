@@ -1,0 +1,134 @@
+/* Payment Warning Overlay */
+.payment-warning-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pw-fadeIn 0.3s ease;
+}
+
+@keyframes pw-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.payment-warning-popup {
+  background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 440px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  box-shadow:
+    0 0 40px rgba(239, 68, 68, 0.15),
+    0 20px 60px rgba(0, 0, 0, 0.4);
+  animation: pw-slideUp 0.3s ease;
+}
+
+@keyframes pw-slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.payment-warning-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #71717a;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.payment-warning-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e4e4e7;
+}
+
+.payment-warning-icon {
+  color: #f59e0b;
+  margin-bottom: 16px;
+}
+
+.payment-warning-title {
+  color: #f4f4f5;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+
+.payment-warning-text {
+  color: #a1a1aa;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+}
+
+.payment-warning-text strong {
+  color: #fbbf24;
+}
+
+.payment-warning-urgent {
+  color: #ef4444;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin: 0 0 20px 0;
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+}
+
+.payment-warning-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.payment-warning-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  border: none;
+}
+
+.payment-warning-btn--primary {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #1a1a2e;
+}
+
+.payment-warning-btn--primary:hover {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  transform: translateY(-1px);
+}
+
+.payment-warning-btn--secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #a1a1aa;
+}
+
+.payment-warning-btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e4e4e7;
+}
