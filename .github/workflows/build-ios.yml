@@ -40,11 +40,8 @@ jobs:
         env:
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-          APP_STORE_CONNECT_KEY_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_KEY_P8_BASE64 }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
         run: |
-          # Decode API key
-          echo -n "$APP_STORE_CONNECT_KEY_P8_BASE64" | base64 --decode > /tmp/AuthKey.p8
-
           # Create keychain
           KEYCHAIN_PATH=$RUNNER_TEMP/signing.keychain-db
           security create-keychain -p "ci-keychain" $KEYCHAIN_PATH
@@ -53,13 +50,11 @@ jobs:
           security list-keychain -d user -s $KEYCHAIN_PATH
 
           # Fetch signing assets via App Store Connect API
-          export APP_STORE_CONNECT_PRIVATE_KEY=$(cat /tmp/AuthKey.p8)
-
           app-store-connect fetch-signing-files "de.solarbrain.app" \
             --type IOS_APP_STORE \
             --key-id "$APP_STORE_CONNECT_KEY_ID" \
             --issuer-id "$APP_STORE_CONNECT_ISSUER_ID" \
-            --private-key @/tmp/AuthKey.p8 \
+            --private-key "$APP_STORE_CONNECT_PRIVATE_KEY" \
             --create
 
           keychain add-certificates --keychain $KEYCHAIN_PATH
@@ -77,16 +72,13 @@ jobs:
         env:
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-          APP_STORE_CONNECT_KEY_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_KEY_P8_BASE64 }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
         run: |
-          echo -n "$APP_STORE_CONNECT_KEY_P8_BASE64" | base64 --decode > /tmp/AuthKey.p8
-          export APP_STORE_CONNECT_PRIVATE_KEY=$(cat /tmp/AuthKey.p8)
-
           app-store-connect publish \
             --path build/ios/ipa/*.ipa \
             --key-id "$APP_STORE_CONNECT_KEY_ID" \
             --issuer-id "$APP_STORE_CONNECT_ISSUER_ID" \
-            --private-key @/tmp/AuthKey.p8
+            --private-key "$APP_STORE_CONNECT_PRIVATE_KEY"
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
