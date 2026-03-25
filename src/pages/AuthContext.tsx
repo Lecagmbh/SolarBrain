@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { api, setCsrfToken, clearCsrfToken } from "../modules/api/client";
 import { clearAccessToken, setAccessToken } from "../modules/auth/tokenStorage";
+import { cacheLoginData, tryOfflineLogin, clearOfflineAuth } from "../services/offlineAuth";
+import { getNetworkStatus } from "../hooks/useNetworkStatus";
 
 /**
  * Baunity Auth Context (v2)
@@ -140,8 +142,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, [loadUserData]);
 
-  // Login mit v2 Endpoint (Cookie-basiert)
+  // Login mit v2 Endpoint (Cookie-basiert) + Offline-Fallback
   const login = useCallback(async (email: string, password: string, rememberMe = false) => {
+    const isOnline = getNetworkStatus();
+
+    // Offline-Login: Gegen lokalen Cache prüfen
+    if (!isOnline) {
+      const offlineResult = await tryOfflineLogin(email, password);
+      if (offlineResult.success) {
+        setAccessToken(offlineResult.accessToken);
+        setUser({
+          id: offlineResult.user.id,
+          email: offlineResult.user.email,
+          name: offlineResult.user.name,
+          role: (offlineResult.user.role || "KUNDE").toUpperCase(),
+          kundeId: offlineResult.user.kundeId,
+          kunde: offlineResult.user.kunde || null,
+        });
+        return { success: true, user: offlineResult.user };
+      }
+      return { success: false, error: offlineResult.error };
+    }
+
+    // Online-Login
     try {
       const response = await api.post("/auth/v2/login", {
         email,
@@ -158,7 +181,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // Access Token speichern (für PDF Downloads und andere Browser-Requests)
       if (data.accessToken) {
-        // Access token received, storing
         setAccessToken(data.accessToken);
       } else {
         console.warn('[Auth] KEIN accessToken in Login-Response!');
@@ -166,7 +188,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // User setzen
       if (data.user) {
-        setUser({
+        const userData = {
           id: data.user.id,
           email: data.user.email,
           name: data.user.name,
@@ -174,7 +196,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           kundeId: data.user.kundeId,
           kunde: data.user.kundeName ? { id: data.user.kundeId!, name: data.user.kundeName, firmenName: data.user.kundeName } : null,
           mustChangePassword: data.user.mustChangePassword,
-        });
+        };
+        setUser(userData);
+
+        // Offline-Login cachen für nächstes Mal
+        if (data.accessToken && data.user.id) {
+          cacheLoginData(email, password, {
+            id: data.user.id,
+            email: data.user.email,
+            name: data.user.name,
+            role: userData.role,
+            kundeId: data.user.kundeId,
+            kunde: userData.kunde,
+          }, data.accessToken).catch(() => {});
+        }
       }
 
       // Preferences setzen
@@ -185,29 +220,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Vollständige User-Daten laden (Login-Response enthält nicht alle Felder)
       await loadUserData();
 
-      // AccessToken wird für PDF URLs gespeichert (Browser kann keine Cookies senden bei href/iframe)
-
       return { success: true, user: data.user };
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { error?: string; message?: string } }; message?: string };
       const data = axiosErr.response?.data;
       const message = data?.error || data?.message || axiosErr.message || "Login fehlgeschlagen";
+
+      // Wenn Netzwerkfehler (nicht 401/403): Offline-Login versuchen
+      if (!axiosErr.response) {
+        const offlineResult = await tryOfflineLogin(email, password);
+        if (offlineResult.success) {
+          setAccessToken(offlineResult.accessToken);
+          setUser({
+            id: offlineResult.user.id,
+            email: offlineResult.user.email,
+            name: offlineResult.user.name,
+            role: (offlineResult.user.role || "KUNDE").toUpperCase(),
+            kundeId: offlineResult.user.kundeId,
+            kunde: offlineResult.user.kunde || null,
+          });
+          return { success: true, user: offlineResult.user };
+        }
+      }
+
       return { success: false, error: message };
     }
   }, [loadUserData]);
 
   // Logout mit v2 Endpoint
+  // Offline-Auth-Cache bleibt erhalten (damit Offline-Login nach Neustart funktioniert)
   const logout = useCallback(async () => {
     try {
       await api.post("/auth/v2/logout");
     } catch (err) {
       console.warn("[Auth] Logout error:", err);
     } finally {
-      // Cleanup
+      // Cleanup (Offline-Cache bleibt!)
       setUser(null);
       setPreferences({});
       clearCsrfToken();
-      clearAccessToken();  // Legacy cleanup
+      clearAccessToken();
 
       // Zur Login-Seite
       if (!window.location.pathname.includes('/login')) {

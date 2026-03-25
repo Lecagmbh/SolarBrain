@@ -7,6 +7,7 @@ import { WhiteLabelProvider } from "./contexts/WhiteLabelContext";
 import { RealtimeProvider } from "./providers/RealtimeProvider";
 import { ErrorBoundary } from "./debug/ErrorBoundary";
 import { initSentry } from "./lib/sentry";
+import OfflineBanner from "./components/OfflineBanner";
 
 initSentry();
 
@@ -73,6 +74,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <RealtimeProvider>
             <WhiteLabelProvider>
               <AppRouter />
+              <OfflineBanner />
             </WhiteLabelProvider>
           </RealtimeProvider>
         </AuthProvider>

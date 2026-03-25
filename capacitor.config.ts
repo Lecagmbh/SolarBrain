@@ -5,9 +5,7 @@ const config: CapacitorConfig = {
   appName: 'SolarBrain',
   webDir: 'dist',
   server: {
-    // Production: lokales Bundle nutzen
-    // Development: Live-Server nutzen (auskommentieren für Prod)
-    // url: 'https://solarbrain.de/app',
+    // Lokales Bundle — App funktioniert offline
     androidScheme: 'https',
     iosScheme: 'https',
   },

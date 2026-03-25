@@ -1,6 +1,8 @@
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../pages/AuthContext";
+import { useNetworkStatus } from "../../hooks/useNetworkStatus";
+import { hasOfflineAuth } from "../../services/offlineAuth";
 
 const safeString = (value: unknown): string => {
   if (value === null || value === undefined) return '';
@@ -29,6 +31,8 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { isOnline } = useNetworkStatus();
+  const offlineAvailable = hasOfflineAuth();
 
   useEffect(() => {
     if (!authLoading && user) {
@@ -352,6 +356,22 @@ export default function LoginPage() {
             <div className="gn-logo-name">Baunity</div>
             <div className="gn-logo-sub">D2D Solar-Plattform</div>
           </div>
+
+          {/* Offline-Hinweis */}
+          {!isOnline && (
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '12px 14px', marginBottom: 16,
+              background: offlineAvailable ? 'rgba(212,168,67,0.08)' : 'rgba(239,68,68,0.06)',
+              border: `1px solid ${offlineAvailable ? 'rgba(212,168,67,0.2)' : 'rgba(239,68,68,0.15)'}`,
+              borderRadius: 10, color: offlineAvailable ? '#EAD068' : '#fca5a5', fontSize: 13,
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>
+              </svg>
+              {offlineAvailable ? 'Offline-Modus — Login mit gespeicherten Daten' : 'Kein Internet — Bitte zuerst online einloggen'}
+            </div>
+          )}
 
           {/* Error */}
           {error && (
