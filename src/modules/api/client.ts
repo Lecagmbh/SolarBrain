@@ -76,7 +76,8 @@ api.interceptors.response.use(
       if (!isAuthCheck && !isLoginPage && !isRedirecting) {
         isRedirecting = true;
         clearCsrfToken();
-        window.location.href = '/app/login?expired=1';
+        const isCapacitor = typeof (window as any).Capacitor !== 'undefined';
+        window.location.href = isCapacitor ? '/login?expired=1' : '/app/login?expired=1';
       }
     }
     return Promise.reject(error);

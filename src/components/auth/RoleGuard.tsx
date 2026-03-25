@@ -7,7 +7,7 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../pages/AuthContext';
 
-type UserRole = 'ADMIN' | 'MITARBEITER' | 'HANDELSVERTRETER' | 'KUNDE' | 'SUBUNTERNEHMER' | 'DEMO' | 'PARTNER';
+type UserRole = 'ADMIN' | 'MANAGER' | 'MITARBEITER' | 'HANDELSVERTRETER' | 'KUNDE' | 'SUBUNTERNEHMER' | 'DEMO' | 'PARTNER';
 
 interface RoleGuardProps {
   allowed: UserRole[];

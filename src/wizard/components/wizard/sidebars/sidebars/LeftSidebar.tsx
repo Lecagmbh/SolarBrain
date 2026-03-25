@@ -6,9 +6,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useWizardStore } from '../../../stores/wizardStore';
-import { STEP_CONFIG } from '../../../types/wizard.types';
-import { useVisibleSteps } from '../../../hooks/useVisibleSteps';
+import { useWizardStore } from '../../../../stores/wizardStore';
+import { STEP_CONFIG } from '../../../../types/wizard.types';
+import { useVisibleSteps } from '../../../../hooks/useVisibleSteps';
 
 interface LeftSidebarProps {
   progress: number;

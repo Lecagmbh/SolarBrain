@@ -3,8 +3,8 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 
 export default defineConfig({
-  // Electron/Desktop builds need "./" for file:// protocol
-  base: process.env.VITE_ELECTRON === "true" ? "./" : "/app/",
+  // Electron/Desktop/Capacitor builds need "./" for local file loading
+  base: (process.env.VITE_ELECTRON === "true" || process.env.VITE_CAPACITOR === "true") ? "./" : "/app/",
   plugins: [react()],
   resolve: {
     alias: {

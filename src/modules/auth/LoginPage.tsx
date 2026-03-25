@@ -352,7 +352,7 @@ export default function LoginPage() {
         <div className="gn-card">
           {/* Logo */}
           <div className="gn-logo">
-            <img src="/app/logo-baunity.png" alt="Baunity" style={{width: 56, height: 56, marginBottom: 12, filter: 'drop-shadow(0 4px 12px rgba(212,168,67,0.25))'}} />
+            <img src={`${import.meta.env.BASE_URL}logo-baunity.png`} alt="Baunity" style={{width: 56, height: 56, marginBottom: 12, filter: 'drop-shadow(0 4px 12px rgba(212,168,67,0.25))'}} />
             <div className="gn-logo-name">Baunity</div>
             <div className="gn-logo-sub">D2D Solar-Plattform</div>
           </div>

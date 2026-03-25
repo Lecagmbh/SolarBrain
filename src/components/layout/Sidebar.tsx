@@ -10,7 +10,7 @@ import "./sidebar.css";
 function BaunityLogo({ size = 40 }: { size?: number; animated?: boolean }) {
   return (
     <img
-      src="/app/logo-baunity.png"
+      src={`${import.meta.env.BASE_URL}logo-baunity.png`}
       alt="Baunity"
       width={size}
       height={size}
@@ -95,7 +95,7 @@ const Icons = {
    TYPES & NAVIGATION CONFIG
    ═══════════════════════════════════════════════════════════════════════════ */
 
-type UserRole = "ADMIN" | "MITARBEITER" | "HANDELSVERTRETER" | "KUNDE" | "SUBUNTERNEHMER" | "DEMO" | "PARTNER";
+type UserRole = "ADMIN" | "MANAGER" | "MITARBEITER" | "HANDELSVERTRETER" | "KUNDE" | "SUBUNTERNEHMER" | "DEMO" | "PARTNER" | "HV_LEITER" | "HV_TEAMLEITER";
 
 interface NavItem {
   id: string;

@@ -59,8 +59,9 @@ const queryClient = new QueryClient({
   },
 });
 
-// Register Service Worker for PWA
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
+// Register Service Worker for PWA (not in Capacitor native app)
+const isCapacitor = typeof (window as any).Capacitor !== 'undefined';
+if ('serviceWorker' in navigator && import.meta.env.PROD && !isCapacitor) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   });

@@ -1,27 +1,26 @@
-'use client';
+import { lazy, Suspense } from 'react';
 
-// Baunity Wizard Page - Entry Point
-import dynamic from 'next/dynamic';
+const WizardMain = lazy(() => import('../components/wizard/WizardMain'));
 
-// Dynamic import to avoid SSR issues with react-router
-const WizardMain = dynamic(() => import('../components/wizard/WizardMain'), {
-  ssr: false,
-  loading: () => (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100vh',
-      background: '#0a0a0f',
-      color: '#fff'
-    }}>
-      <div>Lade Wizard...</div>
-    </div>
-  ),
-});
+const Loader = () => (
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+    background: '#0a0a0f',
+    color: '#fff'
+  }}>
+    <div>Lade Wizard...</div>
+  </div>
+);
 
 export default function WizardPage() {
-  return <WizardMain />;
+  return (
+    <Suspense fallback={<Loader />}>
+      <WizardMain />
+    </Suspense>
+  );
 }
 
 export { WizardPage };

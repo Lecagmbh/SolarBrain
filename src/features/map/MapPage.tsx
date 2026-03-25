@@ -100,8 +100,8 @@ const CSS = `
 
 /* Mobile */
 @media(max-width:768px){
-  .map-page{flex-direction:column}
-  .map-container{flex:1;min-height:55vh}
+  .map-page{flex-direction:column;height:calc(100vh - 60px)}
+  .map-container{flex:1;min-height:50vh}
   .map-sidebar{width:100%;height:auto;max-height:45vh;border-left:none;border-top:1px solid rgba(212,168,67,0.08);border-radius:16px 16px 0 0;overflow:hidden}
   .map-sidebar-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
   .map-sidebar-header h2{font-size:14px}
@@ -111,17 +111,16 @@ const CSS = `
   .map-stat-val{font-size:16px}
   .map-list{padding:4px 8px}
   .map-item{padding:10px 10px}
-  .map-toolbar{top:8px;right:8px;gap:4px}
-  .map-toolbar button{padding:10px 12px;font-size:12px;border-radius:10px;min-height:44px}
-  .map-checkin{bottom:auto;top:8px;left:8px;transform:none}
+  .map-toolbar{top:8px;right:8px;left:68px;gap:4px;flex-wrap:wrap}
+  .map-toolbar button{padding:8px 10px;font-size:11px;border-radius:10px;min-height:38px}
+  .map-checkin{bottom:20px;top:auto;left:50%;transform:translateX(-50%)}
   .map-checkin button{padding:10px 20px;font-size:12px;border-radius:10px;min-height:44px}
   .map-handle{display:block;width:40px;height:4px;background:rgba(212,168,67,0.2);border-radius:2px;margin:8px auto 0}
 }
 
 /* Small Phone */
 @media(max-width:400px){
-  .map-toolbar{flex-wrap:wrap;max-width:160px}
-  .map-toolbar button{font-size:11px;padding:8px 10px}
+  .map-toolbar button{font-size:10px;padding:6px 8px}
 }
 `;
 
@@ -152,11 +151,13 @@ export default function MapPage() {
   const [userPos, setUserPos] = useState<[number, number] | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
 
-  // Load installations with coordinates
+  // Load installations — auch ohne Koordinaten für die Sidebar-Liste
+  const [allItems, setAllItems] = useState<any[]>([]);
   const loadPins = useCallback(async () => {
     try {
       const data = await apiFetch("/installations/enterprise?limit=1000");
       const items = data?.data || [];
+      setAllItems(items);
       const mapped: MapPin[] = items
         .filter((i: any) => i.latitude && i.longitude)
         .map((i: any) => ({
@@ -164,10 +165,10 @@ export default function MapPage() {
           lat: parseFloat(i.latitude),
           lng: parseFloat(i.longitude),
           name: i.customerName || i.name || "–",
-          address: [i.street, i.plz, i.city].filter(Boolean).join(", "),
-          status: i.status || "LEAD",
+          address: [i.strasse || i.street, i.plz, i.ort || i.city].filter(Boolean).join(", "),
+          status: (i.status || "LEAD").toUpperCase(),
           kwp: i.kwp || 0,
-          nb: i.netzbetreiberName || "–",
+          nb: i.gridOperator || i.netzbetreiberName || "–",
         }));
       setPins(mapped);
     } catch {
@@ -270,7 +271,7 @@ export default function MapPage() {
           const NF: Record<number,number> = {0:0.87,5:0.90,10:0.93,15:0.96,20:0.98,25:0.99,30:1.0,35:1.0,40:0.99,45:0.97,50:0.94,55:0.90,60:0.85,65:0.79,70:0.73,75:0.66,80:0.60,85:0.57,90:0.55};
 
           function calc() {
-            const g = (s: string) => root.querySelector(`[data-s="${s}"]`) as HTMLInputElement | HTMLSelectElement;
+            const g = (s: string) => root!.querySelector(`[data-s="${s}"]`) as HTMLInputElement | HTMLSelectElement;
             const k = parseFloat(g("kwp").value);
             const price = parseFloat(g("price").value);
             const angle = parseInt(g("angle").value);
@@ -293,7 +294,7 @@ export default function MapPage() {
             const cost = k * 1400;
             const amort = savings > 0 ? (cost / savings).toFixed(1) : "–";
 
-            const o = (s: string) => root.querySelector(`[data-o="${s}"]`) as HTMLElement;
+            const o = (s: string) => root!.querySelector(`[data-o="${s}"]`) as HTMLElement;
             o("kwp").textContent = k + " kWp";
             o("price").textContent = price.toFixed(2) + " €";
             o("angle").textContent = angle + "°";
@@ -493,16 +494,16 @@ export default function MapPage() {
 
         <div className="map-stats">
           <div className="map-stat" style={{ "--sc": "#D4A843" } as any}>
-            <div className="map-stat-val">{pins.length}</div>
+            <div className="map-stat-val">{allItems.length || pins.length}</div>
             <div className="map-stat-label">Gesamt</div>
           </div>
           <div className="map-stat" style={{ "--sc": "#22c55e" } as any}>
-            <div className="map-stat-val">{pins.filter(p => ["VERKAUFT", "GENEHMIGT"].includes(p.status)).length}</div>
+            <div className="map-stat-val">{allItems.filter((i: any) => ["verkauft","genehmigt","VERKAUFT","GENEHMIGT"].includes(i.status)).length || pins.filter(p => ["VERKAUFT", "GENEHMIGT"].includes(p.status)).length}</div>
             <div className="map-stat-label">Verkauft</div>
           </div>
           <div className="map-stat" style={{ "--sc": "#3b82f6" } as any}>
-            <div className="map-stat-val">{pins.filter(p => !["FERTIG", "STORNIERT"].includes(p.status)).length}</div>
-            <div className="map-stat-label">Aktiv</div>
+            <div className="map-stat-val">{pins.length}</div>
+            <div className="map-stat-label">Auf Karte</div>
           </div>
         </div>
 
@@ -512,21 +513,29 @@ export default function MapPage() {
               <div style={{ width: 24, height: 24, border: "2px solid rgba(212,168,67,0.3)", borderTopColor: "#D4A843", borderRadius: "50%", animation: "dcSpin .6s linear infinite" }} />
               Lade Standorte...
             </div>
-          ) : pins.length === 0 ? (
+          ) : allItems.length === 0 && pins.length === 0 ? (
             <div className="map-empty">
               <span style={{ fontSize: 28 }}>📍</span>
               Noch keine Standorte.<br />Erstelle deinen ersten Lead.
             </div>
           ) : (
-            pins.slice(0, 50).map((pin) => {
-              const color = PIN_COLORS[pin.status] || "#D4A843";
-              const label = STATUS_LABELS[pin.status] || pin.status;
+            (allItems.length > 0 ? allItems : pins).slice(0, 50).map((item: any) => {
+              const isMapPin = item.lat != null;
+              const status = (item.status || "LEAD").toUpperCase();
+              const color = PIN_COLORS[status] || "#D4A843";
+              const label = STATUS_LABELS[status] || status;
+              const name = item.name || item.customerName || item.projektName || "–";
+              const address = item.address || [item.strasse || item.street, item.plz, item.ort || item.city].filter(Boolean).join(", ");
+              const nb = item.nb || item.gridOperator || item.netzbetreiberName || "–";
+              const id = item.id || item.installationId;
+              const lat = isMapPin ? item.lat : item.latitude ? parseFloat(item.latitude) : null;
+              const lng = isMapPin ? item.lng : item.longitude ? parseFloat(item.longitude) : null;
               return (
-                <div key={pin.id} className="map-item" onClick={() => flyTo(pin.lat, pin.lng)}>
+                <div key={id} className="map-item" onClick={() => lat && lng ? flyTo(lat, lng) : undefined} style={!lat ? { opacity: 0.6 } : undefined}>
                   <div className="map-item-dot" style={{ background: color, "--dc": color } as any} />
                   <div className="map-item-body">
-                    <div className="map-item-name">{pin.name}</div>
-                    <div className="map-item-sub">{pin.address || pin.nb}</div>
+                    <div className="map-item-name">{name}</div>
+                    <div className="map-item-sub">{address || nb}{!lat && " · Keine GPS-Daten"}</div>
                   </div>
                   <span className="map-item-status" style={{ color, background: color + "12" }}>{label}</span>
                 </div>

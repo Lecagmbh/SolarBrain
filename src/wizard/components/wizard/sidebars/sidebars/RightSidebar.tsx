@@ -6,9 +6,9 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useWizardStore } from '../../../stores/wizardStore';
-import { STEP_CONFIG } from '../../../types/wizard.types';
-import { getAccessToken } from '../../../lib/stubs/tokenStorage';
+import { useWizardStore } from '../../../../stores/wizardStore';
+import { STEP_CONFIG } from '../../../../types/wizard.types';
+import { getAccessToken } from '../../../../lib/stubs/tokenStorage';
 
 interface RightSidebarProps {
   currentStep: number;

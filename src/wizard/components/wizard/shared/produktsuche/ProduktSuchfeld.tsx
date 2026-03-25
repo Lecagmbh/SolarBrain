@@ -20,7 +20,7 @@ interface ProduktSuchfeldProps {
   smartSearching: boolean;
   disabled: boolean;
   label?: string;
-  inputRef: React.RefObject<HTMLInputElement>;
+  inputRef: React.RefObject<HTMLInputElement | null>;
   onInput: (value: string) => void;
   onFocus: () => void;
   onKeyDown: (e: React.KeyboardEvent) => void;

@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { api, setCsrfToken, clearCsrfToken } from "../modules/api/client";
-import { clearAccessToken, setAccessToken } from "../modules/auth/tokenStorage";
+import { clearAccessToken, setAccessToken, getAccessToken } from "../modules/auth/tokenStorage";
 import { cacheLoginData, tryOfflineLogin, clearOfflineAuth } from "../services/offlineAuth";
 import { getNetworkStatus } from "../hooks/useNetworkStatus";
+
+const isCapacitor = typeof (window as any).Capacitor !== 'undefined';
 
 /**
  * Baunity Auth Context (v2)
@@ -97,7 +99,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } catch {}
       }
 
-      const response = await api.get("/auth/v2/me");
+      // Capacitor: /auth/v2/me nutzt Session-Cookie (funktioniert nicht cross-origin)
+      // → Stattdessen /auth/me mit JWT-Token nutzen
+      const meEndpoint = isCapacitor ? "/auth/me" : "/auth/v2/me";
+      const response = await api.get(meEndpoint);
       const meData = response.data;
 
       setUser({
@@ -217,8 +222,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setPreferences(data.preferences);
       }
 
-      // Vollständige User-Daten laden (Login-Response enthält nicht alle Felder)
-      await loadUserData();
+      // Vollständige User-Daten nachladen (Login-Response enthält nicht alle Felder)
+      // In Capacitor: /auth/me mit JWT, im Web: /auth/v2/me mit Cookie
+      try {
+        await loadUserData();
+      } catch {
+        // Wenn loadUserData fehlschlägt (z.B. Capacitor Cookie-Problem),
+        // User-Daten aus Login-Response behalten
+      }
 
       return { success: true, user: data.user };
     } catch (err: unknown) {
@@ -263,7 +274,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // Zur Login-Seite
       if (!window.location.pathname.includes('/login')) {
-        window.location.href = '/app/login';
+        window.location.href = isCapacitor ? '/login' : '/app/login';
       }
     }
   }, []);
