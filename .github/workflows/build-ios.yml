@@ -159,13 +159,12 @@ jobs:
       - name: Build Archive
         run: |
           cd ios/App
-          # Install provisioning profile so Xcode can find it
-          PROFILE=$(ls ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/*.mobileprovision 2>/dev/null | head -1)
-          if [ -n "$PROFILE" ]; then
-            mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-            cp "$PROFILE" ~/Library/MobileDevice/Provisioning\ Profiles/
-            echo "Profile installed: $(basename "$PROFILE")"
-          fi
+          # Copy profile to where Xcode expects it
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          for p in ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/*.mobileprovision; do
+            cp "$p" ~/Library/MobileDevice/Provisioning\ Profiles/ 2>/dev/null || true
+          done
+          echo "Profiles installed: $(ls ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision 2>/dev/null | wc -l)"
 
           xcodebuild archive \
             -project App.xcodeproj \
@@ -173,10 +172,9 @@ jobs:
             -destination "generic/platform=iOS" \
             -archivePath $RUNNER_TEMP/App.xcarchive \
             COMPILER_INDEX_STORE_ENABLE=NO \
-            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=UURWRHMHV8 \
-            CODE_SIGN_IDENTITY=- \
-            -allowProvisioningUpdates \
+            "CODE_SIGN_IDENTITY=Apple Distribution" \
             2>&1 | tee /tmp/xcodebuild.log | tail -30
 
           # Check if archive succeeded (warnings are OK)
