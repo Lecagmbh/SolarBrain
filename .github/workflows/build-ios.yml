@@ -76,32 +76,85 @@ jobs:
           # Generate RSA key for certificate signing
           openssl genrsa -out $RUNNER_TEMP/cert_key.pem 2048
 
-          # Create keychain
-          KEYCHAIN_PATH=$RUNNER_TEMP/signing.keychain-db
-          security create-keychain -p "ci-keychain" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "ci-keychain" $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
+          # Use python for all signing operations to avoid shell escaping issues
+          python3 << 'PYEOF'
+          import subprocess, sys, os
 
-          # Fetch signing assets — read key from file via python to avoid shell escaping
-          python3 -c "
-          import subprocess, sys
-          with open('$RUNNER_TEMP/AuthKey.p8') as f:
+          tmp = os.environ["RUNNER_TEMP"]
+
+          with open(f'{tmp}/AuthKey.p8') as f:
               pk = f.read()
-          with open('$RUNNER_TEMP/cert_key.pem') as f:
+          with open(f'{tmp}/cert_key.pem') as f:
               ck = f.read()
+
+          key_id = os.environ["APP_STORE_CONNECT_KEY_ID"]
+          issuer_id = os.environ["APP_STORE_CONNECT_ISSUER_ID"]
+
+          # Step 1: Revoke old certificates that we don't have keys for
+          # First just try to fetch — if cert exists with matching key, great
+          # If not, use --create which will handle it
           r = subprocess.run([
               'app-store-connect', 'fetch-signing-files', 'de.solarbrain.app',
               '--type', 'IOS_APP_STORE',
-              '--key-id', '$APP_STORE_CONNECT_KEY_ID',
-              '--issuer-id', '$APP_STORE_CONNECT_ISSUER_ID',
+              '--key-id', key_id,
+              '--issuer-id', issuer_id,
               '--private-key', pk,
               '--certificate-key', ck,
               '--create',
-          ], capture_output=False)
-          sys.exit(r.returncode)
-          "
+              '--delete-stale-profiles',
+          ], capture_output=True, text=True)
 
+          print(r.stdout)
+          if r.stderr:
+              print(r.stderr, file=sys.stderr)
+
+          if r.returncode != 0:
+              # Certificate limit reached — revoke oldest and retry
+              print("First attempt failed, trying to revoke old certs...")
+              # List certs
+              lr = subprocess.run([
+                  'app-store-connect', 'certificates', 'list',
+                  '--type', 'DISTRIBUTION',
+                  '--key-id', key_id,
+                  '--issuer-id', issuer_id,
+                  '--private-key', pk,
+                  '--json',
+              ], capture_output=True, text=True)
+              print(lr.stdout[:500])
+
+              import json
+              try:
+                  certs = json.loads(lr.stdout)
+                  # Revoke oldest cert
+                  if certs:
+                      oldest = sorted(certs, key=lambda c: c.get('attributes', {}).get('expirationDate', ''))
+                      if oldest:
+                          cert_id = oldest[0].get('id')
+                          print(f"Revoking cert: {cert_id}")
+                          subprocess.run([
+                              'app-store-connect', 'certificates', 'delete', cert_id,
+                              '--key-id', key_id,
+                              '--issuer-id', issuer_id,
+                              '--private-key', pk,
+                          ])
+              except:
+                  pass
+
+              # Retry
+              r = subprocess.run([
+                  'app-store-connect', 'fetch-signing-files', 'de.solarbrain.app',
+                  '--type', 'IOS_APP_STORE',
+                  '--key-id', key_id,
+                  '--issuer-id', issuer_id,
+                  '--private-key', pk,
+                  '--certificate-key', ck,
+                  '--create',
+              ], capture_output=False)
+              sys.exit(r.returncode)
+
+          PYEOF
+
+          # Add certs to keychain
           keychain initialize
           keychain add-certificates
           xcode-project use-profiles --project ios/App/App.xcodeproj
