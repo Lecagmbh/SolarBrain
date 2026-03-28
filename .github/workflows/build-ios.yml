@@ -36,17 +36,21 @@ jobs:
       - name: Install Codemagic CLI tools
         run: pip3 install --break-system-packages codemagic-cli-tools
 
+      - name: Decode P8 key
+        env:
+          APP_STORE_CONNECT_KEY_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_KEY_P8_BASE64 }}
+        run: |
+          echo "$APP_STORE_CONNECT_KEY_P8_BASE64" | base64 --decode > $RUNNER_TEMP/AuthKey.p8
+          chmod 600 $RUNNER_TEMP/AuthKey.p8
+          echo "P8 key decoded: $(wc -c < $RUNNER_TEMP/AuthKey.p8) bytes"
+
       - name: Setup signing
         env:
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-          APP_STORE_CONNECT_KEY_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_KEY_P8_BASE64 }}
         run: |
-          # Decode App Store Connect API P8 key
-          PRIVATE_KEY=$(echo "$APP_STORE_CONNECT_KEY_P8_BASE64" | base64 --decode)
-
-          # Generate a certificate signing key (RSA)
-          CERT_KEY=$(openssl genrsa 2048 2>/dev/null)
+          # Generate RSA key for certificate signing
+          openssl genrsa -out $RUNNER_TEMP/cert_key.pem 2048
 
           # Create keychain
           KEYCHAIN_PATH=$RUNNER_TEMP/signing.keychain-db
@@ -55,14 +59,24 @@ jobs:
           security unlock-keychain -p "ci-keychain" $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-          # Fetch signing assets via App Store Connect API
-          app-store-connect fetch-signing-files "de.solarbrain.app" \
-            --type IOS_APP_STORE \
-            --key-id "$APP_STORE_CONNECT_KEY_ID" \
-            --issuer-id "$APP_STORE_CONNECT_ISSUER_ID" \
-            --private-key "$PRIVATE_KEY" \
-            --certificate-key "$CERT_KEY" \
-            --create
+          # Fetch signing assets — read key from file via python to avoid shell escaping
+          python3 -c "
+          import subprocess, sys
+          with open('$RUNNER_TEMP/AuthKey.p8') as f:
+              pk = f.read()
+          with open('$RUNNER_TEMP/cert_key.pem') as f:
+              ck = f.read()
+          r = subprocess.run([
+              'app-store-connect', 'fetch-signing-files', 'de.solarbrain.app',
+              '--type', 'IOS_APP_STORE',
+              '--key-id', '$APP_STORE_CONNECT_KEY_ID',
+              '--issuer-id', '$APP_STORE_CONNECT_ISSUER_ID',
+              '--private-key', pk,
+              '--certificate-key', ck,
+              '--create',
+          ], capture_output=False)
+          sys.exit(r.returncode)
+          "
 
           keychain add-certificates --keychain $KEYCHAIN_PATH
           xcode-project use-profiles --project ios/App/App.xcodeproj
