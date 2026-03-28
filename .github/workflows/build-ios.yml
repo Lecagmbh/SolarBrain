@@ -156,18 +156,61 @@ jobs:
           keychain add-certificates
           xcode-project use-profiles --project ios/App/App.xcodeproj
 
-      - name: Build IPA
+      - name: Build Archive
+        run: |
+          cd ios/App
+          xcodebuild archive \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -destination "generic/platform=iOS" \
+            -archivePath $RUNNER_TEMP/App.xcarchive \
+            COMPILER_INDEX_STORE_ENABLE=NO \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM=UURWRHMHV8 \
+            "CODE_SIGN_IDENTITY=iPhone Distribution" \
+            2>&1 | tee /tmp/xcodebuild.log | tail -30
+
+          # Check if archive succeeded (warnings are OK)
+          if [ ! -d "$RUNNER_TEMP/App.xcarchive" ]; then
+            echo "Archive failed. Full log:"
+            cat /tmp/xcodebuild.log | grep "error:" | head -20
+            exit 1
+          fi
+          echo "Archive OK"
+
+      - name: Export IPA
         run: |
           cd ios/App
 
-          # Build with SPM (no CocoaPods, no duplicate framework issue)
-          xcode-project build-ipa \
-            --project App.xcodeproj \
-            --scheme App \
-            --archive-flags="-destination 'generic/platform=iOS' -clonedSourcePackagesDirPath $RUNNER_TEMP/spm-cache"
+          # Get provisioning profile name
+          PROFILE_NAME=$(ls ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/*.mobileprovision 2>/dev/null | head -1)
+          echo "Profile: $PROFILE_NAME"
 
-          IPA=$(find build -name "*.ipa" 2>/dev/null | head -1)
-          echo "IPA built: $IPA ($(du -h "$IPA" | cut -f1))"
+          cat > $RUNNER_TEMP/ExportOptions.plist << 'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store</string>
+            <key>teamID</key>
+            <string>UURWRHMHV8</string>
+            <key>uploadBitcode</key>
+            <false/>
+            <key>uploadSymbols</key>
+            <true/>
+          </dict>
+          </plist>
+          PLIST
+
+          mkdir -p build/ios/ipa
+          xcodebuild -exportArchive \
+            -archivePath $RUNNER_TEMP/App.xcarchive \
+            -exportPath build/ios/ipa \
+            -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist
+
+          IPA=$(find build -name "*.ipa" | head -1)
+          echo "IPA: $IPA ($(du -h "$IPA" | cut -f1))"
 
       - name: Upload to App Store Connect (TestFlight)
         env:
