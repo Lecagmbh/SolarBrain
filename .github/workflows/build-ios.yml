@@ -165,7 +165,7 @@ jobs:
           xcode-project build-ipa \
             --workspace App.xcworkspace \
             --scheme App \
-            --archive-flags="-destination 'generic/platform=iOS'"
+            --archive-flags="-destination 'generic/platform=iOS' BUILD_LIBRARY_FOR_DISTRIBUTION=NO"
 
       - name: Upload to App Store Connect (TestFlight)
         env:
