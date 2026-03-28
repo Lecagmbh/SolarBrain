@@ -209,8 +209,12 @@ jobs:
           APP_STORE_CONNECT_KEY_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_KEY_P8_BASE64 }}
         run: |
           PRIVATE_KEY=$(echo "$APP_STORE_CONNECT_KEY_P8_BASE64" | base64 --decode)
+          # Find the IPA file
+          IPA_PATH=$(find ios/App/build -name "*.ipa" -o -name "*.ipa" | head -1)
+          echo "IPA found at: $IPA_PATH"
+          ls -la ios/App/build/ios/ipa/ 2>/dev/null || true
           app-store-connect publish \
-            --path build/ios/ipa/*.ipa \
+            --path "$IPA_PATH" \
             --key-id "$APP_STORE_CONNECT_KEY_ID" \
             --issuer-id "$APP_STORE_CONNECT_ISSUER_ID" \
             --private-key "$PRIVATE_KEY"
@@ -220,4 +224,4 @@ jobs:
         if: always()
         with:
           name: SolarBrain-iOS
-          path: build/ios/ipa/*.ipa
+          path: ios/App/build/ios/ipa/*.ipa
