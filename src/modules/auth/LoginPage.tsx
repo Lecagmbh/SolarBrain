@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../pages/AuthContext";
 import { useNetworkStatus } from "../../hooks/useNetworkStatus";
 import { hasOfflineAuth } from "../../services/offlineAuth";
+import { isBiometricAvailable, isBiometricEnabled, authenticateWithBiometric, getBiometricCredentials, enableBiometric } from "../../lib/biometric";
+import { isCapacitor } from "../../hooks/useCapacitor";
+import { setAuthToken } from "../../config/storage";
 
 const safeString = (value: unknown): string => {
   if (value === null || value === undefined) return '';
@@ -15,6 +18,9 @@ const safeString = (value: unknown): string => {
 
 const getRedirectPath = (role?: string): string => {
   switch (role?.toUpperCase()) {
+    case 'HV_LEITER':
+    case 'HV_TEAMLEITER':
+    case 'HV_LEADER':
     case 'HANDELSVERTRETER': return '/hv-center';
     case 'ENDKUNDE_PORTAL': return '/portal';
     default: return '/dashboard';
@@ -33,12 +39,47 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const { isOnline } = useNetworkStatus();
   const offlineAvailable = hasOfflineAuth();
+  const [bioAvailable, setBioAvailable] = useState(false);
+  const [bioLoading, setBioLoading] = useState(false);
 
   useEffect(() => {
     if (!authLoading && user) {
       navigate(getRedirectPath(user.role), { replace: true });
     }
   }, [user, authLoading, navigate]);
+
+  // Biometrie Check
+  useEffect(() => {
+    if (isCapacitor && isBiometricEnabled()) {
+      isBiometricAvailable().then(setBioAvailable);
+    }
+  }, []);
+
+  // Auto-Biometrie bei App-Start wenn verfügbar
+  useEffect(() => {
+    if (bioAvailable && !user && !authLoading) {
+      handleBiometricLogin();
+    }
+  }, [bioAvailable]);
+
+  async function handleBiometricLogin() {
+    const creds = getBiometricCredentials();
+    if (!creds) return;
+    setBioLoading(true);
+    try {
+      const authenticated = await authenticateWithBiometric();
+      if (!authenticated) { setBioLoading(false); return; }
+      // Token direkt setzen und User laden
+      setAuthToken(creds.token);
+      const result = await login(creds.email, "", false);
+      if (!result.success) {
+        // Token abgelaufen → normalen Login zeigen
+        setBioLoading(false);
+      }
+    } catch {
+      setBioLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (window.baunityDesktop?.credentials) {
@@ -61,6 +102,15 @@ export default function LoginPage() {
       if (result.success) {
         if (window.baunityDesktop?.credentials) {
           rememberMe ? window.baunityDesktop.credentials.save(email, password) : window.baunityDesktop.credentials.delete();
+        }
+        // Biometrie: Credentials speichern nach erstem erfolgreichen Login
+        if (isCapacitor) {
+          const token = localStorage.getItem("baunity_token");
+          if (token) {
+            isBiometricAvailable().then(available => {
+              if (available) enableBiometric(email, token);
+            });
+          }
         }
         navigate(getRedirectPath(result.user?.role), { replace: true });
       } else {
@@ -435,6 +485,24 @@ export default function LoginPage() {
             <button type="submit" className="gn-btn" disabled={loading}>
               {loading ? <><div className="gn-spinner" /> Anmelden...</> : <>Anmelden</>}
             </button>
+
+            {/* Biometrie-Login Button */}
+            {bioAvailable && (
+              <button type="button" onClick={handleBiometricLogin} disabled={bioLoading}
+                style={{
+                  width: "100%", marginTop: 12, padding: "14px 20px", borderRadius: 12,
+                  background: "rgba(212,168,67,0.08)", border: "1px solid rgba(212,168,67,0.2)",
+                  color: "#D4A843", fontSize: 14, fontWeight: 700, cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                  fontFamily: "inherit", transition: "all .15s",
+                }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 10v4M7 10.3V7a5 5 0 0 1 10 0v3.3"/>
+                  <rect x="3" y="10" width="18" height="12" rx="2"/>
+                </svg>
+                {bioLoading ? "Wird gepruft..." : "Mit Fingerabdruck / PIN anmelden"}
+              </button>
+            )}
           </form>
 
           <div className="gn-footer">

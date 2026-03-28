@@ -54,22 +54,14 @@ export const STATUS_ORDER: Record<string, number> = {
 // ═══════════════════════════════════════════════════════════════════
 
 export const VIEWS: { key: ViewKey; label: string; icon: string; filter: (i: UnifiedItem) => boolean; color?: string; staffOnly?: boolean }[] = [
-  { key: "inbox",   label: "Handlungsbedarf", icon: "🔥", color: "#ef4444",
-    filter: i => ["rueckfrage", "eingang"].includes(i.status) || (i.status === "beim_nb" && (i.daysAtNb ?? 0) > 14) },
-  { key: "open",    label: "Alle offenen",    icon: "📋",
-    filter: i => !["fertig", "storniert", "crm_eingestellt", "crm_abgeschlossen"].includes(i.status) },
-  { key: "nb",      label: "Beim Netzbetreiber", icon: "🏢",
-    filter: i => i.status === "beim_nb" },
-  { key: "done",    label: "Archiv",          icon: "📦",
-    filter: i => ["fertig", "storniert", "crm_eingestellt", "crm_abgeschlossen"].includes(i.status) },
-  { key: "all",     label: "Alle Projekte",   icon: "📊",
+  { key: "inbox",   label: "Neue Leads", icon: "🌟", color: "#D4A843",
+    filter: i => i.status === "lead_neu" },
+  { key: "open",    label: "In Bearbeitung",    icon: "📞",
+    filter: i => ["lead_kontaktiert", "lead_qualifiziert"].includes(i.status) },
+  { key: "done",    label: "Abgeschlossen",          icon: "✅",
+    filter: i => ["lead_disqualifiziert", "lead_abgelehnt", "lead_konvertiert"].includes(i.status) },
+  { key: "all",     label: "Alle Leads",       icon: "📊",
     filter: () => true },
-  { key: "wizard",  label: "Netzanmeldungen", icon: "⚡",
-    filter: i => i.source === "wizard", staffOnly: true },
-  { key: "crm",     label: "CRM-Projekte",    icon: "📊",
-    filter: i => i.source === "crm", staffOnly: true },
-  { key: "leads",   label: "Wizard-Leads",    icon: "🌟",
-    filter: i => i.source === "lead", staffOnly: true },
 ];
 
 // ═══════════════════════════════════════════════════════════════════

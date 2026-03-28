@@ -262,6 +262,9 @@ export function useUnifiedItems(params: UseUnifiedParams) {
       storniert: stats?.storniert || 0,
       avgDaysBeimNb: stats?.avgDaysBeimNb || 0,
       leads_neu: allLeadsConverted.filter(l => l.status === "lead_neu").length,
+      leads_kontaktiert: allLeadsConverted.filter(l => l.status === "lead_kontaktiert").length,
+      leads_qualifiziert: allLeadsConverted.filter(l => l.status === "lead_qualifiziert").length,
+      leads_disqualifiziert: allLeadsConverted.filter(l => l.status === "lead_disqualifiziert" || l.status === "lead_abgelehnt").length,
       leads_total: allLeadsConverted.length,
     };
 

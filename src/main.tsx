@@ -60,11 +60,16 @@ const queryClient = new QueryClient({
 });
 
 // Register Service Worker for PWA (not in Capacitor native app)
-const isCapacitor = typeof (window as any).Capacitor !== 'undefined';
-if ('serviceWorker' in navigator && import.meta.env.PROD && !isCapacitor) {
+const isCapacitorEnv = typeof (window as any).Capacitor !== 'undefined';
+if ('serviceWorker' in navigator && import.meta.env.PROD && !isCapacitorEnv) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   });
+}
+
+// Capacitor: Body-Class für CSS-Targeting
+if (isCapacitorEnv) {
+  document.body.classList.add('capacitor-app');
 }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

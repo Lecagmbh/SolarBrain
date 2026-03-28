@@ -11,8 +11,9 @@ import {
   XCircle, Search, UserCheck, UserX, ArrowRight,
   Calendar, MapPin, Clock, Bell, AlertTriangle, Megaphone, UserPlus, Check, X,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { api } from "../../../../modules/api/client";
+import { useAuth } from "../../../../pages/AuthContext";
 
 const formatEur = (v: number) =>
   new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(v);
@@ -259,7 +260,220 @@ const EMPTY_DATA: DashData = {
   streak: 0, leadsHeute: 0, leadsWoche: 0, trendWoche: [0,0,0,0,0,0,0], conversionRate: 0, kundenCount: 0,
 };
 
+// ═══════════════════════════════════════════════════════════════════
+// TEAM DASHBOARD — für VP, Director, Leader
+// ═══════════════════════════════════════════════════════════════════
+
+const ROLE_DISPLAY: Record<string, { label: string; color: string }> = {
+  HV_LEITER: { label: "Vice President", color: "#D4A843" },
+  HV_TEAMLEITER: { label: "Director", color: "#3b82f6" },
+  HV_LEADER: { label: "Leader", color: "#8b5cf6" },
+  HANDELSVERTRETER: { label: "Member", color: "#64748b" },
+};
+
+function TeamDashboard() {
+  const { user: authUser } = useAuth();
+  const teamNav = useNavigate();
+  const [teamStats, setTeamStats] = useState<any>(null);
+  const [unterHvs, setUnterHvs] = useState<any[]>([]);
+  const [leadStats, setLeadStats] = useState<any>({});
+  const [loading, setLoading] = useState(true);
+
+  const me = authUser || {} as any;
+  const myRole = ROLE_DISPLAY[me.role] || ROLE_DISPLAY.HANDELSVERTRETER;
+
+  useEffect(() => {
+    Promise.allSettled([
+      api.get("/hv/team-stats"),
+      api.get("/hv/unter-hvs"),
+      api.get("/wizard/leads"),
+    ]).then(([tsRes, uhRes, ldRes]) => {
+      if (tsRes.status === "fulfilled") setTeamStats(tsRes.value?.data?.data);
+      if (uhRes.status === "fulfilled") setUnterHvs(uhRes.value?.data?.data || []);
+      if (ldRes.status === "fulfilled") setLeadStats(ldRes.value?.data?.stats || {});
+    }).finally(() => setLoading(false));
+  }, []);
+
+  const animTotal = useCountUp(leadStats.total || 0, 1800);
+  const animNeu = useCountUp(leadStats.neu || 0, 1400);
+  const animKont = useCountUp(leadStats.kontaktiert || 0, 1400);
+  const animQual = useCountUp(leadStats.qualifiziert || 0, 1400);
+  const animTeam = useCountUp(teamStats?.unterHvsCount || 0, 1200);
+
+  if (loading) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 60, color: "#71717a" }}>
+        <style>{`@keyframes hvSpin { to { transform: rotate(360deg) } }`}</style>
+        <div style={{ width: 24, height: 24, border: "2px solid rgba(212,168,67,0.3)", borderTopColor: "#D4A843", borderRadius: "50%", animation: "hvSpin 1s linear infinite", marginRight: 12 }} />
+        Dashboard wird geladen...
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ padding: 24, maxWidth: 1200, margin: "0 auto" }}>
+      <style>{`
+        @keyframes tdSlide{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes tdGlow{0%,100%{box-shadow:0 0 20px rgba(212,168,67,0.08)}50%{box-shadow:0 0 40px rgba(212,168,67,0.2)}}
+        @keyframes tdShine{0%{left:-100%}100%{left:200%}}
+        @keyframes tdFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+        @keyframes tdPulse{0%,100%{opacity:1}50%{opacity:.5}}
+      `}</style>
+
+      {/* Hero */}
+      <div style={{
+        background: `linear-gradient(135deg, ${myRole.color}10, rgba(16,185,129,0.04))`,
+        border: `1px solid ${myRole.color}30`, borderRadius: 20, padding: "28px 32px",
+        marginBottom: 20, position: "relative", overflow: "hidden", animation: "tdSlide .5s ease",
+      }}>
+        <div style={{ position: "absolute", top: 0, width: "60%", height: "100%", background: `linear-gradient(90deg, transparent, ${myRole.color}06, transparent)`, animation: "tdShine 4s ease infinite", pointerEvents: "none" }} />
+
+        <div style={{ display: "flex", alignItems: "center", gap: 20, position: "relative", flexWrap: "wrap" }}>
+          {/* Icon */}
+          <div style={{
+            width: 72, height: 72, borderRadius: "50%",
+            background: `linear-gradient(135deg, ${myRole.color}, ${myRole.color}88)`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: `0 0 30px ${myRole.color}40`, animation: "tdFloat 3s ease infinite",
+          }}>
+            <Crown size={32} style={{ color: "#000" }} />
+          </div>
+
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: "0.7rem", color: "#71717a", textTransform: "uppercase", letterSpacing: 2, fontWeight: 700 }}>
+              {myRole.label}
+            </div>
+            <div style={{ fontSize: "1.8rem", fontWeight: 900, color: "#fff", letterSpacing: -1, marginBottom: 4 }}>
+              {me.name || "Dashboard"}
+            </div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <span style={{ padding: "4px 14px", borderRadius: 20, background: `${myRole.color}15`, border: `1px solid ${myRole.color}30`, color: myRole.color, fontSize: "0.8rem", fontWeight: 700 }}>
+                {animTeam} Team-Mitglieder
+              </span>
+              <span style={{ padding: "4px 14px", borderRadius: 20, background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.25)", color: "#10b981", fontSize: "0.8rem", fontWeight: 700 }}>
+                {animTotal} Leads
+              </span>
+            </div>
+          </div>
+
+          {/* Big number */}
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: "0.65rem", color: "#71717a", textTransform: "uppercase", letterSpacing: 2, fontWeight: 700, marginBottom: 4 }}>Team-Provisionen</div>
+            <div style={{ fontSize: "2rem", fontWeight: 900, letterSpacing: -2, background: `linear-gradient(135deg, ${myRole.color}, #22c55e)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              {formatEur(teamStats?.teamProvisionenGesamt || 0)}
+            </div>
+            <div style={{ fontSize: "0.8rem", color: "#22c55e", fontWeight: 600, marginTop: 2 }}>
+              {formatEur(teamStats?.teamProvisionenMonat || 0)} diesen Monat
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* KPIs — klickbar, navigiert zur Leads-Seite mit Filter */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginBottom: 20 }}>
+        {[
+          { n: animNeu, l: "Zu Kontaktieren", c: "#f59e0b", filter: "neu" },
+          { n: animKont, l: "Kontaktiert", c: "#3b82f6", filter: "kontaktiert" },
+          { n: animQual, l: "Qualifiziert", c: "#10b981", filter: "qualifiziert" },
+          { n: animTotal, l: "Leads Gesamt", c: "#D4A843", filter: "" },
+        ].map((k, i) => (
+          <div key={k.l} onClick={() => teamNav(`/leads${k.filter ? `?filter=${k.filter}` : ""}`)} style={{
+            background: "rgba(15,23,42,0.5)", border: `1px solid ${k.c}15`, borderRadius: 14,
+            padding: "18px 16px", textAlign: "center", animation: "tdSlide .5s ease both",
+            animationDelay: `${i * 60}ms`, position: "relative", overflow: "hidden",
+            cursor: "pointer", transition: "all .15s",
+          }}>
+            <div style={{ fontSize: 32, fontWeight: 900, color: k.c, letterSpacing: -1.5, lineHeight: 1, fontVariantNumeric: "tabular-nums", textShadow: `0 0 20px ${k.c}25` }}>{k.n}</div>
+            <div style={{ fontSize: 9, fontWeight: 800, color: k.c, opacity: 0.8, marginTop: 6, letterSpacing: 1.5, textTransform: "uppercase" }}>{k.l}</div>
+            <div style={{ position: "absolute", bottom: 0, left: "10%", right: "10%", height: 3, borderRadius: 2, background: `linear-gradient(90deg, transparent, ${k.c}, transparent)`, opacity: 0.3 }} />
+          </div>
+        ))}
+      </div>
+
+      {/* Team Ranking */}
+      <div style={{ background: "rgba(15,23,42,0.5)", border: "1px solid rgba(212,168,67,0.08)", borderRadius: 16, padding: 20, marginBottom: 20, animation: "tdSlide .5s ease both", animationDelay: "300ms" }}>
+        <div style={{ fontSize: 15, fontWeight: 800, color: "#f1f5f9", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+          <Trophy size={18} style={{ color: "#D4A843" }} /> Team Ranking
+        </div>
+
+        {unterHvs.length === 0 && (
+          <div style={{ color: "#64748b", fontSize: 13, padding: 20, textAlign: "center" }}>Noch keine Team-Mitglieder</div>
+        )}
+
+        {unterHvs.map((hv: any, i: number) => {
+          const rc = ROLE_DISPLAY[hv.role] || ROLE_DISPLAY.HANDELSVERTRETER;
+          const initials = (hv.user?.name || "?").split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase();
+          // Count leads for this HV from lead stats (approximate via leaderboard data)
+          return (
+            <div key={hv.id} style={{
+              display: "flex", alignItems: "center", gap: 14, padding: "12px 14px",
+              borderRadius: 12, marginBottom: 4, background: i < 3 ? "rgba(212,168,67,0.04)" : "transparent",
+              border: `1px solid ${i < 3 ? "rgba(212,168,67,0.08)" : "rgba(255,255,255,0.02)"}`,
+              animation: "tdSlide .4s ease both", animationDelay: `${350 + i * 50}ms`,
+            }}>
+              <div style={{ fontSize: 16, fontWeight: 900, color: i < 3 ? "#D4A843" : "#475569", width: 28, textAlign: "center" }}>#{i + 1}</div>
+              <div style={{
+                width: 40, height: 40, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center",
+                background: `${rc.color}12`, border: `1px solid ${rc.color}25`, fontSize: 13, fontWeight: 800, color: rc.color,
+              }}>{initials}</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#f1f5f9" }}>{hv.user?.name || "–"}</div>
+                <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 2 }}>
+                  <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 20, color: rc.color, background: `${rc.color}12` }}>{rc.label}</span>
+                  {hv.firmenName && <span style={{ fontSize: 11, color: "#64748b" }}>{hv.firmenName}</span>}
+                  {!hv.isDirect && <span style={{ fontSize: 9, color: "#475569", fontStyle: "italic" }}>via {hv.parentName}</span>}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 10, color: "#64748b", fontWeight: 600 }}>Kunden</div>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: "#e2e8f0" }}>{hv.kundenCount}</div>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 10, color: "#64748b", fontWeight: 600 }}>Prov./Mon.</div>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: "#D4A843" }}>{formatEur(hv.provisionenMonat)}</div>
+                </div>
+                <div style={{ width: 8, height: 8, borderRadius: "50%", background: hv.aktiv ? "#10b981" : "#ef4444" }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Quick Links */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+        {[
+          { label: "Team verwalten", path: "/hv-center?tab=team", icon: Users, color: "#3b82f6" },
+          { label: "Alle Leads", path: "/leads", icon: Target, color: "#D4A843" },
+          { label: "Provisionen", path: "/hv-center?tab=provisionen", icon: Award, color: "#10b981" },
+        ].map(lnk => (
+          <Link key={lnk.path} to={lnk.path} style={{
+            display: "flex", alignItems: "center", gap: 12, padding: "16px 20px",
+            background: "rgba(15,23,42,0.5)", border: `1px solid ${lnk.color}15`, borderRadius: 14,
+            color: "#e2e8f0", textDecoration: "none", transition: "all .15s",
+          }}>
+            <lnk.icon size={20} style={{ color: lnk.color }} />
+            <span style={{ fontSize: 14, fontWeight: 600 }}>{lnk.label}</span>
+            <ArrowRight size={16} style={{ color: "#475569", marginLeft: "auto" }} />
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// MEMBER DASHBOARD — Gamified (bestehendes Dashboard)
+// ═══════════════════════════════════════════════════════════════════
+
 export function HvDashboardTab() {
+  // Rollen-Check: VP/Director/Leader → Team-Dashboard
+  const { user: authUser } = useAuth();
+  const authRole = ((authUser as any)?.role || "").toUpperCase();
+  if (["HV_LEITER", "HV_TEAMLEITER", "HV_LEADER"].includes(authRole)) {
+    return <TeamDashboard />;
+  }
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<DashData>(EMPTY_DATA);

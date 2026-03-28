@@ -315,7 +315,7 @@ export function HvTeamTab() {
         {[
           { label: "Unter-HVs", value: String(teamStats?.unterHvsCount || 0), icon: Users, color: "#D4A843" },
           { label: "Team-Kunden", value: String(teamStats?.teamKundenGesamt || 0), icon: Building2, color: "#3b82f6" },
-          { label: "Anmeldungen / Mon.", value: String(teamStats?.teamAnmeldungenMonat || 0), icon: TrendingUp, color: "#10b981" },
+          { label: "Leads / Mon.", value: String(teamStats?.teamAnmeldungenMonat || 0), icon: TrendingUp, color: "#10b981" },
           { label: "Ø Weitergabesatz", value: formatPct(teamStats?.avgWeitergabeSatz || 0), icon: BarChart3, color: "#f59e0b" },
           { label: "Team-Prov. / Mon.", value: formatEur(teamStats?.teamProvisionenMonat || 0), icon: Coins, color: "#EAD068" },
         ].map((item) => (
@@ -408,7 +408,7 @@ function TeamTable({
             <th style={s.th}>Weitergabe</th>
             <th style={{ ...s.th, width: "180px" }}>Split</th>
             <th style={{ ...s.th, textAlign: "right" }}>Kunden</th>
-            <th style={{ ...s.th, textAlign: "right" }}>Anm./Mon.</th>
+            <th style={{ ...s.th, textAlign: "right" }}>Leads/Mon.</th>
             <th style={{ ...s.th, textAlign: "right" }}>Prov./Mon.</th>
             <th style={s.th}>Status</th>
             <th style={{ ...s.th, width: "32px" }} />
@@ -671,7 +671,7 @@ function UnterHvDetailPanel({
             {/* Metrics */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
               <div style={s.statCard}>
-                <span style={s.statLabel}>Anmeldungen / Mon.</span>
+                <span style={s.statLabel}>Leads / Mon.</span>
                 <span style={s.statValue}>{hv.anmeldungenMonat}</span>
               </div>
               <div style={s.statCard}>

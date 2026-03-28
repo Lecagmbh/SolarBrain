@@ -2,7 +2,7 @@
  * AdminDashboard — Baunity D2D Sales Dashboard
  * KPIs, Pipeline, Top-Gebiete, Sales-Aktivitäten, Handlungsbedarf
  */
-import { useStats, useGroupedByNB, fetchApi, getAuthHeaders } from "../../hooks/useEnterpriseApi";
+import { fetchApi } from "../../hooks/useEnterpriseApi";
 import { useQuery } from "@tanstack/react-query";
 import { C, cardStyle } from "../../../crm-center/crm.styles";
 import { CountUp } from "../hooks/useCountUp";
@@ -16,64 +16,43 @@ interface Props {
   isStaff: boolean;
 }
 
-// Map GridNetz stats to D2D
-function mapStats(s: any) {
-  return {
-    leads: (s?.eingang || 0) + (s?.lead || 0),
-    termine: (s?.beim_nb || s?.beimNb || 0) + (s?.termin || 0),
-    angebote: (s?.rueckfrage || 0) + (s?.angebot || 0),
-    verkauft: (s?.genehmigt || 0) + (s?.verkauft || 0),
-    installation: (s?.ibn || 0) + (s?.installation || 0),
-    fertig: s?.fertig || 0,
-    storniert: s?.storniert || 0,
-    total: s?.total || 0,
-  };
-}
-
 export default function AdminDashboard({ onDrillDown, onPipelineFilter, pipelineCounts, isStaff }: Props) {
-  const { data: stats } = useStats();
-  const { data: nbData } = useGroupedByNB();
-  const { data: listData } = useQuery({
-    queryKey: ["installations", "list-for-kunden"],
-    queryFn: () => fetchApi<any>(`/api/installations/enterprise?limit=500`),
-    staleTime: 60_000,
+  // Wizard-Leads — einzige Datenquelle für D2D
+  const { data: wizardLeadsData } = useQuery<{ data: any[]; stats: any }>({
+    queryKey: ["wizard-leads-dashboard"],
+    queryFn: () => fetchApi<{ data: any[]; stats: any }>("/api/wizard/leads"),
+    staleTime: 30_000,
   });
+  const leads = wizardLeadsData?.data || [];
+  const wizardStats = wizardLeadsData?.stats || {};
+  const wizardLeadCount = wizardStats.total || 0;
+  const wizardLeadNeu = wizardStats.neu || 0;
 
-  // Top Reps / Gebiete
+  // Top PLZ-Gebiete aus Leads
   const topGebiete = (() => {
-    const items = listData?.data || [];
-    const map = new Map<string, { name: string; count: number; open: number }>();
-    items.forEach((i: any) => {
-      const key = i.kundeName || i.createdByCompany || i.customerName || "Unbekannt";
-      if (!map.has(key)) map.set(key, { name: key, count: 0, open: 0 });
-      const m = map.get(key)!;
+    const map = new Map<string, { plz: string; count: number; qualifiziert: number }>();
+    leads.forEach((l: any) => {
+      const plz = l.plz || "–";
+      if (!map.has(plz)) map.set(plz, { plz, count: 0, qualifiziert: 0 });
+      const m = map.get(plz)!;
       m.count++;
-      if (!["fertig", "storniert", "FERTIG", "STORNIERT"].includes(i.status)) m.open++;
+      if (l.status === "qualifiziert") m.qualifiziert++;
     });
     return [...map.values()].sort((a, b) => b.count - a.count).slice(0, 8);
   })();
 
-  // Activity Feed
-  const { data: feedData } = useQuery({
-    queryKey: ["dashboard", "activity-feed"],
-    queryFn: () => fetchApi<any>("/api/dashboard/activity-feed").then(d => ({ activities: Array.isArray(d) ? d : d?.activities || [] })).catch(() => ({ activities: [] })),
-    staleTime: 30_000,
-  });
-
-  // Wizard-Leads
-  const { data: wizardLeadsData } = useQuery<{ stats: any }>({
-    queryKey: ["wizard-leads-stats"],
-    queryFn: () => fetchApi<{ stats: any }>("/api/wizard/leads"),
-    staleTime: 30_000,
-  });
-  const wizardLeadCount = wizardLeadsData?.stats?.total || 0;
-  const wizardLeadNeu = wizardLeadsData?.stats?.neu || 0;
-
-  const d = mapStats(stats);
-  d.leads += wizardLeadNeu; // Wizard-Leads zu den Gesamt-Leads addieren
-  const topNb = (nbData?.groups || []).slice(0, 8);
-  const feed = (feedData?.activities || []).slice(0, 10);
-  const pipeline = d.leads + d.termine + d.angebote + d.verkauft + d.installation;
+  // Top HVs aus Leads (wenn zugewiesen)
+  const topHvs = (() => {
+    const map = new Map<number, { id: number; name: string; count: number; qualifiziert: number }>();
+    leads.forEach((l: any) => {
+      if (!l.assignedToId) return;
+      if (!map.has(l.assignedToId)) map.set(l.assignedToId, { id: l.assignedToId, name: l.assignedToName || `HV #${l.assignedToId}`, count: 0, qualifiziert: 0 });
+      const m = map.get(l.assignedToId)!;
+      m.count++;
+      if (l.status === "qualifiziert") m.qualifiziert++;
+    });
+    return [...map.values()].sort((a, b) => b.count - a.count).slice(0, 8);
+  })();
 
   const feedColor = (type: string) => {
     if (type === "status_change") return "#D4A843";
@@ -102,9 +81,9 @@ export default function AdminDashboard({ onDrillDown, onPipelineFilter, pipeline
       <div className="v3-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 10, marginBottom: 16 }}>
         {[
           { v: wizardLeadNeu, l: "Zu Kontaktieren", c: "#D4A843", sub: "neue Leads" },
-          { v: (wizardLeadsData?.stats?.kontaktiert || 0), l: "Kontaktiert", c: "#3b82f6", sub: "in Bearbeitung" },
-          { v: (wizardLeadsData?.stats?.qualifiziert || 0), l: "Qualifiziert", c: "#22c55e", sub: "Angebot möglich" },
-          { v: (wizardLeadsData?.stats?.abgelehnt || 0), l: "Disqualifiziert", c: "#ef4444", sub: "" },
+          { v: (wizardStats.kontaktiert || 0), l: "Kontaktiert", c: "#3b82f6", sub: "in Bearbeitung" },
+          { v: (wizardStats.qualifiziert || 0), l: "Qualifiziert", c: "#22c55e", sub: "Angebot möglich" },
+          { v: (wizardStats.disqualifiziert || 0) + (wizardStats.abgelehnt || 0), l: "Disqualifiziert", c: "#ef4444", sub: "" },
           { v: wizardLeadCount, l: "Gesamt", c: "#64748b", sub: "" },
         ].map(k => (
           <div key={k.l} style={{ ...cardStyle, padding: "16px", cursor: "default", textAlign: "center", border: `1px solid ${k.c}15`, background: k.c + "04" }}>
@@ -120,77 +99,53 @@ export default function AdminDashboard({ onDrillDown, onPipelineFilter, pipeline
         <AnimatedPipeline counts={pipelineCounts} activeFilter={null} onFilter={(k) => onPipelineFilter ? onPipelineFilter(k) : onDrillDown("open")} isStaff={isStaff} />
       </div>
 
-      {/* 3-Spalten: Gebiete | Handlungsbedarf | Live-Feed */}
-      <div className="v3-dashboard-cols" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 16 }}>
+      {/* 2-Spalten: Gebiete | Handlungsbedarf */}
+      <div className="v3-dashboard-cols" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
 
-        {/* Top Gebiete / Netzbetreiber */}
+        {/* Top PLZ-Gebiete */}
         <div style={cardStyle}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: C.textBright, marginBottom: 12 }}>📍 Top Gebiete</div>
-          {topNb.length > 0 ? topNb.map((nb: any, i: number) => (
-            <div key={nb.nbName || i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0", borderBottom: i < topNb.length - 1 ? `1px solid ${C.border}` : "none" }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: C.textBright, marginBottom: 12 }}>📍 Top Gebiete (PLZ)</div>
+          {topGebiete.length > 0 ? topGebiete.map((g, i) => (
+            <div key={g.plz} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 0", borderBottom: i < topGebiete.length - 1 ? `1px solid ${C.border}` : "none" }}>
               <span style={{ fontSize: 10, color: C.textMuted, width: 16, textAlign: "right" }}>#{i + 1}</span>
-              <span style={{ fontSize: 11, color: C.text, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{nb.nbName || "Unbekannt"}</span>
-              <span style={{ fontSize: 10, fontWeight: 700, color: "#D4A843", width: 30, textAlign: "right" }}>{nb.count}</span>
-              <span style={{ fontSize: 9, color: nb.avgDays > 12 ? "#ef4444" : "#64748b", width: 32, textAlign: "right" }}>{nb.avgDays}d</span>
+              <span style={{ fontSize: 12, color: C.text, flex: 1, fontWeight: 600 }}>{g.plz}</span>
+              <span style={{ fontSize: 10, color: "#D4A843", fontWeight: 700 }}>{g.count} Leads</span>
+              {g.qualifiziert > 0 && <span style={{ fontSize: 10, color: "#22c55e", fontWeight: 600 }}>{g.qualifiziert} qual.</span>}
             </div>
           )) : <div style={{ color: C.textMuted, fontSize: 11, padding: 8 }}>Keine Daten</div>}
         </div>
 
         {/* Handlungsbedarf — D2D */}
         <div style={cardStyle}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#D4A843", marginBottom: 12 }}>⚡ Handlungsbedarf</div>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#D4A843", marginBottom: 12 }}>Handlungsbedarf</div>
           {[
-            { icon: "⚡", text: `${wizardLeadNeu} zu kontaktieren`, action: "Kontaktieren", color: "#D4A843" },
-            { icon: "📞", text: `${wizardLeadsData?.stats?.kontaktiert || 0} kontaktiert`, action: "Qualifizieren", color: "#3b82f6" },
-            { icon: "✅", text: `${wizardLeadsData?.stats?.qualifiziert || 0} qualifiziert`, action: "Angebot erstellen", color: "#22c55e" },
+            { text: `${wizardLeadNeu} neue Leads zu kontaktieren`, action: "Kontaktieren", color: "#D4A843", filter: "lead_neu" },
+            { text: `${wizardStats.kontaktiert || 0} kontaktiert — qualifizieren`, action: "Qualifizieren", color: "#3b82f6", filter: "lead_kontaktiert" },
+            { text: `${wizardStats.qualifiziert || 0} qualifiziert — Angebot erstellen`, action: "Angebote", color: "#22c55e", filter: "lead_qualifiziert" },
           ].map((p, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "5px 0", borderBottom: i < 3 ? `1px solid ${C.border}` : "none" }}>
-              <span style={{ fontSize: 14, flexShrink: 0 }}>{p.icon}</span>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 11, color: C.textDim }}>{p.text}</div>
-                <button onClick={() => onDrillDown("open")} style={{ marginTop: 3, background: p.color + "10", color: p.color, border: `1px solid ${p.color}20`, borderRadius: 4, padding: "2px 8px", fontSize: 9, fontWeight: 700, cursor: "pointer" }}>→ {p.action}</button>
-              </div>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: i < 2 ? `1px solid ${C.border}` : "none" }}>
+              <div style={{ width: 4, height: 28, borderRadius: 2, background: p.color, flexShrink: 0 }} />
+              <div style={{ flex: 1, fontSize: 12, color: C.text }}>{p.text}</div>
+              <button onClick={() => onPipelineFilter ? onPipelineFilter(p.filter) : onDrillDown("open")} style={{ background: p.color + "12", color: p.color, border: `1px solid ${p.color}25`, borderRadius: 6, padding: "4px 12px", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>{p.action}</button>
             </div>
           ))}
         </div>
+      </div>
 
-        {/* Live-Feed */}
-        <div style={cardStyle}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.textBright }}>📊 Letzte Aktivitäten</div>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#D4A843", animation: "urgentPulse 2s infinite" }} />
-          </div>
-          {feed.length > 0 ? feed.map((e: any, i: number) => {
-            const d = e.data || e;
-            const name = d.customerName || d.publicId || "";
-            const time = e.timestamp ? new Date(e.timestamp).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) : "";
-            return (
-              <div key={i} style={{ display: "flex", gap: 8, padding: "4px 0", borderBottom: i < feed.length - 1 ? `1px solid ${C.border}` : "none" }}>
-                <div style={{ width: 3, height: "auto", borderRadius: 2, background: feedColor(e.type), flexShrink: 0 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 10, color: C.textDim, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {e.type === "status_change" ? `⚡ ${name} → ${d.toStatus || d.statusLabel || ""}` : `📌 ${name}: ${(d.message || d.text || "").substring(0, 50)}`}
-                  </div>
-                </div>
-                <span style={{ fontSize: 9, color: C.textMuted, flexShrink: 0, fontFamily: "'DM Mono'" }}>{time}</span>
-              </div>
-            );
-          }) : <div style={{ color: C.textMuted, fontSize: 11, padding: 8 }}>Keine Aktivitäten</div>}
+      {/* HV Leaderboard (nur wenn HVs zugewiesen) */}
+      {topHvs.length > 0 && (
+        <div style={{ ...cardStyle, maxWidth: 600 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: C.textBright, marginBottom: 12 }}>HV Leaderboard</div>
+          {topHvs.map((hv, i) => (
+            <div key={hv.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 0", borderBottom: i < topHvs.length - 1 ? `1px solid ${C.border}` : "none" }}>
+              <span style={{ fontSize: 10, color: C.textMuted, width: 16, textAlign: "right" }}>#{i + 1}</span>
+              <span style={{ fontSize: 12, color: C.text, flex: 1, fontWeight: 600 }}>{hv.name}</span>
+              <span style={{ fontSize: 10, color: "#D4A843", fontWeight: 700 }}>{hv.count} Leads</span>
+              {hv.qualifiziert > 0 && <span style={{ fontSize: 10, color: "#22c55e", fontWeight: 600 }}>{hv.qualifiziert} qual.</span>}
+            </div>
+          ))}
         </div>
-      </div>
-
-      {/* Top Sales Reps / Kunden */}
-      <div style={{ ...cardStyle, maxWidth: 600 }}>
-        <div style={{ fontSize: 13, fontWeight: 800, color: C.textBright, marginBottom: 12 }}>🏆 Sales Leaderboard</div>
-        {topGebiete.length > 0 ? topGebiete.map((k, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 0", borderBottom: i < topGebiete.length - 1 ? `1px solid ${C.border}` : "none" }}>
-            <span style={{ fontSize: 10, color: C.textMuted, width: 16, textAlign: "right" }}>#{i + 1}</span>
-            <span style={{ fontSize: 11, color: C.text, flex: 1, fontWeight: 600 }}>{k.name}</span>
-            <span style={{ fontSize: 10, color: "#D4A843" }}>{k.count} total</span>
-            <span style={{ fontSize: 10, color: "#22c55e", fontWeight: 600 }}>{k.open} aktiv</span>
-          </div>
-        )) : <div style={{ color: C.textMuted, fontSize: 11, padding: 8 }}>Noch keine Daten</div>}
-      </div>
+      )}
     </div>
   );
 }

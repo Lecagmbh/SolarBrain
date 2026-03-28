@@ -6,14 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:app": "vite build && npx cap sync",
-    "build:android": "vite build && npx cap sync android && npx cap open android",
-    "build:ios": "vite build && npx cap sync ios && npx cap open ios",
+    "build:app": "VITE_CAPACITOR=true vite build && npx cap sync",
+    "build:android": "VITE_CAPACITOR=true vite build && npx cap sync android",
+    "build:ios": "VITE_CAPACITOR=true vite build && npx cap sync ios",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
+    "@aparajita/capacitor-biometric-auth": "^10.0.0",
     "@capacitor/android": "^8.2.0",
     "@capacitor/app": "^8.0.1",
     "@capacitor/browser": "^8.0.2",

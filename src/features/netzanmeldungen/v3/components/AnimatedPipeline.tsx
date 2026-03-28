@@ -31,26 +31,26 @@ interface Props {
   isStaff: boolean;
 }
 
-// Map counts to 3-stage pipeline
+// Map counts to D2D pipeline from wizard-leads
 function mapCounts(counts: PipelineCounts) {
   return {
-    zuKontaktieren: (counts as any).lead || counts.eingang || 0,
-    kontaktiert: (counts as any).kontaktiert || counts.beim_nb || 0,
-    qualifiziert: (counts as any).qualifiziert || counts.rueckfrage || counts.genehmigt || 0,
-    disqualifiziert: (counts as any).disqualifiziert || 0,
+    zuKontaktieren: (counts as any).leads_neu || 0,
+    kontaktiert: (counts as any).leads_kontaktiert || 0,
+    qualifiziert: (counts as any).leads_qualifiziert || 0,
+    disqualifiziert: (counts as any).leads_disqualifiziert || 0,
   };
 }
 
 export default function AnimatedPipeline({ counts, activeFilter, onFilter }: Props) {
   const d2d = mapCounts(counts);
-  const gesamt = d2d.zuKontaktieren + d2d.kontaktiert + d2d.qualifiziert;
+  const gesamt = (counts as any).leads_total || (d2d.zuKontaktieren + d2d.kontaktiert + d2d.qualifiziert + d2d.disqualifiziert);
 
   return (
     <div style={{ padding: "14px 24px 10px" }}>
       <div style={{ display: "flex", gap: 6, alignItems: "flex-start", minWidth: 500 }}>
-        <PipelineStage label="ZU KONTAKTIEREN" count={d2d.zuKontaktieren} color="#D4A843" active={activeFilter === "lead" || activeFilter === "eingang"} onClick={() => onFilter("lead")} delay={0} pulse={d2d.zuKontaktieren > 0} />
-        <PipelineStage label="KONTAKTIERT" count={d2d.kontaktiert} color="#3b82f6" sub="In Bearbeitung" active={activeFilter === "kontaktiert" || activeFilter === "beim_nb"} onClick={() => onFilter("kontaktiert")} delay={80} />
-        <PipelineStage label="QUALIFIZIERT" count={d2d.qualifiziert} color="#22c55e" sub="Angebot möglich" active={activeFilter === "qualifiziert"} onClick={() => onFilter("qualifiziert")} delay={160} />
+        <PipelineStage label="ZU KONTAKTIEREN" count={d2d.zuKontaktieren} color="#D4A843" active={activeFilter === "lead_neu"} onClick={() => onFilter("lead_neu")} delay={0} pulse={d2d.zuKontaktieren > 0} />
+        <PipelineStage label="KONTAKTIERT" count={d2d.kontaktiert} color="#3b82f6" sub="In Bearbeitung" active={activeFilter === "lead_kontaktiert"} onClick={() => onFilter("lead_kontaktiert")} delay={80} />
+        <PipelineStage label="QUALIFIZIERT" count={d2d.qualifiziert} color="#22c55e" sub="Angebot möglich" active={activeFilter === "lead_qualifiziert"} onClick={() => onFilter("lead_qualifiziert")} delay={160} />
 
         {/* Gesamt + Disqualifiziert */}
         <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 90, paddingTop: 4 }}>
@@ -59,11 +59,11 @@ export default function AnimatedPipeline({ counts, activeFilter, onFilter }: Pro
             <div style={{ fontSize: 9, fontWeight: 800, color: "#71717a", letterSpacing: 0.5 }}>GESAMT</div>
           </div>
           <div
-            onClick={() => onFilter("disqualifiziert")}
+            onClick={() => onFilter("lead_disqualifiziert")}
             style={{
               textAlign: "center", padding: "6px 8px", borderRadius: 8, cursor: "pointer",
-              background: activeFilter === "disqualifiziert" ? "rgba(239,68,68,0.15)" : "rgba(239,68,68,0.06)",
-              border: activeFilter === "disqualifiziert" ? "1px solid rgba(239,68,68,0.4)" : "1px solid rgba(239,68,68,0.15)",
+              background: activeFilter === "lead_disqualifiziert" ? "rgba(239,68,68,0.15)" : "rgba(239,68,68,0.06)",
+              border: activeFilter === "lead_disqualifiziert" ? "1px solid rgba(239,68,68,0.4)" : "1px solid rgba(239,68,68,0.15)",
               transition: "all 0.15s",
             }}
           >

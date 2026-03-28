@@ -149,7 +149,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
         items: [
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
           { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
-          { id: "projekte", label: "Sales Pipeline", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "projekte", label: "Leads", icon: Icons.zap, path: "/leads" },
           { id: "leaderboard", label: "Leaderboard", icon: Icons.zap, path: "/leaderboard" },
           { id: "finanzen", label: "Finanzen", icon: Icons.accounting, path: "/finanzen" },
           { id: "kunden", label: "Team & Benutzer", icon: Icons.users, path: "/kunden" },
@@ -177,7 +177,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
         items: [
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
           { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
-          { id: "projekte", label: "Sales Pipeline", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "projekte", label: "Leads", icon: Icons.zap, path: "/leads" },
           { id: "finanzen", label: "Finanzen", icon: Icons.accounting, path: "/finanzen" },
           { id: "kunden", label: "Team & Benutzer", icon: Icons.users, path: "/kunden" },
           { id: "handelsvertreter", label: "HV-Verwaltung", icon: Icons.userCheck, path: "/admin/handelsvertreter" },
@@ -208,7 +208,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
         items: [
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
           { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
-          { id: "netzanmeldungen", label: "Sales Pipeline", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "netzanmeldungen", label: "Leads", icon: Icons.zap, path: "/leads" },
           { id: "leaderboard", label: "Leaderboard", icon: Icons.zap, path: "/leaderboard" },
           { id: "kommunikation", label: "Nachrichten", icon: Icons.mail, path: "/emails" },
           { id: "dokumente", label: "Dokumente", icon: Icons.file, path: "/dokumente" },
@@ -240,7 +240,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
         items: [
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
           { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
-          { id: "projekte", label: "Sales Pipeline", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "projekte", label: "Leads", icon: Icons.zap, path: "/leads" },
           { id: "leaderboard", label: "Leaderboard", icon: Icons.zap, path: "/leaderboard" },
           { id: "dokumente", label: "Dokumente", icon: Icons.file, path: "/dokumente" },
           { id: "finanzen", label: "Rechnungen", icon: Icons.wallet, path: "/rechnungen" },
@@ -272,7 +272,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
         items: [
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/hv-center" },
           { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
-          { id: "projekte", label: "Alle Leads", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "projekte", label: "Alle Leads", icon: Icons.zap, path: "/leads" },
           { id: "lead-new", label: "Neuer Lead", icon: Icons.wizard, path: "/wizard" },
           { id: "leaderboard", label: "Leaderboard", icon: Icons.target, path: "/leaderboard" },
         ]
@@ -296,7 +296,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
         items: [
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/hv-center" },
           { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
-          { id: "projekte", label: "Team-Leads", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "projekte", label: "Team-Leads", icon: Icons.zap, path: "/leads" },
           { id: "lead-new", label: "Neuer Lead", icon: Icons.wizard, path: "/wizard" },
           { id: "leaderboard", label: "Leaderboard", icon: Icons.target, path: "/leaderboard" },
         ]
@@ -320,7 +320,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
         items: [
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/hv-center" },
           { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
-          { id: "projekte", label: "Team-Leads", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "projekte", label: "Team-Leads", icon: Icons.zap, path: "/leads" },
           { id: "lead-new", label: "Neuer Lead", icon: Icons.wizard, path: "/wizard" },
           { id: "leaderboard", label: "Leaderboard", icon: Icons.target, path: "/leaderboard" },
         ]
@@ -343,7 +343,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
         items: [
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/hv-center" },
           { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
-          { id: "projekte", label: "Meine Leads", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "projekte", label: "Meine Leads", icon: Icons.zap, path: "/leads" },
           { id: "lead-new", label: "Neuer Lead", icon: Icons.wizard, path: "/wizard" },
           { id: "leaderboard", label: "Leaderboard", icon: Icons.target, path: "/leaderboard" },
         ]
@@ -365,7 +365,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
       {
         items: [
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
-          { id: "netzanmeldungen", label: "Sales Pipeline", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "netzanmeldungen", label: "Leads", icon: Icons.zap, path: "/leads" },
         ]
       },
       {
@@ -385,7 +385,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
       {
         items: [
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
-          { id: "netzanmeldungen", label: "Meine Leads", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "netzanmeldungen", label: "Meine Leads", icon: Icons.zap, path: "/leads" },
           { id: "dokumente", label: "Dokumente", icon: Icons.file, path: "/dokumente" },
         ]
       },
@@ -405,7 +405,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
     {
       items: [
         { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
-        { id: "netzanmeldungen", label: "Meine Leads", icon: Icons.zap, path: "/netzanmeldungen" },
+        { id: "netzanmeldungen", label: "Meine Leads", icon: Icons.zap, path: "/leads" },
         { id: "dokumente", label: "Dokumente", icon: Icons.file, path: "/dokumente" },
         { id: "whatsapp", label: "WhatsApp", icon: Icons.whatsapp, path: "/whatsapp", isNew: true },
       ]

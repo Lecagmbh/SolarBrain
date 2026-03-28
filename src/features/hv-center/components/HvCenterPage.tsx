@@ -44,7 +44,6 @@ interface Tab {
 
 const ALL_TABS: Tab[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, component: HvDashboardTab },
-  { id: "leads", label: "Leads", icon: Target, component: HvLeadsTab },
   { id: "team", label: "Mein Team", icon: UsersRound, component: HvTeamTab, oberHvOnly: true },
   { id: "provisionen", label: "Provisionen", icon: Coins, component: HvProvisionenTab },
   { id: "auszahlungen", label: "Auszahlungen", icon: Banknote, component: HvAuszahlungenTab },
@@ -59,7 +58,10 @@ export function HvCenterPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isOberHv, setIsOberHv] = useState(false);
 
-  // Ober-HV Status laden
+  // HV-Leitungsrollen sehen Team-Tab immer
+  const isHvLeader = ["HV_LEITER", "HV_TEAMLEITER", "HV_LEADER"].includes(user?.role || "");
+
+  // Ober-HV Status laden (für HANDELSVERTRETER die Unter-HVs haben)
   useEffect(() => {
     if (user?.role === "HANDELSVERTRETER" || user?.role === "ADMIN" || user?.role === "MITARBEITER") {
       hvCenterApi.getProfil()
@@ -68,9 +70,9 @@ export function HvCenterPage() {
     }
   }, [user]);
 
-  // Tabs filtern: team-Tab nur für Ober-HVs (oder Admins)
+  // Tabs filtern: team-Tab für Leitungsrollen, Ober-HVs oder Staff
   const isStaff = user?.role === "ADMIN" || user?.role === "MITARBEITER";
-  const TABS = ALL_TABS.filter((t) => !t.oberHvOnly || isOberHv || isStaff);
+  const TABS = ALL_TABS.filter((t) => !t.oberHvOnly || isHvLeader || isOberHv || isStaff);
 
   const tabParam = searchParams.get("tab") as TabId | null;
   const [activeTab, setActiveTab] = useState<TabId>(
@@ -88,9 +90,14 @@ export function HvCenterPage() {
 
   const showContractBanner = !contractLoading && needsAcceptance && user?.role === "HANDELSVERTRETER";
 
-  // Redirect non-authorized users
+  // Redirect non-HV users (Admin/Mitarbeiter haben eigenes Dashboard)
   useEffect(() => {
-    if (user && !ALLOWED_ROLES.includes(user.role)) {
+    if (!user) return;
+    if (!ALLOWED_ROLES.includes(user.role)) {
+      navigate("/dashboard", { replace: true });
+    }
+    // Admin/Mitarbeiter → eigenes Dashboard (HV-Center ist nur für HV-Rollen)
+    if (user.role === "ADMIN" || user.role === "MITARBEITER") {
       navigate("/dashboard", { replace: true });
     }
   }, [user, navigate]);

@@ -34,7 +34,7 @@ export default function CommandPalette({
   const commands: CommandItem[] = [
     { id: "new", title: "Neuer Lead", subtitle: "PV-Wizard öffnen", icon: "🌟", action: () => window.open("/wizard", "_blank"), keywords: ["neu", "lead", "wizard", "anlage", "erstellen"] },
     { id: "dashboard", title: "Dashboard", subtitle: "Zur Übersicht", icon: "📊", action: () => navigate("/dashboard"), keywords: ["start", "home", "übersicht"] },
-    { id: "netzanmeldungen", title: "Netzanmeldungen", subtitle: "Alle Anmeldungen anzeigen", icon: "📋", action: () => navigate("/netzanmeldungen"), keywords: ["liste", "anlagen", "vorgänge"] },
+    { id: "netzanmeldungen", title: "Netzanmeldungen", subtitle: "Alle Anmeldungen anzeigen", icon: "📋", action: () => navigate("/leads"), keywords: ["liste", "anlagen", "vorgänge"] },
     { id: "emails", title: "E-Mails", subtitle: "E-Mail Center öffnen", icon: "📧", action: () => navigate("/emails"), keywords: ["mail", "kommunikation", "nachrichten"] },
     { id: "dokumente", title: "Dokumente", subtitle: "Dokumentenverwaltung", icon: "📄", action: () => navigate("/dokumente"), keywords: ["docs", "dateien", "uploads"] },
     { id: "rechnungen", title: "Rechnungen", subtitle: "Finanzen verwalten", icon: "💰", action: () => navigate("/rechnungen"), keywords: ["finanzen", "geld", "rechnung"] },

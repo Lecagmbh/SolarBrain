@@ -61,5 +61,8 @@ export interface PipelineCounts {
   avgDaysBeimNb: number;
   // Wizard-Leads
   leads_neu?: number;
+  leads_kontaktiert?: number;
+  leads_qualifiziert?: number;
+  leads_disqualifiziert?: number;
   leads_total?: number;
 }

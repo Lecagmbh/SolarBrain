@@ -27,12 +27,16 @@ export default function SmartSidebar({ view, onViewChange, sourceFilter, onSourc
   const leadsTotal = counts.leads_total || 0;
   const leadsNeu = counts.leads_neu || 0;
 
+  const leadsKontaktiert = (counts as any).leads_kontaktiert || 0;
+  const leadsQualifiziert = (counts as any).leads_qualifiziert || 0;
+  const leadsDisqualifiziert = (counts as any).leads_disqualifiziert || 0;
+
   const viewCount = (key: ViewKey): number => {
     if (key === "inbox") return leadsNeu;
-    if (key === "open") return leadsTotal;
+    if (key === "open") return leadsKontaktiert + leadsQualifiziert;
     if (key === "all") return leadsTotal;
     if (key === "leads") return leadsTotal;
-    if (key === "done") return 0;
+    if (key === "done") return leadsDisqualifiziert;
     return 0;
   };
 
@@ -104,14 +108,14 @@ export default function SmartSidebar({ view, onViewChange, sourceFilter, onSourc
       {/* Kunden */}
       {isStaff && kundenList.length > 0 && <>
         <div style={{ height: 1, background: C.border, margin: "10px 0" }} />
-        <div style={{ fontSize: 10, fontWeight: 700, color: C.dim, textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Kunde</div>
+        <div style={{ fontSize: 10, fontWeight: 700, color: C.dim, textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>HV / Agentur</div>
         {selectedKunde && (
           <button onClick={() => onKundeChange(null)} style={{
             width: "100%", padding: "7px 12px", borderRadius: 6, border: "1px solid rgba(239,68,68,0.15)", cursor: "pointer",
             background: "rgba(239,68,68,0.08)", color: "#ef4444", fontSize: 12, fontWeight: 600, marginBottom: 6,
           }}>✕ Filter aufheben</button>
         )}
-        <input value={kundeSearch} onChange={e => setKundeSearch(e.target.value)} placeholder="Kunde suchen..."
+        <input value={kundeSearch} onChange={e => setKundeSearch(e.target.value)} placeholder="HV suchen..."
           style={{ width: "100%", padding: "9px 12px", borderRadius: 8, border: `1px solid ${C.border}`, background: "rgba(15,15,25,0.9)", color: C.text, fontSize: 13, outline: "none", marginBottom: 6, fontFamily: "inherit", boxSizing: "border-box" }} />
         <div style={{ maxHeight: 200, overflowY: "auto" }}>
           {kundenList

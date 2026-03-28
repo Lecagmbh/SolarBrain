@@ -28,9 +28,11 @@ export function clearCsrfToken(): void {
   sessionStorage.removeItem(CSRF_STORAGE_KEY);
 }
 
+// Capacitor: muss absolute URL nutzen (App läuft lokal, nicht auf Server)
+const _isCap = typeof (window as any).Capacitor !== "undefined";
 const API_BASE = import.meta.env.VITE_API_BASE_URL
   ? `${import.meta.env.VITE_API_BASE_URL}/api`
-  : "/api";
+  : _isCap ? "https://solarbrain.de/api" : "/api";
 
 const api = axios.create({
   baseURL: API_BASE,

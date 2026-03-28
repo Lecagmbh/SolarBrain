@@ -18,10 +18,10 @@ export default function OfflineBanner() {
   return (
     <div style={{
       position: 'fixed',
-      bottom: 0,
+      bottom: document.body.classList.contains('capacitor-app') ? 72 : 0,
       left: 0,
       right: 0,
-      zIndex: 9999,
+      zIndex: 9998,
       padding: '10px 16px',
       display: 'flex',
       alignItems: 'center',

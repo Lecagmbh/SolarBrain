@@ -2,11 +2,30 @@ import { BrowserRouter, HashRouter, Routes, Route, Navigate } from "react-router
 import { lazy, Suspense } from "react";
 import RequireAuth from "./pages/RequireAuth";
 import AdminLayout from "./components/layout/AdminLayout";
+import MobileLayout from "./components/layout/MobileLayout";
 import { RoleGuard } from "./components/auth/RoleGuard";
 import { TrackingProvider } from "./contexts/TrackingContext";
+import { isCapacitor } from "./hooks/useCapacitor";
 
-// Electron/Desktop uses HashRouter (file:// protocol), web uses BrowserRouter
-const AppRouterProvider = import.meta.env.VITE_ELECTRON === "true" ? HashRouter : BrowserRouter;
+// Electron/Capacitor use HashRouter (local file loading), web uses BrowserRouter
+// Runtime detection: Capacitor setzt window.Capacitor bevor JS lädt
+const isLocalApp = import.meta.env.VITE_ELECTRON === "true"
+  || import.meta.env.VITE_CAPACITOR === "true"
+  || typeof (window as any).Capacitor !== "undefined";
+const AppRouterProvider = isLocalApp ? HashRouter : BrowserRouter;
+
+// Rollenbasierter Redirect von /
+import { useAuth } from "./pages/AuthContext";
+
+function RoleRedirect() {
+  const { user } = useAuth();
+  const role = (user as any)?.role || "";
+  const hvRoles = ["HV_LEITER", "HV_TEAMLEITER", "HV_LEADER", "HANDELSVERTRETER"];
+  if (hvRoles.includes(role)) {
+    return <Navigate to="/hv-center" replace />;
+  }
+  return <Navigate to="/dashboard" replace />;
+}
 
 // ─── Public Pages (direct import - needed immediately) ───────────────────────
 import LoginPage from "./modules/auth/LoginPage";
@@ -28,7 +47,7 @@ const UnternehmenPage = lazy(() => import("./pages/UnternehmenPage"));
 
 // ─── Baunity D2D Pages ───────────────────────────────────────────────────────
 const MapPage = lazy(() => import("./features/map/MapPage"));
-const LeadWizard = lazy(() => import("./pages/AnlagenWizardPage"));
+const LeadWizard = lazy(() => import("./features/d2d-wizard/D2DWizardPage"));
 
 // ─── Lazy-loaded Admin Pages ─────────────────────────────────────────────────
 const Dashboard = lazy(() => import("./modules/dashboard/Dashboard"));
@@ -76,8 +95,8 @@ const MockKommentarSystem = lazy(() => import("./features/crm-center/MockKomment
 const MockDetailPanelV2 = lazy(() => import("./features/netzanmeldungen/MockDetailPanelV2"));
 const MockDetailPanelV3 = lazy(() => import("./features/netzanmeldungen/MockDetailPanelV3"));
 const DetailPanelLive = lazy(() => import("./features/netzanmeldungen/DetailPanelLive"));
-// NetzanmeldungenV2: ARCHIVED
-const NetzanmeldungenV3 = lazy(() => import("./features/netzanmeldungen/NetzanmeldungenV3"));
+// NetzanmeldungenV2/V3: ARCHIVED — ersetzt durch D2D Leads Page
+const D2DLeadsPage = lazy(() => import("./features/netzanmeldungen/D2DLeadsPage"));
 const ProvisionenPage = lazy(() => import("./features/admin/provisionen").then(m => ({ default: m.ProvisionenPage })));
 const CalendarPage = lazy(() => import("./features/calendar").then(m => ({ default: m.CalendarPage })));
 const ZaehlerwechselCenterPage = lazy(() => import("./features/netzanmeldungen/components/ZaehlerwechselCenter").then(m => ({ default: m.ZaehlerwechselCenter })));
@@ -160,7 +179,7 @@ export default function AppRouter() {
     <AppRouterProvider>
       <TrackingProvider>
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
@@ -183,20 +202,22 @@ export default function AppRouter() {
           <Route path="/resend-verification" element={<ResendVerificationPage />} />
           <Route path="/onboarding" element={<L><KundenOnboardingPage /></L>} />
           <Route path="/hv-center/vertrag" element={<L><HvContractPage /></L>} />
-          <Route element={<AdminLayout />}>
-            {/* Alle Rollen */}
-            {/* PanelTestPage: ARCHIVED */}
+          <Route element={isCapacitor ? <MobileLayout /> : <AdminLayout />}>
+            {/* Rollenbasierter Home-Redirect */}
+            <Route path="/home" element={<RoleRedirect />} />
             <Route path="/dashboard" element={<L><DashboardMock /></L>} />
             <Route path="/map" element={<L><MapPage /></L>} />
             <Route path="/lead/new" element={<L><LeadWizard /></L>} />
-            <Route path="/netzanmeldungen" element={<L><NetzanmeldungenV3 /></L>} />
-            <Route path="/netzanmeldungen/:id" element={<L><DetailPanelLive /></L>} />
-            {/* V2/V3/Legacy: Redirects auf aktuelle Version */}
-            <Route path="/netzanmeldungen-v2" element={<Navigate to="/netzanmeldungen" replace />} />
-            <Route path="/netzanmeldungen-v2/:id" element={<Navigate to="/netzanmeldungen" replace />} />
-            <Route path="/netzanmeldungen-v3" element={<Navigate to="/netzanmeldungen" replace />} />
-            <Route path="/netzanmeldungen-v3/:id" element={<Navigate to="/netzanmeldungen" replace />} />
-            <Route path="/netzanmeldungen-legacy" element={<Navigate to="/netzanmeldungen" replace />} />
+            <Route path="/leads" element={<L><D2DLeadsPage /></L>} />
+            <Route path="/leads/:id" element={<L><DetailPanelLive /></L>} />
+            {/* Legacy redirects → /leads */}
+            <Route path="/netzanmeldungen" element={<Navigate to="/leads" replace />} />
+            <Route path="/netzanmeldungen/:id" element={<Navigate to="/leads" replace />} />
+            <Route path="/netzanmeldungen-v2" element={<Navigate to="/leads" replace />} />
+            <Route path="/netzanmeldungen-v2/:id" element={<Navigate to="/leads" replace />} />
+            <Route path="/netzanmeldungen-v3" element={<Navigate to="/leads" replace />} />
+            <Route path="/netzanmeldungen-v3/:id" element={<Navigate to="/leads" replace />} />
+            <Route path="/netzanmeldungen-legacy" element={<Navigate to="/leads" replace />} />
             <Route path="/anlagen-wizard" element={<L><AnlagenWizardPage /></L>} />
             <Route path="/dokumente" element={<L><DokumentenCenterPage /></L>} />
             <Route path="/rechnungen" element={<L><RechnungenRouteSwitch /></L>} />
@@ -241,8 +262,8 @@ export default function AppRouter() {
             <Route path="/admin/provisionen" element={<RoleGuard allowed={['ADMIN', 'MANAGER']}><L><ProvisionenPage /></L></RoleGuard>} />
             <Route path="/admin/events" element={<RoleGuard allowed={['ADMIN', 'MANAGER']}><L><EventsAdminPage /></L></RoleGuard>} />
             {/* /op-center redirect bereits oben definiert */}
-            <Route path="/factro-center" element={<Navigate to="/netzanmeldungen" replace />} />
-            <Route path="/crm" element={<Navigate to="/netzanmeldungen" replace />} />
+            <Route path="/factro-center" element={<Navigate to="/leads" replace />} />
+            <Route path="/crm" element={<Navigate to="/leads" replace />} />
             <Route path="/mock/verknuepfung" element={<L><MockVerknuepfung /></L>} />
             <Route path="/mock/netzanmeldungen" element={<MockNetzanmeldungen />} />
             <Route path="/mock/dashboard" element={<L><DashboardMock /></L>} />
@@ -252,7 +273,7 @@ export default function AppRouter() {
             {/* MockDetailTabs: ARCHIVED */}
             <Route path="/mock/detail-v2" element={<L><MockDetailPanelV2 /></L>} />
             <Route path="/mock/detail-v3" element={<L><MockDetailPanelV3 /></L>} />
-            <Route path="/v2/netzanmeldungen" element={<Navigate to="/netzanmeldungen" replace />} />
+            <Route path="/v2/netzanmeldungen" element={<Navigate to="/leads" replace />} />
             {/* /ticket-center entfernt */}
             {/* DetailPanelLive wird oben unter /netzanmeldungen/:id registriert */}
             <Route path="/pricing" element={<L><CrmPricingPage /></L>} />

@@ -6,17 +6,21 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuthToken } from "../../config/storage";
+import { useAuth } from "../../pages/AuthContext";
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // API HELPER
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const API = import.meta.env.VITE_API_BASE || "/api";
+import { API_BASE as API } from "../../lib/apiBase";
 
 async function apiFetch(path: string) {
   const token = getAuthToken();
+  const headers: Record<string, string> = {};
+  if (token) headers["Authorization"] = `Bearer ${token}`;
   const res = await fetch(`${API}${path}`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers,
+    credentials: "include",
   });
   if (!res.ok) return null;
   return res.json();
@@ -238,26 +242,33 @@ function PipelineStage({ stage, delay, onClick }: { stage: { key: string; label:
 
 export default function DashboardMock() {
   const nav = useNavigate();
+  const { user: authUser } = useAuth();
+
+  // HV-Rollen → auf HV-Center weiterleiten (NICHT für Admin/Mitarbeiter)
+  const myRole = ((authUser as any)?.role || "").toUpperCase();
+  const isHvRole = ["HV_LEITER", "HV_TEAMLEITER", "HV_LEADER", "HANDELSVERTRETER"].includes(myRole);
+  const isAdminRole = myRole === "ADMIN" || myRole === "MITARBEITER" || myRole === "MANAGER";
+  useEffect(() => {
+    if (isHvRole && !isAdminRole) {
+      nav("/hv-center", { replace: true });
+    }
+  }, [isHvRole, isAdminRole, nav]);
+
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 
   const loadData = useCallback(async () => {
     try {
-      // Daten aus beiden Quellen: Wizard-Leads (JSON) + DB-Installationen
-      const [leadsRes, installRes] = await Promise.allSettled([
-        apiFetch("/wizard/leads"),
-        apiFetch("/installations/counts"),
-      ]);
+      // Daten nur aus Wizard-Leads (D2D Plattform)
+      const leadsRes = await apiFetch("/wizard/leads").catch(() => null);
 
-      const wizardStats = (leadsRes.status === "fulfilled" ? leadsRes.value?.stats : {}) || {};
-      const dbCounts = (installRes.status === "fulfilled" ? installRes.value : {}) || {};
-      const leads = (leadsRes.status === "fulfilled" ? leadsRes.value?.data : []) || [];
+      const wizardStats = (leadsRes as any)?.stats || {};
+      const leads = (leadsRes as any)?.data || [];
 
-      // DB-Installationen haben Vorrang, Wizard-Leads als Fallback
-      const neu = (dbCounts.LEAD || 0) + (dbCounts.EINGANG || 0) + (wizardStats.neu || 0);
-      const kontaktiert = (dbCounts.KONTAKTIERT || 0) + (dbCounts.BEIM_NB || 0) + (wizardStats.kontaktiert || 0);
-      const qualifiziert = (dbCounts.QUALIFIZIERT || 0) + (dbCounts.GENEHMIGT || 0) + (wizardStats.qualifiziert || 0);
-      const disqualifiziert = (dbCounts.DISQUALIFIZIERT || 0) + (wizardStats.abgelehnt || 0);
+      const neu = wizardStats.neu || 0;
+      const kontaktiert = wizardStats.kontaktiert || 0;
+      const qualifiziert = wizardStats.qualifiziert || 0;
+      const disqualifiziert = (wizardStats.disqualifiziert || 0) + (wizardStats.abgelehnt || 0);
       const total = neu + kontaktiert + qualifiziert + disqualifiziert;
       const aktiv = neu + kontaktiert + qualifiziert;
       const abgelehnt = disqualifiziert;
@@ -296,9 +307,8 @@ export default function DashboardMock() {
         return { time: timeStr, text: `${l.name} — neuer Lead (${l.plz})`, type: "lead" };
       });
 
-      // User name from localStorage
-      const user = localStorage.getItem("baunity_user") || localStorage.getItem("gridnetz_user");
-      const userName = user ? (JSON.parse(user).name || "").split(" ")[0] : "User";
+      // User name from auth context
+      const userName = (authUser as any)?.name?.split(" ")[0] || "Admin";
 
       setData({ pipeline, kpis, actions: [], projects, activity, topNb: [], termine: [], userName, totalProjects: total });
     } catch (err) {
@@ -421,7 +431,7 @@ export default function DashboardMock() {
             <div className="dc-card dc-fade" style={{ animationDelay: ".3s" }}>
               <div className="dc-card-title">
                 Neue Leads
-                <span className="count" style={{ cursor: "pointer" }} onClick={() => nav("/netzanmeldungen")}>Alle anzeigen &rarr;</span>
+                <span className="count" style={{ cursor: "pointer" }} onClick={() => nav("/leads")}>Alle anzeigen &rarr;</span>
               </div>
               {d.projects.length > 0 ? (
                 <div className="dc-projects">
@@ -429,7 +439,7 @@ export default function DashboardMock() {
                     const st = STATUS_MAP[p.status] || STATUS_MAP.neu;
                     const isNeu = p.status === "neu";
                     return (
-                      <div key={p.id} className="dc-proj dc-fade" onClick={() => nav("/netzanmeldungen")}
+                      <div key={p.id} className="dc-proj dc-fade" onClick={() => nav("/leads")}
                         style={{ animationDelay: `${0.35 + i * 0.03}s`, borderLeft: isNeu ? "3px solid #22c55e" : undefined }}>
                         <div className="dc-proj-head">
                           <div className="dc-proj-name">{p.name}</div>

@@ -1,12 +1,6 @@
 /**
- * Baunity D2D — Kartenbasierter Vertrieb
- * =======================================
- * Leaflet Map mit:
- * - Installations/Leads als Pins
- * - Gebiete (Territories) als farbige Polygone
- * - Heatmap Layer (Aktivitätsdichte)
- * - GPS-Tracking, Visit Check-in
- * - Sidebar mit Visit-Liste & Quick-Stats
+ * SolarBrain D2D — Vertriebskarte
+ * Zeigt alle Leads als farbige Pins nach Status
  */
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +8,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { getAuthToken } from "../../config/storage";
 
-const API = import.meta.env.VITE_API_BASE || "/api";
+import { API_BASE as API } from "../../lib/apiBase";
 
 async function apiFetch(path: string) {
   const token = getAuthToken();
@@ -25,121 +19,146 @@ async function apiFetch(path: string) {
   return res.json();
 }
 
-// Pin colors per status
-const PIN_COLORS: Record<string, string> = {
-  LEAD: "#D4A843",
-  KONTAKTIERT: "#3b82f6",
-  QUALIFIZIERT: "#22c55e",
-  DISQUALIFIZIERT: "#ef4444",
-  VERKAUFT: "#22c55e",
-  INSTALLATION: "#f59e0b",
-  FERTIG: "#64748b",
-  // Legacy
-  EINGANG: "#D4A843",
-  BEIM_NB: "#3b82f6",
-  RUECKFRAGE: "#8b5cf6",
-  GENEHMIGT: "#22c55e",
-  IBN: "#f59e0b",
+// Status-Konfiguration
+const STATUS_CONFIG: Record<string, { color: string; label: string; icon: string }> = {
+  NEU:              { color: "#f59e0b", label: "Neu",             icon: "●" },
+  KONTAKTIERT:      { color: "#3b82f6", label: "Kontaktiert",     icon: "●" },
+  QUALIFIZIERT:     { color: "#10b981", label: "Qualifiziert",    icon: "●" },
+  DISQUALIFIZIERT:  { color: "#ef4444", label: "Disqualifiziert", icon: "●" },
+  KONVERTIERT:      { color: "#8b5cf6", label: "Konvertiert",     icon: "●" },
+  ABGELEHNT:        { color: "#6b7280", label: "Abgelehnt",       icon: "●" },
 };
 
-const STATUS_LABELS: Record<string, string> = {
-  LEAD: "Lead", KONTAKTIERT: "Kontaktiert", QUALIFIZIERT: "Qualifiziert",
-  DISQUALIFIZIERT: "Disqualifiziert", VERKAUFT: "Verkauft",
-  INSTALLATION: "Installation", FERTIG: "Fertig",
-  EINGANG: "Lead", BEIM_NB: "Kontaktiert", RUECKFRAGE: "Qualifiziert", GENEHMIGT: "Verkauft", IBN: "Installation",
+const HAUSART_LABELS: Record<string, string> = {
+  efh: "Einfamilienhaus", mfh: "Mehrfamilienhaus",
+  gewerbe: "Gewerbe", gewerblich: "Gewerbe", sonstiges: "Sonstiges",
 };
 
-function createPin(color: string) {
+function createPin(color: string, isActive: boolean) {
+  const size = isActive ? 18 : 12;
+  const glow = isActive ? `0 0 12px ${color}80, 0 0 24px ${color}30` : `0 0 6px ${color}40`;
   return L.divIcon({
     className: "",
-    html: `<div style="width:14px;height:14px;background:${color};border:2px solid rgba(255,255,255,0.9);border-radius:50%;box-shadow:0 0 8px ${color}60,0 2px 6px rgba(0,0,0,0.3);"></div>`,
-    iconSize: [14, 14],
-    iconAnchor: [7, 7],
+    html: `<div style="
+      width:${size}px;height:${size}px;
+      background:${color};
+      border:2.5px solid #fff;
+      border-radius:50%;
+      box-shadow:${glow};
+      transition:all .2s;
+    "></div>`,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
   });
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
 // STYLES
-// ═══════════════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
 
 const CSS = `
-.map-page{display:flex;height:calc(100vh - 64px);height:calc(100dvh - 64px);background:#060a14;overflow:hidden}
-.map-container{flex:1;position:relative;min-width:0}
-.map-container .leaflet-container{height:100%!important;width:100%!important;background:#f0ede6}
-.map-sidebar{width:340px;flex-shrink:0;background:#0b1224;border-left:1px solid rgba(212,168,67,0.08);display:flex;flex-direction:column;overflow:hidden}
-@media(max-width:768px){.map-sidebar{display:none}.map-page{height:100vh;height:100dvh}}
-.map-sidebar-header{padding:16px 20px;border-bottom:1px solid rgba(212,168,67,0.06)}
-.map-sidebar-header h2{font-size:15px;font-weight:800;color:#f1f5f9;letter-spacing:-0.02em;font-family:'Inter',sans-serif}
-.map-sidebar-header p{font-size:11px;color:#64748b;margin-top:2px}
-.map-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:12px 20px;border-bottom:1px solid rgba(212,168,67,0.06)}
-.map-stat{text-align:center;padding:8px 4px;background:rgba(15,23,42,0.5);border-radius:8px;border:1px solid rgba(212,168,67,0.04)}
-.map-stat-val{font-size:20px;font-weight:800;color:var(--sc,#D4A843);font-family:'DM Mono',monospace}
-.map-stat-label{font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-top:2px}
-.map-list{flex:1;overflow-y:auto;padding:8px 12px}
-.map-list::-webkit-scrollbar{width:4px}
-.map-list::-webkit-scrollbar-thumb{background:rgba(212,168,67,0.15);border-radius:2px}
-.map-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .15s;margin-bottom:4px;border:1px solid transparent}
-.map-item:hover{background:rgba(15,23,42,0.6);border-color:rgba(212,168,67,0.08)}
-.map-item-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;box-shadow:0 0 6px var(--dc,#D4A843)}
-.map-item-body{flex:1;min-width:0}
-.map-item-name{font-size:12px;font-weight:600;color:#e2e8f0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.map-item-sub{font-size:10px;color:#64748b;margin-top:1px}
-.map-item-status{font-size:9px;font-weight:700;padding:2px 8px;border-radius:6px;text-transform:uppercase;flex-shrink:0}
-.map-toolbar{position:absolute;top:12px;right:12px;z-index:1000;display:flex;gap:6px}
-.map-toolbar button{padding:8px 14px;background:rgba(11,18,36,0.9);border:1px solid rgba(212,168,67,0.12);border-radius:8px;color:#e2e8f0;font-size:11px;font-weight:600;cursor:pointer;backdrop-filter:blur(8px);transition:all .15s;font-family:'Inter',sans-serif}
-.map-toolbar button:hover{border-color:rgba(212,168,67,0.3);background:rgba(11,18,36,0.95)}
-.map-toolbar button.active{border-color:#D4A843;color:#D4A843;background:rgba(212,168,67,0.08)}
-.map-checkin{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:1000}
-.map-checkin button{padding:12px 32px;background:linear-gradient(135deg,#D4A843,#EAD068);border:none;border-radius:12px;color:#060a14;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(212,168,67,0.3);transition:all .2s;font-family:'Inter',sans-serif}
-.map-checkin button:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,168,67,0.4)}
-.map-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:#475569;font-size:12px;text-align:center;gap:8px}
-@keyframes locPulse{0%{transform:scale(1);opacity:.4}50%{transform:scale(2.5);opacity:0}100%{transform:scale(1);opacity:0}}
+/* Layout */
+.sb-map{display:flex;height:calc(100vh - 64px);height:calc(100dvh - 64px);background:#060b18;overflow:hidden;position:relative}
+.sb-map-area{flex:1;position:relative;min-width:0}
+.sb-map-area .leaflet-container{height:100%!important;width:100%!important;background:#f0ede6}
 
-/* Tablet */
-@media(max-width:1024px){
-  .map-sidebar{width:280px}
-  .map-stat-val{font-size:16px}
-}
+/* Dark map theme overrides */
+.leaflet-control-zoom a{background:#111827!important;color:#d1d5db!important;border-color:#1f2937!important}
+.leaflet-control-zoom a:hover{background:#1f2937!important;color:#f9fafb!important}
+.leaflet-popup-content-wrapper{background:#fff!important;color:#1e293b!important;border-radius:12px!important;box-shadow:0 8px 32px rgba(0,0,0,0.15)!important;border:1px solid rgba(0,0,0,0.06)!important}
+.leaflet-popup-tip{background:#fff!important}
+.leaflet-popup-close-button{color:#64748b!important;font-size:18px!important;top:6px!important;right:8px!important}
 
-/* Mobile */
+/* Panel */
+.sb-panel{width:360px;flex-shrink:0;background:#0d1321;border-left:1px solid rgba(255,255,255,0.04);display:flex;flex-direction:column;overflow:hidden}
+.sb-panel-head{padding:20px 20px 16px}
+.sb-panel-title{font-size:18px;font-weight:800;color:#f1f5f9;letter-spacing:-0.03em}
+.sb-panel-sub{font-size:12px;color:#64748b;margin-top:4px}
+
+/* Stats Grid */
+.sb-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:0 20px 16px}
+.sb-stat{text-align:center;padding:10px 4px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;transition:all .15s}
+.sb-stat:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08)}
+.sb-stat.active{border-color:var(--sc);background:color-mix(in srgb,var(--sc) 8%,transparent)}
+.sb-stat-n{font-size:22px;font-weight:800;color:var(--sc);font-variant-numeric:tabular-nums}
+.sb-stat-l{font-size:8px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px}
+
+/* Filter Pills */
+.sb-filters{display:flex;gap:6px;padding:0 20px 12px;flex-wrap:wrap}
+.sb-pill{padding:5px 12px;border-radius:20px;font-size:10px;font-weight:700;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#94a3b8;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:0.04em}
+.sb-pill:hover{border-color:rgba(255,255,255,0.15);color:#cbd5e1}
+.sb-pill.active{border-color:var(--pc);color:var(--pc);background:color-mix(in srgb,var(--pc) 10%,transparent)}
+
+/* Divider */
+.sb-div{height:1px;background:rgba(255,255,255,0.04);margin:0 20px}
+
+/* List */
+.sb-list{flex:1;overflow-y:auto;padding:8px 12px}
+.sb-list::-webkit-scrollbar{width:3px}
+.sb-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
+.sb-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;cursor:pointer;transition:all .15s;margin-bottom:4px;border:1px solid transparent;position:relative}
+.sb-card:hover{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.06)}
+.sb-card-pin{width:10px;height:10px;border-radius:50%;flex-shrink:0;position:relative}
+.sb-card-pin::after{content:'';position:absolute;inset:-3px;border-radius:50%;background:currentColor;opacity:0.15}
+.sb-card-info{flex:1;min-width:0}
+.sb-card-name{font-size:13px;font-weight:600;color:#e2e8f0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-card-meta{font-size:10px;color:#64748b;margin-top:2px;display:flex;gap:8px;align-items:center}
+.sb-card-badge{font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px;flex-shrink:0;letter-spacing:0.02em}
+
+/* Map Controls */
+.sb-controls{position:absolute;top:16px;right:16px;z-index:1000;display:flex;gap:8px}
+.sb-btn{padding:9px 16px;background:rgba(13,19,33,0.92);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:#cbd5e1;font-size:11px;font-weight:600;cursor:pointer;backdrop-filter:blur(12px);transition:all .15s;font-family:inherit;display:flex;align-items:center;gap:6px}
+.sb-btn:hover{border-color:rgba(255,255,255,0.15);color:#f1f5f9;background:rgba(13,19,33,0.96)}
+.sb-btn.active{border-color:#D4A843;color:#D4A843}
+.sb-btn svg{width:14px;height:14px}
+
+/* CTA */
+.sb-cta{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:1000}
+.sb-cta button{padding:12px 28px;background:linear-gradient(135deg,#D4A843 0%,#e8c35a 100%);border:none;border-radius:12px;color:#060b18;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 24px rgba(212,168,67,0.25),0 0 0 1px rgba(212,168,67,0.1);transition:all .2s;font-family:inherit;letter-spacing:-0.01em}
+.sb-cta button:hover{transform:translateY(-1px);box-shadow:0 8px 32px rgba(212,168,67,0.35)}
+
+/* Empty */
+.sb-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;color:#475569;font-size:13px;text-align:center;gap:12px}
+
+/* Legende */
+.sb-legend{position:absolute;bottom:24px;left:16px;z-index:1000;background:rgba(13,19,33,0.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:5px}
+.sb-legend-item{display:flex;align-items:center;gap:8px;font-size:10px;color:#94a3b8;font-weight:500}
+.sb-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+@keyframes sb-pulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:0;transform:scale(2.5)}}
+@keyframes sb-spin{to{transform:rotate(360deg)}}
+
+/* Responsive */
+@media(max-width:1024px){.sb-panel{width:300px}.sb-stat-n{font-size:18px}.sb-stats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){
-  .map-page{flex-direction:column;height:calc(100vh - 60px)}
-  .map-container{flex:1;min-height:50vh}
-  .map-sidebar{width:100%;height:auto;max-height:45vh;border-left:none;border-top:1px solid rgba(212,168,67,0.08);border-radius:16px 16px 0 0;overflow:hidden}
-  .map-sidebar-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
-  .map-sidebar-header h2{font-size:14px}
-  .map-sidebar-header p{display:none}
-  .map-stats{padding:8px 16px;gap:6px}
-  .map-stat{padding:6px 4px}
-  .map-stat-val{font-size:16px}
-  .map-list{padding:4px 8px}
-  .map-item{padding:10px 10px}
-  .map-toolbar{top:8px;right:8px;left:68px;gap:4px;flex-wrap:wrap}
-  .map-toolbar button{padding:8px 10px;font-size:11px;border-radius:10px;min-height:38px}
-  .map-checkin{bottom:20px;top:auto;left:50%;transform:translateX(-50%)}
-  .map-checkin button{padding:10px 20px;font-size:12px;border-radius:10px;min-height:44px}
-  .map-handle{display:block;width:40px;height:4px;background:rgba(212,168,67,0.2);border-radius:2px;margin:8px auto 0}
-}
-
-/* Small Phone */
-@media(max-width:400px){
-  .map-toolbar button{font-size:10px;padding:6px 8px}
+  .sb-map{flex-direction:column}
+  .sb-map-area{flex:1;min-height:55vh}
+  .sb-panel{width:100%;max-height:42vh;border-left:none;border-top:1px solid rgba(255,255,255,0.04);border-radius:16px 16px 0 0}
+  .sb-panel-head{padding:12px 16px 8px}
+  .sb-panel-title{font-size:15px}
+  .sb-stats{padding:0 16px 10px;grid-template-columns:repeat(4,1fr)}
+  .sb-controls{top:10px;right:10px;gap:6px;flex-wrap:wrap}
+  .sb-btn{padding:8px 12px;font-size:10px;min-height:38px}
+  .sb-legend{bottom:16px;left:10px;padding:8px 12px}
+  .sb-cta{bottom:16px}
 }
 `;
 
-// ═══════════════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
 // COMPONENT
-// ═══════════════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
 
-interface MapPin {
+interface LeadPin {
   id: string;
   lat: number;
   lng: number;
   name: string;
   address: string;
   status: string;
-  kwp: number;
-  nb: string;
+  hausart: string;
+  stromverbrauch: number;
+  plz: string;
+  timestamp: string;
 }
 
 export default function MapPage() {
@@ -147,31 +166,37 @@ export default function MapPage() {
   const mapRef = useRef<L.Map | null>(null);
   const mapEl = useRef<HTMLDivElement>(null);
   const markersRef = useRef<L.LayerGroup | null>(null);
-  const [pins, setPins] = useState<MapPin[]>([]);
+  const [pins, setPins] = useState<LeadPin[]>([]);
+  const [allItems, setAllItems] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>({});
   const [loading, setLoading] = useState(true);
-  const [heatmapOn, setHeatmapOn] = useState(false);
   const [satellite, setSatellite] = useState(false);
+  const [filter, setFilter] = useState<string | null>(null);
   const [userPos, setUserPos] = useState<[number, number] | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
+  const [activePin, setActivePin] = useState<string | null>(null);
 
-  // Load installations — auch ohne Koordinaten für die Sidebar-Liste
-  const [allItems, setAllItems] = useState<any[]>([]);
+  // Load leads
   const loadPins = useCallback(async () => {
     try {
-      const data = await apiFetch("/installations/enterprise?limit=1000");
-      const items = data?.data || [];
+      const data = await apiFetch("/wizard/leads-map");
+      if (!data?.success) { setPins([]); return; }
+      const items = data.data || [];
       setAllItems(items);
-      const mapped: MapPin[] = items
-        .filter((i: any) => i.latitude && i.longitude)
+      setStats(data.stats || {});
+      const mapped: LeadPin[] = items
+        .filter((i: any) => i.lat && i.lng)
         .map((i: any) => ({
-          id: i.installationId || i.id,
-          lat: parseFloat(i.latitude),
-          lng: parseFloat(i.longitude),
-          name: i.customerName || i.name || "–",
-          address: [i.strasse || i.street, i.plz, i.ort || i.city].filter(Boolean).join(", "),
-          status: (i.status || "LEAD").toUpperCase(),
-          kwp: i.kwp || 0,
-          nb: i.gridOperator || i.netzbetreiberName || "–",
+          id: i.id,
+          lat: i.lat,
+          lng: i.lng,
+          name: i.name || "–",
+          address: [i.strasse, i.hausNr, i.plz, i.ort].filter(Boolean).join(", "),
+          status: (i.status || "NEU").toUpperCase(),
+          hausart: i.hausart || "",
+          stromverbrauch: i.stromverbrauch || 0,
+          plz: i.plz || "",
+          timestamp: i.timestamp || "",
         }));
       setPins(mapped);
     } catch {
@@ -181,209 +206,69 @@ export default function MapPage() {
     }
   }, []);
 
-  // Init map (with retry for WebView navigation)
+  // Filtered pins
+  const visiblePins = filter ? pins.filter(p => p.status === filter) : pins;
+
+  // Init map
   useEffect(() => {
     function initMap() {
       if (!mapEl.current || mapRef.current) return false;
       const el = mapEl.current;
-      // Guard: element must have dimensions
       if (!el.offsetWidth || !el.offsetHeight) return false;
 
-    try {
-      const map = L.map(el, {
-        center: [51.1657, 10.4515], // Germany center
-        zoom: 6,
-        zoomControl: false,
-        attributionControl: false,
-      });
-
-      // Map tiles — Standard (Carto Voyager)
-      tileLayerRef.current = L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-        maxZoom: 19,
-      }).addTo(map);
-
-      L.control.zoom({ position: "bottomright" }).addTo(map);
-      L.control.attribution({ position: "bottomleft" }).addTo(map);
-
-      markersRef.current = L.layerGroup().addTo(map);
-      mapRef.current = map;
-
-      // Fix for WebView: force map to recalculate size
-      setTimeout(() => map.invalidateSize(), 200);
-      setTimeout(() => map.invalidateSize(), 1000);
-
-    // Klick auf Karte → Solar-Check
-    map.on("click", async (e: L.LeafletMouseEvent) => {
-      if (map.getZoom() < 15) return; // Nur bei hohem Zoom
-      const { lat, lng } = e.latlng;
-      const popup = L.popup({ maxWidth: 280 })
-        .setLatLng(e.latlng)
-        .setContent(`<div style="text-align:center;padding:8px;font-family:Inter,sans-serif">
-          <div style="width:20px;height:20px;border:2px solid #D4A843;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;margin:0 auto"></div>
-          <div style="font-size:11px;color:#888;margin-top:6px">Solar-Analyse läuft...</div>
-          <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
-        </div>`)
-        .openOn(map);
-
       try {
-        const data = await apiFetch(`/solar/solar-check?lat=${lat.toFixed(6)}&lng=${lng.toFixed(6)}`);
-        if (!data || !data.available) {
-          popup.setContent(`<div style="font-family:Inter,sans-serif;padding:4px">
-            <div style="font-size:12px;color:#888">Keine Solardaten für diesen Standort</div>
-          </div>`);
-          return;
-        }
-
-        const syBase = data.specificYield || data.maxSunshineHours || 950;
-        const optAngle = data.optimalAngle || 30;
-        const pid = `sp${Date.now()}`;
-
-        function renderPopup(kwp: number) {
-          const quality = syBase >= 1050 ? "Sehr gut" : syBase >= 950 ? "Gut" : syBase >= 850 ? "Mittel" : "Mäßig";
-          const qc = syBase >= 1050 ? "#059669" : syBase >= 950 ? "#D4A843" : syBase >= 850 ? "#f59e0b" : "#ef4444";
-          const ykwh = Math.round(kwp * syBase);
-          const sav = Math.round(ykwh * 0.7 * 0.35 + ykwh * 0.3 * 0.082);
-          const pan = Math.round(kwp * 1000 / 400);
-          const amo = sav > 0 ? (kwp * 1400 / sav).toFixed(1) : "–";
-
-          return `<div style="font-family:Inter,sans-serif;min-width:290px;max-width:330px" id="${pid}">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-              <div style="font-size:14px;font-weight:700;color:#1a1a1a">☀️ Solar-Rechner</div>
-              <div style="display:flex;align-items:center;gap:4px">
-                <div style="width:7px;height:7px;border-radius:50%;background:${qc}"></div>
-                <span style="font-size:10px;font-weight:700;color:${qc}">${quality}</span>
-              </div>
-            </div>
-            <div style="font-size:10px;color:#888;margin-bottom:8px" data-o="syval">${syBase} kWh/kWp</div>
-            <div style="padding:8px;background:#f8f8f8;border-radius:8px">
-              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="font-size:9px;color:#666;width:62px">Anlagengröße</span><input type="range" min="3" max="30" step="0.5" value="${kwp}" data-s="kwp" style="flex:1;accent-color:#D4A843;height:4px"><span style="font-size:10px;font-weight:700;color:#D4A843;width:55px;text-align:right" data-o="kwp">${kwp} kWp</span></div>
-              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="font-size:9px;color:#666;width:62px">Strompreis</span><input type="range" min="0.20" max="0.55" step="0.01" value="0.35" data-s="price" style="flex:1;accent-color:#2563EB;height:4px"><span style="font-size:10px;font-weight:700;color:#2563EB;width:55px;text-align:right" data-o="price">0.35 €</span></div>
-              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="font-size:9px;color:#666;width:62px">Dachneigung</span><input type="range" min="0" max="90" step="5" value="${optAngle}" data-s="angle" style="flex:1;accent-color:#059669;height:4px"><span style="font-size:10px;font-weight:700;color:#059669;width:55px;text-align:right" data-o="angle">${optAngle}°</span></div>
-              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="font-size:9px;color:#666;width:62px">Ausrichtung</span><select data-s="dir" style="flex:1;font-size:10px;padding:3px;border:1px solid #ddd;border-radius:4px"><option value="1.0">Süd</option><option value="0.97">SSO / SSW</option><option value="0.95">SO / SW</option><option value="0.80">Ost / West</option><option value="0.65">NO / NW</option><option value="0.55">Nord</option></select><span style="width:55px"></span></div>
-              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="font-size:9px;color:#666;width:62px">Eigenverbr.</span><input type="range" min="30" max="90" step="5" value="70" data-s="ev" style="flex:1;accent-color:#8b5cf6;height:4px"><span style="font-size:10px;font-weight:700;color:#8b5cf6;width:55px;text-align:right" data-o="ev">70%</span></div>
-              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="font-size:9px;color:#666;width:62px">Modul</span><input type="range" min="300" max="500" step="10" value="400" data-s="watt" style="flex:1;accent-color:#f59e0b;height:4px"><span style="font-size:10px;font-weight:700;color:#f59e0b;width:55px;text-align:right" data-o="watt">400 W</span></div>
-              <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:#666;width:62px">Alter</span><input type="range" min="0" max="25" step="1" value="0" data-s="age" style="flex:1;accent-color:#64748b;height:4px"><span style="font-size:10px;font-weight:700;color:#64748b;width:55px;text-align:right" data-o="age">0 J.</span></div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:8px">
-              <div style="background:#ECFDF5;padding:6px;border-radius:6px;text-align:center"><div style="font-size:15px;font-weight:800;color:#059669" data-o="kwh">${ykwh.toLocaleString("de-DE")}</div><div style="font-size:8px;color:#065F46;font-weight:600">kWh/Jahr</div></div>
-              <div style="background:#FEF3C7;padding:6px;border-radius:6px;text-align:center"><div style="font-size:15px;font-weight:800;color:#D4A843" data-o="sav">${sav.toLocaleString("de-DE")}€</div><div style="font-size:8px;color:#92400E;font-weight:600">Ersparnis/J.</div></div>
-              <div style="background:#F5F3FF;padding:6px;border-radius:6px;text-align:center"><div style="font-size:15px;font-weight:800;color:#7C3AED" data-o="pan">${pan}</div><div style="font-size:8px;color:#5B21B6;font-weight:600">Module</div></div>
-            </div>
-            <div style="margin-top:6px;padding:5px 8px;background:#FEF9C3;border-radius:6px;font-size:10px;color:#854D0E;text-align:center">⚡ Amortisation: ~<span data-o="amo">${amo}</span> Jahre · Kosten ~<span data-o="cost">${(kwp*1.4).toFixed(1)}</span>k€</div>
-          </div>`;
-        }
-
-        popup.setContent(renderPopup(10));
-
-        // Event-Listener NACH dem Rendern registrieren
-        popup.on("add", () => {
-          const root = document.getElementById(pid);
-          if (!root) return;
-
-          const NF: Record<number,number> = {0:0.87,5:0.90,10:0.93,15:0.96,20:0.98,25:0.99,30:1.0,35:1.0,40:0.99,45:0.97,50:0.94,55:0.90,60:0.85,65:0.79,70:0.73,75:0.66,80:0.60,85:0.57,90:0.55};
-
-          function calc() {
-            const g = (s: string) => root!.querySelector(`[data-s="${s}"]`) as HTMLInputElement | HTMLSelectElement;
-            const k = parseFloat(g("kwp").value);
-            const price = parseFloat(g("price").value);
-            const angle = parseInt(g("angle").value);
-            const dirFactor = parseFloat(g("dir").value);
-            const ev = parseInt(g("ev").value) / 100;
-            const watt = parseInt(g("watt").value);
-            const age = parseInt(g("age").value);
-
-            // Neigungsfaktor interpolieren
-            const lo = Math.floor(angle / 5) * 5;
-            const hi = Math.ceil(angle / 5) * 5;
-            const nf = lo === hi ? (NF[lo] || 0.87) : (NF[lo] || 0.87) + ((NF[hi] || 0.87) - (NF[lo] || 0.87)) * ((angle - lo) / 5);
-            const degradation = 1 - age * 0.005;
-            const syAdj = Math.round(syBase * nf * dirFactor * degradation);
-            const yearly = Math.round(k * syAdj);
-            const evKwh = Math.round(yearly * ev);
-            const eiKwh = yearly - evKwh;
-            const savings = Math.round(evKwh * price + eiKwh * 0.082);
-            const panels = Math.round(k * 1000 / watt);
-            const cost = k * 1400;
-            const amort = savings > 0 ? (cost / savings).toFixed(1) : "–";
-
-            const o = (s: string) => root!.querySelector(`[data-o="${s}"]`) as HTMLElement;
-            o("kwp").textContent = k + " kWp";
-            o("price").textContent = price.toFixed(2) + " €";
-            o("angle").textContent = angle + "°";
-            o("ev").textContent = Math.round(ev * 100) + "%";
-            o("watt").textContent = watt + " W";
-            o("age").textContent = age + " J.";
-            o("syval").textContent = syAdj + " kWh/kWp";
-            o("kwh").textContent = yearly.toLocaleString("de-DE");
-            o("sav").textContent = savings.toLocaleString("de-DE") + "€";
-            o("pan").textContent = String(panels);
-            o("amo").textContent = amort;
-            o("cost").textContent = (cost / 1000).toFixed(1);
-          }
-
-          root.querySelectorAll("[data-s]").forEach(el => {
-            el.addEventListener("input", calc);
-            el.addEventListener("change", calc);
-          });
+        const map = L.map(el, {
+          center: [51.1657, 10.4515],
+          zoom: 6,
+          zoomControl: false,
+          attributionControl: false,
         });
-      } catch {
-        popup.setContent(`<div style="font-family:Inter,sans-serif;color:#888;font-size:11px">Fehler bei der Analyse</div>`);
-      }
-    });
 
-    // Standort ermitteln: GPS → IP-Fallback
-    function showLocation(ll: [number, number], label: string, zoom: number) {
-      setUserPos(ll);
-      map.setView(ll, zoom);
-      L.marker(ll, {
-        icon: L.divIcon({
-          className: "",
-          html: `<div style="position:relative">
-            <div style="width:16px;height:16px;background:#3b82f6;border:3px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(59,130,246,0.5);position:relative;z-index:2"></div>
-            <div style="position:absolute;top:-8px;left:-8px;width:32px;height:32px;background:rgba(59,130,246,0.15);border-radius:50%;animation:locPulse 2s infinite"></div>
-          </div>`,
-          iconSize: [16, 16],
-          iconAnchor: [8, 8],
-        }),
-        zIndexOffset: 1000,
-      }).addTo(map).bindPopup(`<b>${label}</b>`);
-    }
+        tileLayerRef.current = L.tileLayer(
+          "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+          { maxZoom: 19 }
+        ).addTo(map);
 
-    // IP-basierter Fallback
-    async function ipFallback() {
-      try {
-        const res = await fetch("https://ipapi.co/json/");
-        const data = await res.json();
-        if (data.latitude && data.longitude) {
-          showLocation([data.latitude, data.longitude], `Standort: ${data.city || ""}`, 13);
-          return;
+        L.control.zoom({ position: "bottomright" }).addTo(map);
+        markersRef.current = L.layerGroup().addTo(map);
+        mapRef.current = map;
+
+        setTimeout(() => map.invalidateSize(), 200);
+        setTimeout(() => map.invalidateSize(), 1000);
+
+        // Location
+        function showLocation(ll: [number, number], label: string, zoom: number) {
+          setUserPos(ll);
+          map.setView(ll, zoom);
+          L.marker(ll, {
+            icon: L.divIcon({
+              className: "",
+              html: `<div style="position:relative">
+                <div style="width:14px;height:14px;background:#3b82f6;border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 12px rgba(59,130,246,0.5);position:relative;z-index:2"></div>
+                <div style="position:absolute;top:-7px;left:-7px;width:28px;height:28px;background:rgba(59,130,246,0.2);border-radius:50%;animation:sb-pulse 2s infinite"></div>
+              </div>`,
+              iconSize: [14, 14],
+              iconAnchor: [7, 7],
+            }),
+            zIndexOffset: 1000,
+          }).addTo(map).bindPopup(`<div style="font-size:12px;font-weight:600">${label}</div>`);
         }
-      } catch {}
-      // Letzter Fallback: Lahr (Baunity HQ)
-      showLocation([48.3392, 7.8723], "Baunity HQ — Lahr", 13);
+
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => showLocation([pos.coords.latitude, pos.coords.longitude], "Dein Standort", 14),
+            () => showLocation([48.3392, 7.8723], "SolarBrain HQ", 12),
+            { enableHighAccuracy: true, timeout: 5000 }
+          );
+        } else {
+          showLocation([48.3392, 7.8723], "SolarBrain HQ", 12);
+        }
+      } catch (err) {
+        console.error("[Map] Init error:", err);
+      }
+      return true;
     }
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => showLocation([pos.coords.latitude, pos.coords.longitude], "Dein Standort", 15),
-        () => ipFallback(),
-        { enableHighAccuracy: true, timeout: 5000 }
-      );
-    } else {
-      ipFallback();
-    }
-
-    return () => {
-      map.remove();
-      mapRef.current = null;
-    };
-    } catch (err) {
-      console.error("[Map] Init error:", err);
-    }
-    return true;
-    }
-
-    // Try immediately, then retry after delays (for WebView navigation)
     if (!initMap()) {
       const t1 = setTimeout(() => { if (!initMap()) { setTimeout(initMap, 1000); } }, 300);
       return () => clearTimeout(t1);
@@ -398,32 +283,49 @@ export default function MapPage() {
     if (!markersRef.current) return;
     markersRef.current.clearLayers();
 
-    pins.forEach((pin) => {
-      const color = PIN_COLORS[pin.status] || "#D4A843";
-      const label = STATUS_LABELS[pin.status] || pin.status;
-      const marker = L.marker([pin.lat, pin.lng], { icon: createPin(color) });
+    visiblePins.forEach((pin) => {
+      const cfg = STATUS_CONFIG[pin.status] || STATUS_CONFIG.NEU;
+      const isHighlighted = activePin === pin.id;
+      const marker = L.marker([pin.lat, pin.lng], {
+        icon: createPin(cfg.color, isHighlighted),
+        zIndexOffset: isHighlighted ? 1000 : 0,
+      });
+
+      const timeAgo = pin.timestamp ? formatTimeAgo(pin.timestamp) : "";
+
       marker.bindPopup(`
-        <div style="font-family:Inter,sans-serif;min-width:180px">
-          <div style="font-weight:700;font-size:13px;margin-bottom:4px">${pin.name}</div>
-          <div style="font-size:11px;color:#666;margin-bottom:6px">${pin.address}</div>
-          <div style="display:flex;gap:8px;font-size:10px">
-            <span style="background:${color}15;color:${color};padding:2px 8px;border-radius:4px;font-weight:700">${label}</span>
-            ${pin.kwp > 0 ? `<span style="color:#888">${pin.kwp} kWp</span>` : ""}
+        <div style="font-family:Inter,system-ui,sans-serif;min-width:200px;padding:4px 0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <div style="width:32px;height:32px;border-radius:10px;background:${cfg.color}18;display:flex;align-items:center;justify-content:center">
+              <div style="width:10px;height:10px;border-radius:50%;background:${cfg.color}"></div>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:14px;color:#1e293b">${pin.name}</div>
+              <div style="font-size:11px;color:#64748b">${pin.address || pin.plz || "–"}</div>
+            </div>
           </div>
-          ${pin.nb !== "–" ? `<div style="font-size:10px;color:#999;margin-top:4px">NB: ${pin.nb}</div>` : ""}
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span style="background:${cfg.color}18;color:${cfg.color};padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700">${cfg.label}</span>
+            ${pin.hausart ? `<span style="background:rgba(255,255,255,0.05);color:#94a3b8;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600">${HAUSART_LABELS[pin.hausart] || pin.hausart}</span>` : ""}
+          </div>
+          ${pin.stromverbrauch > 0 ? `<div style="display:flex;align-items:center;gap:6px;padding:8px 10px;background:#f8fafc;border-radius:8px;margin-bottom:6px">
+            <span style="font-size:10px;color:#64748b">Verbrauch</span>
+            <span style="font-size:12px;font-weight:700;color:#1e293b;margin-left:auto">${pin.stromverbrauch.toLocaleString("de-DE")} kWh/J.</span>
+          </div>` : ""}
+          ${timeAgo ? `<div style="font-size:10px;color:#475569;text-align:right">${timeAgo}</div>` : ""}
         </div>
-      `, { className: "baunity-popup" });
+      `, { className: "sb-popup", maxWidth: 280 });
+
       markersRef.current!.addLayer(marker);
     });
 
-    // Fit bounds if pins exist
-    if (pins.length > 0 && mapRef.current) {
-      const bounds = L.latLngBounds(pins.map(p => [p.lat, p.lng]));
-      mapRef.current.fitBounds(bounds, { padding: [50, 50], maxZoom: 13 });
+    if (visiblePins.length > 0 && mapRef.current) {
+      const bounds = L.latLngBounds(visiblePins.map(p => [p.lat, p.lng]));
+      mapRef.current.fitBounds(bounds, { padding: [60, 60], maxZoom: 14 });
     }
-  }, [pins]);
+  }, [visiblePins, activePin]);
 
-  // Toggle satellite
+  // Toggle satellite / dark
   useEffect(() => {
     if (!mapRef.current || !tileLayerRef.current) return;
     mapRef.current.removeLayer(tileLayerRef.current);
@@ -433,134 +335,154 @@ export default function MapPage() {
         : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
       { maxZoom: 19 }
     ).addTo(mapRef.current);
-    // Tiles müssen unter den Markern sein
     tileLayerRef.current.setZIndex(0);
   }, [satellite]);
 
-  // Toggle heatmap
-  useEffect(() => {
-    if (!mapRef.current) return;
-    const map = mapRef.current;
-    const heatId = "_baunityHeat";
-
-    if (heatmapOn && pins.length > 0) {
-      // Simple circle-based heatmap (no leaflet.heat needed)
-      const heatGroup = L.layerGroup();
-      pins.forEach((p) => {
-        L.circle([p.lat, p.lng], {
-          radius: 2000,
-          color: "transparent",
-          fillColor: "#D4A843",
-          fillOpacity: 0.08,
-        }).addTo(heatGroup);
-      });
-      (heatGroup as any)._baunityId = heatId;
-      heatGroup.addTo(map);
-    } else {
-      map.eachLayer((layer: any) => {
-        if (layer._baunityId === heatId) map.removeLayer(layer);
-      });
-    }
-  }, [heatmapOn, pins]);
-
-  // Stats
-  const statusCounts: Record<string, number> = {};
-  pins.forEach((p) => {
-    const mapped = STATUS_LABELS[p.status] || p.status;
-    statusCounts[mapped] = (statusCounts[mapped] || 0) + 1;
-  });
-
-  const flyTo = (lat: number, lng: number) => {
-    mapRef.current?.flyTo([lat, lng], 15, { duration: 0.8 });
+  const flyTo = (lat: number, lng: number, id: string) => {
+    setActivePin(id);
+    mapRef.current?.flyTo([lat, lng], 16, { duration: 0.6 });
+    setTimeout(() => setActivePin(null), 4000);
   };
 
+  // Filtered list items
+  const filteredItems = filter
+    ? allItems.filter((i: any) => (i.status || "NEU").toUpperCase() === filter)
+    : allItems;
+
   return (
-    <div className="map-page">
+    <div className="sb-map">
       <style>{CSS}</style>
 
       {/* Map */}
-      <div className="map-container">
+      <div className="sb-map-area">
         <div ref={mapEl} style={{ height: "100%", width: "100%" }} />
 
-        {/* Toolbar */}
-        <div className="map-toolbar">
-          <button className={satellite ? "active" : ""} onClick={() => setSatellite(!satellite)}>
-            🛰 Satellit
+        {/* Controls */}
+        <div className="sb-controls">
+          <button className={`sb-btn${satellite ? " active" : ""}`} onClick={() => setSatellite(!satellite)}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            Satellit
           </button>
-          <button className={heatmapOn ? "active" : ""} onClick={() => setHeatmapOn(!heatmapOn)}>
-            🔥 Heatmap
+          <button className="sb-btn" onClick={() => userPos && mapRef.current?.flyTo(userPos, 15, { duration: 0.6 })}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg>
+            Standort
           </button>
-          <button onClick={() => userPos && mapRef.current?.flyTo(userPos, 14, { duration: 0.8 })}>
-            📍 Mein Standort
-          </button>
-          <button onClick={() => pins.length > 0 && mapRef.current?.fitBounds(L.latLngBounds(pins.map(p => [p.lat, p.lng])), { padding: [50, 50] })}>
-            🗺 Alle zeigen
-          </button>
-          <button onClick={() => mapRef.current && mapRef.current.getZoom() < 15 && mapRef.current.setZoom(15)}>
-            ☀️ Solar-Check
+          <button className="sb-btn" onClick={() => visiblePins.length > 0 && mapRef.current?.fitBounds(L.latLngBounds(visiblePins.map(p => [p.lat, p.lng])), { padding: [60, 60] })}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+            Alle
           </button>
         </div>
 
-        {/* Check-in Button */}
-        <div className="map-checkin">
+        {/* Legend */}
+        <div className="sb-legend">
+          {Object.entries(STATUS_CONFIG).filter(([k]) => {
+            const count = pins.filter(p => p.status === k).length;
+            return count > 0;
+          }).map(([key, cfg]) => (
+            <div key={key} className="sb-legend-item">
+              <div className="sb-legend-dot" style={{ background: cfg.color }} />
+              <span>{cfg.label} ({pins.filter(p => p.status === key).length})</span>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className="sb-cta">
           <button onClick={() => nav("/lead/new")}>+ Neuen Lead erfassen</button>
         </div>
       </div>
 
-      {/* Sidebar */}
-      <div className="map-sidebar">
-        <div className="map-handle" style={{ display: "none" }} />
-        <div className="map-sidebar-header">
-          <h2>Vertriebsgebiet</h2>
-          <p>{pins.length} Standorte</p>
+      {/* Panel */}
+      <div className="sb-panel">
+        <div className="sb-panel-head">
+          <div className="sb-panel-title">Vertriebsgebiet</div>
+          <div className="sb-panel-sub">{pins.length} Leads auf der Karte</div>
         </div>
 
-        <div className="map-stats">
-          <div className="map-stat" style={{ "--sc": "#D4A843" } as any}>
-            <div className="map-stat-val">{allItems.length || pins.length}</div>
-            <div className="map-stat-label">Gesamt</div>
+        {/* Stats */}
+        <div className="sb-stats">
+          <div
+            className={`sb-stat${filter === null ? " active" : ""}`}
+            style={{ "--sc": "#D4A843" } as any}
+            onClick={() => setFilter(null)}
+          >
+            <div className="sb-stat-n">{stats.total || 0}</div>
+            <div className="sb-stat-l">Gesamt</div>
           </div>
-          <div className="map-stat" style={{ "--sc": "#22c55e" } as any}>
-            <div className="map-stat-val">{allItems.filter((i: any) => ["verkauft","genehmigt","VERKAUFT","GENEHMIGT"].includes(i.status)).length || pins.filter(p => ["VERKAUFT", "GENEHMIGT"].includes(p.status)).length}</div>
-            <div className="map-stat-label">Verkauft</div>
+          <div
+            className={`sb-stat${filter === "NEU" ? " active" : ""}`}
+            style={{ "--sc": STATUS_CONFIG.NEU.color } as any}
+            onClick={() => setFilter(filter === "NEU" ? null : "NEU")}
+          >
+            <div className="sb-stat-n">{stats.neu || 0}</div>
+            <div className="sb-stat-l">Neu</div>
           </div>
-          <div className="map-stat" style={{ "--sc": "#3b82f6" } as any}>
-            <div className="map-stat-val">{pins.length}</div>
-            <div className="map-stat-label">Auf Karte</div>
+          <div
+            className={`sb-stat${filter === "KONTAKTIERT" ? " active" : ""}`}
+            style={{ "--sc": STATUS_CONFIG.KONTAKTIERT.color } as any}
+            onClick={() => setFilter(filter === "KONTAKTIERT" ? null : "KONTAKTIERT")}
+          >
+            <div className="sb-stat-n">{stats.kontaktiert || 0}</div>
+            <div className="sb-stat-l">Kontaktiert</div>
+          </div>
+          <div
+            className={`sb-stat${filter === "QUALIFIZIERT" ? " active" : ""}`}
+            style={{ "--sc": STATUS_CONFIG.QUALIFIZIERT.color } as any}
+            onClick={() => setFilter(filter === "QUALIFIZIERT" ? null : "QUALIFIZIERT")}
+          >
+            <div className="sb-stat-n">{stats.qualifiziert || 0}</div>
+            <div className="sb-stat-l">Qualifiziert</div>
           </div>
         </div>
 
-        <div className="map-list">
+        <div className="sb-div" />
+
+        {/* Lead List */}
+        <div className="sb-list">
           {loading ? (
-            <div className="map-empty">
-              <div style={{ width: 24, height: 24, border: "2px solid rgba(212,168,67,0.3)", borderTopColor: "#D4A843", borderRadius: "50%", animation: "dcSpin .6s linear infinite" }} />
-              Lade Standorte...
+            <div className="sb-empty">
+              <div style={{ width: 24, height: 24, border: "2px solid rgba(212,168,67,0.2)", borderTopColor: "#D4A843", borderRadius: "50%", animation: "sb-spin .6s linear infinite" }} />
+              <span>Leads werden geladen...</span>
             </div>
-          ) : allItems.length === 0 && pins.length === 0 ? (
-            <div className="map-empty">
-              <span style={{ fontSize: 28 }}>📍</span>
-              Noch keine Standorte.<br />Erstelle deinen ersten Lead.
+          ) : filteredItems.length === 0 ? (
+            <div className="sb-empty">
+              {filter ? (
+                <>
+                  <span style={{ fontSize: 32, opacity: 0.5 }}>&#8709;</span>
+                  <span>Keine Leads mit Status "{STATUS_CONFIG[filter]?.label || filter}"</span>
+                  <button onClick={() => setFilter(null)} style={{ marginTop: 8, padding: "6px 16px", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "#94a3b8", fontSize: 11, cursor: "pointer", fontWeight: 600 }}>Filter zurücksetzen</button>
+                </>
+              ) : (
+                <>
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Noch keine Leads erfasst</span>
+                </>
+              )}
             </div>
           ) : (
-            (allItems.length > 0 ? allItems : pins).slice(0, 50).map((item: any) => {
-              const isMapPin = item.lat != null;
-              const status = (item.status || "LEAD").toUpperCase();
-              const color = PIN_COLORS[status] || "#D4A843";
-              const label = STATUS_LABELS[status] || status;
-              const name = item.name || item.customerName || item.projektName || "–";
-              const address = item.address || [item.strasse || item.street, item.plz, item.ort || item.city].filter(Boolean).join(", ");
-              const nb = item.nb || item.gridOperator || item.netzbetreiberName || "–";
-              const id = item.id || item.installationId;
-              const lat = isMapPin ? item.lat : item.latitude ? parseFloat(item.latitude) : null;
-              const lng = isMapPin ? item.lng : item.longitude ? parseFloat(item.longitude) : null;
+            filteredItems.slice(0, 60).map((item: any) => {
+              const hasCoords = item.lat != null && item.lng != null;
+              const status = (item.status || "NEU").toUpperCase();
+              const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.NEU;
+              const name = item.name || "–";
+              const address = [item.strasse, item.hausNr, item.plz, item.ort].filter(Boolean).join(", ");
+              const timeStr = item.timestamp ? formatTimeAgo(item.timestamp) : "";
               return (
-                <div key={id} className="map-item" onClick={() => lat && lng ? flyTo(lat, lng) : undefined} style={!lat ? { opacity: 0.6 } : undefined}>
-                  <div className="map-item-dot" style={{ background: color, "--dc": color } as any} />
-                  <div className="map-item-body">
-                    <div className="map-item-name">{name}</div>
-                    <div className="map-item-sub">{address || nb}{!lat && " · Keine GPS-Daten"}</div>
+                <div
+                  key={item.id}
+                  className="sb-card"
+                  onClick={() => hasCoords ? flyTo(item.lat, item.lng, item.id) : undefined}
+                  style={!hasCoords ? { opacity: 0.5, cursor: "default" } : undefined}
+                >
+                  <div className="sb-card-pin" style={{ background: cfg.color, color: cfg.color }} />
+                  <div className="sb-card-info">
+                    <div className="sb-card-name">{name}</div>
+                    <div className="sb-card-meta">
+                      <span>{address || "Keine Adresse"}</span>
+                      {timeStr && <span>{timeStr}</span>}
+                    </div>
                   </div>
-                  <span className="map-item-status" style={{ color, background: color + "12" }}>{label}</span>
+                  <span className="sb-card-badge" style={{ color: cfg.color, background: `${cfg.color}12` }}>{cfg.label}</span>
                 </div>
               );
             })
@@ -569,4 +491,16 @@ export default function MapPage() {
       </div>
     </div>
   );
+}
+
+function formatTimeAgo(ts: string): string {
+  const diff = Date.now() - new Date(ts).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "gerade eben";
+  if (mins < 60) return `vor ${mins} Min.`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `vor ${hrs} Std.`;
+  const days = Math.floor(hrs / 24);
+  if (days < 30) return `vor ${days} T.`;
+  return `vor ${Math.floor(days / 30)} Mon.`;
 }

@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 
 const ROUTE_TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
-  "/netzanmeldungen": "Sales Pipeline",
+  "/leads": "Leads",
   "/archiv": "Archiv",
   "/anlagen-wizard": "Neuer Lead",
   "/dokumente": "Dokumente",

@@ -198,7 +198,7 @@ export default function NetzanmeldungenV3() {
             {isHV ? "Meine Leads" : isSub ? "Meine Leads" : "Sales Pipeline"}
           </div>
           <div style={{ fontSize: 13, color: "#64748b" }}>
-            {isLoading ? "Laden..." : `${items.length} Projekte · ${totalOpen} offen · ${totalDone} abgeschlossen`}
+            {isLoading ? "Laden..." : `${items.length} Leads · ${totalOpen} offen · ${totalDone} abgeschlossen`}
           </div>
         </div>
 
@@ -259,7 +259,7 @@ export default function NetzanmeldungenV3() {
           {!isLoading && items.length === 0 && (
             <div style={{ textAlign: "center", padding: 50, color: "#64748b" }}>
               <div style={{ fontSize: 36, marginBottom: 10 }}>📭</div>
-              <div style={{ fontSize: 15, fontWeight: 600, color: "#94a3b8" }}>Keine Projekte vorhanden</div>
+              <div style={{ fontSize: 15, fontWeight: 600, color: "#94a3b8" }}>Keine Leads vorhanden</div>
               <div style={{ fontSize: 12, color: "#64748b", marginTop: 4 }}>
                 {isKunde ? "Starten Sie mit einem neuen Lead." : "Noch keine Leads vorhanden."}
               </div>
@@ -285,7 +285,7 @@ export default function NetzanmeldungenV3() {
         {/* Dashboard / Liste Toggle (nur Staff) */}
         {isStaff && (
           <div style={{ display: "flex", gap: 2, background: "rgba(12,12,20,0.7)", borderRadius: 8, padding: 3, border: "1px solid rgba(212,168,67,0.08)" }}>
-            {([["dashboard", "Dashboard"], ["list", "Projekte"]] as const).map(([k, l]) => (
+            {([["dashboard", "Dashboard"], ["list", "Leads"]] as const).map(([k, l]) => (
               <button key={k} onClick={() => setMode(k as V3Mode)} style={{
                 padding: "8px 18px", borderRadius: 6, border: "none", fontSize: 13, fontWeight: 600, cursor: "pointer",
                 background: mode === k ? "rgba(212,168,67,0.15)" : "transparent", color: mode === k ? "#a5b4fc" : "#64748b",
@@ -420,7 +420,7 @@ export default function NetzanmeldungenV3() {
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <div style={{ fontSize: 14, color: "#64748b" }}>
-                {isLoading ? "Laden..." : `${items.length} Projekte`}
+                {isLoading ? "Laden..." : `${items.length} Leads`}
               </div>
             </div>
 
@@ -478,7 +478,7 @@ export default function NetzanmeldungenV3() {
             {!isLoading && items.length === 0 && (
               <div style={{ padding: 40, textAlign: "center", color: "#64748b" }}>
                 <div style={{ fontSize: 32, marginBottom: 8 }}>📭</div>
-                <div style={{ fontSize: 14 }}>Keine Projekte in dieser Ansicht</div>
+                <div style={{ fontSize: 14 }}>Keine Leads in dieser Ansicht</div>
                 {hasActiveFilters && (
                   <button onClick={handleResetAll} style={{
                     marginTop: 12, background: "rgba(212,168,67,0.1)", color: "#a5b4fc",
