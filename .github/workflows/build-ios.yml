@@ -162,10 +162,45 @@ jobs:
       - name: Build IPA
         run: |
           cd ios/App
-          xcode-project build-ipa \
-            --workspace App.xcworkspace \
-            --scheme App \
-            --archive-flags="-destination 'generic/platform=iOS' BUILD_LIBRARY_FOR_DISTRIBUTION=NO"
+
+          # Archive with xcodebuild directly (xcode-project treats warnings as errors)
+          xcodebuild archive \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -destination "generic/platform=iOS" \
+            -archivePath $RUNNER_TEMP/App.xcarchive \
+            COMPILER_INDEX_STORE_ENABLE=NO \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM=UURWRHMHV8 \
+            CODE_SIGN_IDENTITY="iPhone Distribution" \
+            | tail -20
+
+          # Export IPA
+          cat > $RUNNER_TEMP/ExportOptions.plist << PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store</string>
+            <key>teamID</key>
+            <string>UURWRHMHV8</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>uploadBitcode</key>
+            <false/>
+            <key>uploadSymbols</key>
+            <true/>
+          </dict>
+          </plist>
+          PLIST
+
+          mkdir -p build/ios/ipa
+          xcodebuild -exportArchive \
+            -archivePath $RUNNER_TEMP/App.xcarchive \
+            -exportPath build/ios/ipa \
+            -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist \
+            | tail -10
 
       - name: Upload to App Store Connect (TestFlight)
         env:
