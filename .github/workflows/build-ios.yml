@@ -162,45 +162,20 @@ jobs:
       - name: Build IPA
         run: |
           cd ios/App
+          # Use xcode-project but allow warnings (exit 0 even on warnings)
+          xcode-project build-ipa \
+            --workspace App.xcworkspace \
+            --scheme App \
+            --archive-flags="-destination 'generic/platform=iOS'" \
+            || true
 
-          # Archive with xcodebuild directly (xcode-project treats warnings as errors)
-          xcodebuild archive \
-            -workspace App.xcworkspace \
-            -scheme App \
-            -destination "generic/platform=iOS" \
-            -archivePath $RUNNER_TEMP/App.xcarchive \
-            COMPILER_INDEX_STORE_ENABLE=NO \
-            CODE_SIGN_STYLE=Manual \
-            DEVELOPMENT_TEAM=UURWRHMHV8 \
-            CODE_SIGN_IDENTITY="iPhone Distribution" \
-            | tail -20
-
-          # Export IPA
-          cat > $RUNNER_TEMP/ExportOptions.plist << PLIST
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>method</key>
-            <string>app-store</string>
-            <key>teamID</key>
-            <string>UURWRHMHV8</string>
-            <key>signingStyle</key>
-            <string>manual</string>
-            <key>uploadBitcode</key>
-            <false/>
-            <key>uploadSymbols</key>
-            <true/>
-          </dict>
-          </plist>
-          PLIST
-
-          mkdir -p build/ios/ipa
-          xcodebuild -exportArchive \
-            -archivePath $RUNNER_TEMP/App.xcarchive \
-            -exportPath build/ios/ipa \
-            -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist \
-            | tail -10
+          # Check if IPA was actually created despite warnings
+          IPA=$(find build -name "*.ipa" 2>/dev/null | head -1)
+          if [ -z "$IPA" ]; then
+            echo "ERROR: No IPA file found"
+            exit 1
+          fi
+          echo "IPA built: $IPA ($(du -h "$IPA" | cut -f1))"
 
       - name: Upload to App Store Connect (TestFlight)
         env:
@@ -209,10 +184,8 @@ jobs:
           APP_STORE_CONNECT_KEY_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_KEY_P8_BASE64 }}
         run: |
           PRIVATE_KEY=$(echo "$APP_STORE_CONNECT_KEY_P8_BASE64" | base64 --decode)
-          # Find the IPA file
-          IPA_PATH=$(find ios/App/build -name "*.ipa" -o -name "*.ipa" | head -1)
-          echo "IPA found at: $IPA_PATH"
-          ls -la ios/App/build/ios/ipa/ 2>/dev/null || true
+          IPA_PATH=$(find ios/App/build -name "*.ipa" | head -1)
+          echo "IPA: $IPA_PATH"
           app-store-connect publish \
             --path "$IPA_PATH" \
             --key-id "$APP_STORE_CONNECT_KEY_ID" \
