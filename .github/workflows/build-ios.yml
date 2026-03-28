@@ -46,7 +46,7 @@ jobs:
           PRIVATE_KEY=$(echo "$APP_STORE_CONNECT_KEY_P8_BASE64" | base64 --decode)
 
           # Generate a certificate signing key (RSA)
-          openssl genrsa -out $RUNNER_TEMP/cert_key.pem 2048
+          CERT_KEY=$(openssl genrsa 2048 2>/dev/null)
 
           # Create keychain
           KEYCHAIN_PATH=$RUNNER_TEMP/signing.keychain-db
@@ -61,7 +61,7 @@ jobs:
             --key-id "$APP_STORE_CONNECT_KEY_ID" \
             --issuer-id "$APP_STORE_CONNECT_ISSUER_ID" \
             --private-key "$PRIVATE_KEY" \
-            --certificate-key $RUNNER_TEMP/cert_key.pem \
+            --certificate-key "$CERT_KEY" \
             --create
 
           keychain add-certificates --keychain $KEYCHAIN_PATH
