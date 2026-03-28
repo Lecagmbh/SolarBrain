@@ -36,9 +36,9 @@
   --portal-warning-bg: rgba(245, 158, 11, 0.1);
 
   /* ── Background ── */
-  --portal-bg: #0a0a0f;
-  --portal-bg-secondary: #0d0d1a;
-  --portal-bg-tertiary: #0a0f1a;
+  --portal-bg: #060b18;
+  --portal-bg-secondary: #0a1128;
+  --portal-bg-tertiary: #081020;
 
   /* ── Surface (glass panels) ── */
   --portal-surface: rgba(255, 255, 255, 0.03);
@@ -71,7 +71,7 @@
 
   /* ── Gradients ── */
   --portal-gradient-primary: linear-gradient(135deg, #D4A843 0%, #EAD068 100%);
-  --portal-gradient-bg: linear-gradient(135deg, #0a0a0f 0%, #0d0d1a 50%, #0a0f1a 100%);
+  --portal-gradient-bg: linear-gradient(135deg, #060b18 0%, #0a1128 50%, #081020 100%);
 
   /* ── Sidebar ── */
   --portal-sidebar-width: 260px;

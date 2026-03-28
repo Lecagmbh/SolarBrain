@@ -8,7 +8,7 @@
 }
 
 .admin-kpi-card {
-  background: radial-gradient(circle at top left, #020b29, #020617 75%);
+  background: radial-gradient(circle at top left, #020b29, #060b18 75%);
   border-radius: var(--admin-radius);
   border: 1px solid rgba(15, 23, 42, 0.98);
   box-shadow: var(--admin-shadow-subtle);
@@ -144,7 +144,7 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  background: radial-gradient(circle at top left, #020b29, #020617 80%);
+  background: radial-gradient(circle at top left, #020b29, #060b18 80%);
 }
 
 .admin-table thead {

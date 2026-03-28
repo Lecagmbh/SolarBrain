@@ -95,7 +95,20 @@ const Icons = {
    TYPES & NAVIGATION CONFIG
    ═══════════════════════════════════════════════════════════════════════════ */
 
-type UserRole = "ADMIN" | "MANAGER" | "MITARBEITER" | "HANDELSVERTRETER" | "KUNDE" | "SUBUNTERNEHMER" | "DEMO" | "PARTNER" | "HV_LEITER" | "HV_TEAMLEITER";
+type UserRole = "ADMIN" | "MANAGER" | "MITARBEITER" | "HANDELSVERTRETER" | "KUNDE" | "SUBUNTERNEHMER" | "DEMO" | "PARTNER" | "HV_LEITER" | "HV_TEAMLEITER" | "HV_LEADER";
+
+// Display-Labels für HV-Rollen
+const ROLE_LABELS: Record<string, string> = {
+  ADMIN: "Admin",
+  MITARBEITER: "Mitarbeiter",
+  MANAGER: "Manager",
+  HV_LEITER: "Vice President",
+  HV_TEAMLEITER: "Director",
+  HV_LEADER: "Leader",
+  HANDELSVERTRETER: "Member",
+  KUNDE: "Kunde",
+  PARTNER: "Partner",
+};
 
 interface NavItem {
   id: string;
@@ -137,12 +150,12 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
           { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
           { id: "projekte", label: "Sales Pipeline", icon: Icons.zap, path: "/netzanmeldungen" },
-          { id: "ticket-center", label: "Tickets", icon: Icons.clipboardCheck, path: "/ticket-center", isNew: true },
-          { id: "calendar", label: "Kalender", icon: Icons.calendar, path: "/calendar" },
+          { id: "leaderboard", label: "Leaderboard", icon: Icons.zap, path: "/leaderboard" },
           { id: "finanzen", label: "Finanzen", icon: Icons.accounting, path: "/finanzen" },
           { id: "kunden", label: "Team & Benutzer", icon: Icons.users, path: "/kunden" },
           { id: "handelsvertreter", label: "HV-Verwaltung", icon: Icons.userCheck, path: "/admin/handelsvertreter" },
           { id: "provisionen", label: "Provisionen", icon: Icons.coins, path: "/admin/provisionen" },
+          { id: "events", label: "Events & News", icon: Icons.calendar, path: "/admin/events" },
           ...(isDesktop ? [{ id: "offline", label: "Offline-Akten", icon: Icons.briefcase, path: "/offline" }] : []),
         ]
       },
@@ -196,10 +209,9 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
           { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
           { id: "netzanmeldungen", label: "Sales Pipeline", icon: Icons.zap, path: "/netzanmeldungen" },
-          { id: "calendar", label: "Kalender", icon: Icons.calendar, path: "/calendar" },
+          { id: "leaderboard", label: "Leaderboard", icon: Icons.zap, path: "/leaderboard" },
           { id: "kommunikation", label: "Nachrichten", icon: Icons.mail, path: "/emails" },
           { id: "dokumente", label: "Dokumente", icon: Icons.file, path: "/dokumente" },
-          { id: "ticket-center", label: "Tickets", icon: Icons.clipboardCheck, path: "/ticket-center", isNew: true },
         ]
       },
       {
@@ -229,7 +241,7 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
           { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
           { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
           { id: "projekte", label: "Sales Pipeline", icon: Icons.zap, path: "/netzanmeldungen" },
-          { id: "ticket-center", label: "Tickets", icon: Icons.clipboardCheck, path: "/ticket-center", isNew: true },
+          { id: "leaderboard", label: "Leaderboard", icon: Icons.zap, path: "/leaderboard" },
           { id: "dokumente", label: "Dokumente", icon: Icons.file, path: "/dokumente" },
           { id: "finanzen", label: "Rechnungen", icon: Icons.wallet, path: "/rechnungen" },
         ]
@@ -252,68 +264,94 @@ const getNavConfig = (role: UserRole, hasWhitelabel: boolean, kundeId?: number, 
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // HV_LEITER: Sieht Team, Provisionen, Leads
+  // HV_LEITER (Vice President): Alle eigenen Teams + Leads
   // ═══════════════════════════════════════════════════════════════════════════
   if (role === "HV_LEITER") {
     return [
       {
         items: [
-          { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
-          { id: "projekte", label: "Meine Leads", icon: Icons.zap, path: "/netzanmeldungen" },
-          { id: "wizard", label: "Neuer Lead", icon: Icons.wizard, path: "/wizard" },
+          { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/hv-center" },
+          { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
+          { id: "projekte", label: "Alle Leads", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "lead-new", label: "Neuer Lead", icon: Icons.wizard, path: "/wizard" },
+          { id: "leaderboard", label: "Leaderboard", icon: Icons.target, path: "/leaderboard" },
         ]
       },
       {
         title: "Team",
         items: [
-          { id: "hv-team", label: "Mein Team", icon: Icons.users, path: "/hv-center?tab=benutzer" },
+          { id: "hv-team", label: "Meine Teams", icon: Icons.users, path: "/hv-center?tab=team" },
           { id: "hv-provisionen", label: "Provisionen", icon: Icons.coins, path: "/hv-center?tab=provisionen" },
-          { id: "hv-profil", label: "Mein Profil", icon: Icons.user, path: "/hv-center?tab=profil" },
         ]
       },
     ];
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // HV_TEAMLEITER: Sieht sein Team + Leads
+  // HV_TEAMLEITER (Director): Nur eigene Teams + Leads
   // ═══════════════════════════════════════════════════════════════════════════
   if (role === "HV_TEAMLEITER") {
     return [
       {
         items: [
-          { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
-          { id: "projekte", label: "Meine Leads", icon: Icons.zap, path: "/netzanmeldungen" },
-          { id: "wizard", label: "Neuer Lead", icon: Icons.wizard, path: "/wizard" },
+          { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/hv-center" },
+          { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
+          { id: "projekte", label: "Team-Leads", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "lead-new", label: "Neuer Lead", icon: Icons.wizard, path: "/wizard" },
+          { id: "leaderboard", label: "Leaderboard", icon: Icons.target, path: "/leaderboard" },
         ]
       },
       {
         title: "Team",
         items: [
-          { id: "hv-team", label: "Mein Team", icon: Icons.users, path: "/hv-center?tab=benutzer" },
+          { id: "hv-team", label: "Mein Team", icon: Icons.users, path: "/hv-center?tab=team" },
           { id: "hv-provisionen", label: "Provisionen", icon: Icons.coins, path: "/hv-center?tab=provisionen" },
-          { id: "hv-profil", label: "Mein Profil", icon: Icons.user, path: "/hv-center?tab=profil" },
         ]
       },
     ];
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // HANDELSVERTRETER: Nur eigene Leads + Profil
+  // HV_LEADER (Leader): Eigenes Team + Leads
   // ═══════════════════════════════════════════════════════════════════════════
-  if (role === "HANDELSVERTRETER") {
+  if (role === "HV_LEADER") {
     return [
       {
         items: [
-          { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/dashboard" },
-          { id: "projekte", label: "Meine Leads", icon: Icons.zap, path: "/netzanmeldungen" },
-          { id: "wizard", label: "Neuer Lead", icon: Icons.wizard, path: "/wizard" },
+          { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/hv-center" },
+          { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
+          { id: "projekte", label: "Team-Leads", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "lead-new", label: "Neuer Lead", icon: Icons.wizard, path: "/wizard" },
+          { id: "leaderboard", label: "Leaderboard", icon: Icons.target, path: "/leaderboard" },
         ]
       },
       {
         title: "Konto",
         items: [
           { id: "hv-provisionen", label: "Meine Provisionen", icon: Icons.coins, path: "/hv-center?tab=provisionen" },
-          { id: "hv-profil", label: "Mein Profil", icon: Icons.user, path: "/hv-center?tab=profil" },
+        ]
+      },
+    ];
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // HANDELSVERTRETER (Member): Nur eigene Leads + Profil
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (role === "HANDELSVERTRETER") {
+    return [
+      {
+        items: [
+          { id: "dashboard", label: "Dashboard", icon: Icons.dashboard, path: "/hv-center" },
+          { id: "map", label: "Karte", icon: Icons.home, path: "/map" },
+          { id: "projekte", label: "Meine Leads", icon: Icons.zap, path: "/netzanmeldungen" },
+          { id: "lead-new", label: "Neuer Lead", icon: Icons.wizard, path: "/wizard" },
+          { id: "leaderboard", label: "Leaderboard", icon: Icons.target, path: "/leaderboard" },
+        ]
+      },
+      {
+        title: "Konto",
+        items: [
+          { id: "hv-provisionen", label: "Meine Provisionen", icon: Icons.coins, path: "/hv-center?tab=provisionen" },
         ]
       },
     ];
@@ -477,7 +515,7 @@ export default function Sidebar({
               // External links (e.g. /wizard → static HTML page)
               if (item.path === "/wizard") {
                 return (
-                  <a key={item.id} href="/wizard" target="_blank" rel="noopener"
+                  <a key={item.id} href="/wizard"
                     className="nav-item" title={collapsed ? item.label : undefined}>
                     <span className="nav-icon">{item.icon}</span>
                     {!collapsed && <span className="nav-label">{item.label}</span>}
@@ -524,7 +562,7 @@ export default function Sidebar({
           {!collapsed && (
             <div className="user-info">
               <span className="user-name">{(user as any)?.name || user?.email || "User"}</span>
-              
+              <span style={{ fontSize: "0.65rem", color: "#64748b", fontWeight: 500 }}>{ROLE_LABELS[role] || role}</span>
             </div>
           )}
         </div>

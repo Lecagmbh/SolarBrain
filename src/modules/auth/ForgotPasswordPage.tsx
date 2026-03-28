@@ -44,7 +44,7 @@ export default function ForgotPasswordPage() {
       <style>{`
         .gn-login {
           min-height: 100vh; display: flex; align-items: center; justify-content: center;
-          background: #09090b; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          background: #060b18; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
           -webkit-font-smoothing: antialiased; position: relative; overflow: hidden;
         }
         .gn-login::before {

@@ -77,7 +77,7 @@ export function CancelPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0a0f] via-[#0f1020] to-[#0a0a0f] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#060b18] via-[#0f1020] to-[#060b18] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">

@@ -15,7 +15,7 @@
 }
 
 .admin-kpi-card {
-  background: #020617;
+  background: #060b18;
   border-radius: 0.75rem;
   padding: 0.85rem 1rem;
   border: 1px solid #1f2937;
@@ -48,7 +48,7 @@
 }
 
 .admin-card {
-  background: #020617;
+  background: #060b18;
   border-radius: 0.75rem;
   padding: 1rem 1.1rem;
   border: 1px solid #1f2937;
@@ -132,7 +132,7 @@
   text-align: left;
   font-weight: 500;
   color: #9ca3af;
-  background: #020617;
+  background: #060b18;
   position: sticky;
   top: 0;
 }
@@ -268,7 +268,7 @@
 }
 
 .admin-kpi-card {
-  background: radial-gradient(circle at top, #111827, #020617);
+  background: radial-gradient(circle at top, #111827, #060b18);
   border-radius: 0.9rem;
   padding: 1rem 1.2rem;
   border: 1px solid rgba(148, 163, 184, 0.25);
@@ -320,7 +320,7 @@
 .admin-pipeline-stage {
   flex: 1 1 0;
   min-width: 160px;
-  background: linear-gradient(135deg, #0b1120, #020617);
+  background: linear-gradient(135deg, #0b1120, #060b18);
   border-radius: 999px;
   padding: 0.75rem 1.1rem;
   border: 1px solid rgba(148, 163, 184, 0.4);
@@ -362,7 +362,7 @@
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
   border: 1px solid rgba(148, 163, 184, 0.6);
-  background: linear-gradient(135deg, #020617, #020617);
+  background: linear-gradient(135deg, #060b18, #060b18);
   color: #e5e7eb;
   font-size: 0.8rem;
   cursor: pointer;
@@ -376,7 +376,7 @@
   font-size: 0.85rem;
   border-radius: 0.9rem;
   overflow: hidden;
-  background: radial-gradient(circle at top left, #020617, #000000);
+  background: radial-gradient(circle at top left, #060b18, #000000);
   border: 1px solid rgba(31, 41, 55, 0.9);
 }
 
@@ -492,7 +492,7 @@
 }
 
 .admin-kpi-card {
-  background: radial-gradient(circle at top left, #1f2937, #020617);
+  background: radial-gradient(circle at top left, #1f2937, #060b18);
   border-radius: 0.9rem;
   padding: 1.25rem 1.5rem;
   border: 1px solid rgba(148, 163, 184, 0.25);
@@ -500,7 +500,7 @@
 }
 
 .admin-kpi-card--meta {
-  background: linear-gradient(135deg, #0f172a, #020617);
+  background: linear-gradient(135deg, #0f172a, #060b18);
 }
 
 .admin-kpi-label {
@@ -540,7 +540,7 @@
 /* === Pipeline Board === */
 
 .admin-panel {
-  background: radial-gradient(circle at top left, #020617, #020617);
+  background: radial-gradient(circle at top left, #060b18, #060b18);
   border-radius: 1rem;
   padding: 1.5rem 1.75rem;
   border: 1px solid rgba(30, 64, 175, 0.35);
@@ -581,7 +581,7 @@
 }
 
 .admin-pipeline-stage {
-  background: linear-gradient(145deg, #020617, #020617);
+  background: linear-gradient(145deg, #060b18, #060b18);
   border-radius: 0.8rem;
   padding: 1rem 1.1rem;
   border: 1px solid rgba(55, 65, 81, 0.7);
@@ -688,7 +688,7 @@
 
 .admin-toggle-btn--active {
   background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #020617;
+  color: #060b18;
   font-weight: 600;
 }
 
@@ -729,7 +729,7 @@
   padding: 0.45rem 1.2rem;
   border-radius: 999px;
   background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #020617;
+  color: #060b18;
   font-size: 0.8rem;
   font-weight: 600;
   text-decoration: none;
@@ -779,7 +779,7 @@
 
 .admin-toggle-btn--active {
   background: #22c55e;
-  color: #020617;
+  color: #060b18;
   border-color: #22c55e;
 }
 
@@ -807,7 +807,7 @@
 }
 
 .pipeline-stage-card {
-  background: radial-gradient(circle at top left, #1e293b, #020617);
+  background: radial-gradient(circle at top left, #1e293b, #060b18);
   border-radius: 1rem;
   padding: 0.9rem 1rem;
   border: 1px solid rgba(148, 163, 184, 0.35);
@@ -1036,14 +1036,14 @@
 }
 
 .dashboard-card {
-  background: #020617;
+  background: #060b18;
   border-radius: 0.75rem;
   border: 1px solid #1e293b;
   padding: 1rem;
 }
 
 .dashboard-section {
-  background: #020617;
+  background: #060b18;
   border-radius: 0.75rem;
   border: 1px solid #1e293b;
   padding: 1rem 1.25rem;
@@ -1076,7 +1076,7 @@
 }
 
 .kpi-card {
-  background: #020617;
+  background: #060b18;
   border-radius: 0.75rem;
   border: 1px solid #1f2937;
   padding: 0.75rem 0.9rem;
@@ -1109,7 +1109,7 @@
 }
 
 .pipeline-stage {
-  background: #020617;
+  background: #060b18;
   border-radius: 0.75rem;
   border: 1px solid #1f2937;
   padding: 0.75rem 0.9rem;
@@ -1135,7 +1135,7 @@
   margin-top: 0.5rem;
   height: 0.6rem;
   border-radius: 999px;
-  background: #020617;
+  background: #060b18;
   border: 1px solid #111827;
   overflow: hidden;
 }
@@ -1207,7 +1207,7 @@
   font-size: 0.75rem;
   padding: 0.25rem 0.65rem;
   border: 1px solid #374151;
-  background: #020617;
+  background: #060b18;
   color: #d1d5db;
   cursor: pointer;
 }
@@ -1230,7 +1230,7 @@
 }
 
 .dashboard-table thead tr {
-  background: #020617;
+  background: #060b18;
   position: sticky;
   top: 0;
   z-index: 5;

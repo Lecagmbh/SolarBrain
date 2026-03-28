@@ -151,7 +151,7 @@ export async function generateLageplanSVG(
 </defs>
 
 <!-- Hintergrund -->
-<rect width="${W}" height="${H}" fill="#020617"/>
+<rect width="${W}" height="${H}" fill="#060b18"/>
 
 <!-- ═══════════════════════════════════════════════════════════════════════ -->
 <!-- HEADER -->
@@ -397,7 +397,7 @@ async function svgToPdf(svgString: string): Promise<Blob> {
       }
 
       ctx.scale(2, 2);
-      ctx.fillStyle = '#020617';
+      ctx.fillStyle = '#060b18';
       ctx.fillRect(0, 0, 842, 595);
       ctx.drawImage(img, 0, 0, 842, 595);
 

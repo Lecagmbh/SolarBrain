@@ -100,6 +100,8 @@ const KundenOnboardingPage = lazy(() => import("./pages/KundenOnboardingPage"));
 const PaymentPage = lazy(() => import("./pages/PaymentPage"));
 const FactroCenterPage = lazy(() => import("./pages/FactroCenterPage"));
 const OPCenterOPPage = lazy(() => import("./pages/OPCenterPage"));
+const EventsAdminPage = lazy(() => import("./features/admin/events/EventsAdminPage"));
+const LeaderboardPage = lazy(() => import("./features/leaderboard/LeaderboardPage"));
 
 // NB-Portal
 const NbPortalAuswahl = lazy(() => import("./features/nb-portal").then(m => ({ default: m.NbPortalAuswahl })));
@@ -123,13 +125,14 @@ const PortalRequireAuth = lazy(() => import("./portal/PortalRequireAuth"));
 
 // Redirect to external static page (served by nginx, not React)
 const ExternalWizardRedirect = () => {
-  window.location.href = "/wizard";
+  // Full page redirect — works in both browser and WebView
+  window.location.replace("/wizard");
   return null;
 };
 
 // Loading Fallback
 const PageLoader = () => (
-  <div className="flex items-center justify-center min-h-screen bg-[#0a0a0f]">
+  <div className="flex items-center justify-center min-h-screen bg-[#060b18]">
     <div className="flex flex-col items-center gap-4">
       <div className="w-10 h-10 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
       <span className="text-zinc-400 text-sm">Lädt...</span>
@@ -200,8 +203,9 @@ export default function AppRouter() {
             {/* /whatsapp entfernt – Feature noch nicht ausgereift */}
             <Route path="/archiv" element={<L><ArchivPage /></L>} />
             <Route path="/settings/me" element={<L><MyCompanySettingsPage /></L>} />
-            <Route path="/calendar" element={<L><CalendarPage /></L>} />
+            {/* /calendar entfernt */}
             <Route path="/hv-center" element={<L><HvCenterPage /></L>} />
+            <Route path="/leaderboard" element={<L><LeaderboardPage /></L>} />
             {/* Deaktiviert – Alert-System wird komplett überarbeitet */}
             <Route path="/produkte-db" element={<L><ProdukteDatenbankPage /></L>} />
             <Route path="/projekte" element={<L><ProjektePage /></L>} />
@@ -235,6 +239,7 @@ export default function AppRouter() {
             <Route path="/intelligence" element={<RoleGuard allowed={['ADMIN']}><L><IntelligenceDashboard /></L></RoleGuard>} />
             <Route path="/admin/handelsvertreter" element={<RoleGuard allowed={['ADMIN', 'MANAGER']}><L><HandelsvertreterPage /></L></RoleGuard>} />
             <Route path="/admin/provisionen" element={<RoleGuard allowed={['ADMIN', 'MANAGER']}><L><ProvisionenPage /></L></RoleGuard>} />
+            <Route path="/admin/events" element={<RoleGuard allowed={['ADMIN', 'MANAGER']}><L><EventsAdminPage /></L></RoleGuard>} />
             {/* /op-center redirect bereits oben definiert */}
             <Route path="/factro-center" element={<Navigate to="/netzanmeldungen" replace />} />
             <Route path="/crm" element={<Navigate to="/netzanmeldungen" replace />} />
@@ -248,7 +253,7 @@ export default function AppRouter() {
             <Route path="/mock/detail-v2" element={<L><MockDetailPanelV2 /></L>} />
             <Route path="/mock/detail-v3" element={<L><MockDetailPanelV3 /></L>} />
             <Route path="/v2/netzanmeldungen" element={<Navigate to="/netzanmeldungen" replace />} />
-            <Route path="/ticket-center" element={<RoleGuard allowed={['ADMIN', 'MITARBEITER', 'KUNDE']}><L><TicketCenterPage /></L></RoleGuard>} />
+            {/* /ticket-center entfernt */}
             {/* DetailPanelLive wird oben unter /netzanmeldungen/:id registriert */}
             <Route path="/pricing" element={<L><CrmPricingPage /></L>} />
             <Route path="/portal-users" element={<Navigate to="/kunden" replace />} />

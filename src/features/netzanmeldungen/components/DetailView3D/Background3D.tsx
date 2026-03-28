@@ -151,11 +151,11 @@ export function Background3D({ statusColor = "#3b82f6", className = "" }: Backgr
         camera={{ position: [0, 0, 10], fov: 60 }}
         dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: false }}
-        style={{ pointerEvents: "none", background: "linear-gradient(145deg, #0a0a0f 0%, #1a1a2e 100%)" }}
+        style={{ pointerEvents: "none", background: "linear-gradient(145deg, #060b18 0%, #1a1a2e 100%)" }}
         eventSource={undefined}
         eventPrefix="offset"
       >
-        <color attach="background" args={["#0d0d14"]} />
+        <color attach="background" args={["#081020"]} />
         <Scene statusColor={statusColor} />
       </Canvas>
     </div>

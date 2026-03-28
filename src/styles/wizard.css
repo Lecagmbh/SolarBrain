@@ -4,14 +4,14 @@
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #020617 100%);
+  background: radial-gradient(circle at top, #1f2937 0, #060b18 45%, #060b18 100%);
   padding: 1.5rem 1rem;
 }
 
 .wizard-shell {
   width: 100%;
   max-width: 1120px;
-  background: #020617;
+  background: #060b18;
   border-radius: 1rem;
   border: 1px solid rgba(148, 163, 184, 0.3);
   box-shadow: 0 28px 80px -32px rgba(15, 23, 42, 0.9);
@@ -23,7 +23,7 @@
 /* Sidebar / Steps */
 
 .wizard-sidebar {
-  background: radial-gradient(circle at top, #1d2536 0, #020617 55%);
+  background: radial-gradient(circle at top, #1d2536 0, #060b18 55%);
   padding: 1.25rem 1.25rem 1.5rem;
   color: #e5e7eb;
   display: flex;
@@ -88,7 +88,7 @@
 
 .wizard-main {
   padding: 1.5rem 1.75rem;
-  background: radial-gradient(circle at top left, #111827 0, #020617 60%);
+  background: radial-gradient(circle at top left, #111827 0, #060b18 60%);
   color: #e5e7eb;
 }
 
@@ -157,7 +157,7 @@
 .wizard-textarea {
   border-radius: 0.5rem;
   border: 1px solid rgba(148, 163, 184, 0.35);
-  background: #020617;
+  background: #060b18;
   color: #e5e7eb;
   padding: 0.45rem 0.55rem;
   font-size: 0.8rem;

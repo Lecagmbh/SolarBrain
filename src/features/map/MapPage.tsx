@@ -28,8 +28,9 @@ async function apiFetch(path: string) {
 // Pin colors per status
 const PIN_COLORS: Record<string, string> = {
   LEAD: "#D4A843",
-  TERMIN: "#3b82f6",
-  ANGEBOT: "#8b5cf6",
+  KONTAKTIERT: "#3b82f6",
+  QUALIFIZIERT: "#22c55e",
+  DISQUALIFIZIERT: "#ef4444",
   VERKAUFT: "#22c55e",
   INSTALLATION: "#f59e0b",
   FERTIG: "#64748b",
@@ -42,9 +43,10 @@ const PIN_COLORS: Record<string, string> = {
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  LEAD: "Lead", TERMIN: "Termin", ANGEBOT: "Angebot", VERKAUFT: "Verkauft",
+  LEAD: "Lead", KONTAKTIERT: "Kontaktiert", QUALIFIZIERT: "Qualifiziert",
+  DISQUALIFIZIERT: "Disqualifiziert", VERKAUFT: "Verkauft",
   INSTALLATION: "Installation", FERTIG: "Fertig",
-  EINGANG: "Lead", BEIM_NB: "Termin", RUECKFRAGE: "Angebot", GENEHMIGT: "Verkauft", IBN: "Installation",
+  EINGANG: "Lead", BEIM_NB: "Kontaktiert", RUECKFRAGE: "Qualifiziert", GENEHMIGT: "Verkauft", IBN: "Installation",
 };
 
 function createPin(color: string) {
@@ -61,10 +63,11 @@ function createPin(color: string) {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const CSS = `
-.map-page{display:flex;height:calc(100vh - 64px);background:#060a14;overflow:hidden}
+.map-page{display:flex;height:calc(100vh - 64px);height:calc(100dvh - 64px);background:#060a14;overflow:hidden}
 .map-container{flex:1;position:relative;min-width:0}
-.map-container .leaflet-container{height:100%;width:100%;background:#f0ede6}
+.map-container .leaflet-container{height:100%!important;width:100%!important;background:#f0ede6}
 .map-sidebar{width:340px;flex-shrink:0;background:#0b1224;border-left:1px solid rgba(212,168,67,0.08);display:flex;flex-direction:column;overflow:hidden}
+@media(max-width:768px){.map-sidebar{display:none}.map-page{height:100vh;height:100dvh}}
 .map-sidebar-header{padding:16px 20px;border-bottom:1px solid rgba(212,168,67,0.06)}
 .map-sidebar-header h2{font-size:15px;font-weight:800;color:#f1f5f9;letter-spacing:-0.02em;font-family:'Inter',sans-serif}
 .map-sidebar-header p{font-size:11px;color:#64748b;margin-top:2px}
@@ -178,27 +181,36 @@ export default function MapPage() {
     }
   }, []);
 
-  // Init map
+  // Init map (with retry for WebView navigation)
   useEffect(() => {
-    if (!mapEl.current || mapRef.current) return;
+    function initMap() {
+      if (!mapEl.current || mapRef.current) return false;
+      const el = mapEl.current;
+      // Guard: element must have dimensions
+      if (!el.offsetWidth || !el.offsetHeight) return false;
 
-    const map = L.map(mapEl.current, {
-      center: [51.1657, 10.4515], // Germany center
-      zoom: 6,
-      zoomControl: false,
-      attributionControl: false,
-    });
+    try {
+      const map = L.map(el, {
+        center: [51.1657, 10.4515], // Germany center
+        zoom: 6,
+        zoomControl: false,
+        attributionControl: false,
+      });
 
-    // Map tiles — Standard (Carto Voyager)
-    tileLayerRef.current = L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-      maxZoom: 19,
-    }).addTo(map);
+      // Map tiles — Standard (Carto Voyager)
+      tileLayerRef.current = L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+        maxZoom: 19,
+      }).addTo(map);
 
-    L.control.zoom({ position: "bottomright" }).addTo(map);
-    L.control.attribution({ position: "bottomleft" }).addTo(map);
+      L.control.zoom({ position: "bottomright" }).addTo(map);
+      L.control.attribution({ position: "bottomleft" }).addTo(map);
 
-    markersRef.current = L.layerGroup().addTo(map);
-    mapRef.current = map;
+      markersRef.current = L.layerGroup().addTo(map);
+      mapRef.current = map;
+
+      // Fix for WebView: force map to recalculate size
+      setTimeout(() => map.invalidateSize(), 200);
+      setTimeout(() => map.invalidateSize(), 1000);
 
     // Klick auf Karte → Solar-Check
     map.on("click", async (e: L.LeafletMouseEvent) => {
@@ -365,6 +377,17 @@ export default function MapPage() {
       map.remove();
       mapRef.current = null;
     };
+    } catch (err) {
+      console.error("[Map] Init error:", err);
+    }
+    return true;
+    }
+
+    // Try immediately, then retry after delays (for WebView navigation)
+    if (!initMap()) {
+      const t1 = setTimeout(() => { if (!initMap()) { setTimeout(initMap, 1000); } }, 300);
+      return () => clearTimeout(t1);
+    }
   }, []);
 
   // Load data

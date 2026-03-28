@@ -307,7 +307,7 @@ export function HvContractPage() {
 const styles: Record<string, React.CSSProperties> = {
   page: {
     minHeight: "100vh",
-    background: "#0a0a0f",
+    background: "#060b18",
     display: "flex",
     flexDirection: "column",
   },
@@ -485,7 +485,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   loadingContainer: {
     minHeight: "100vh",
-    background: "#0a0a0f",
+    background: "#060b18",
     display: "flex",
     flexDirection: "column" as const,
     alignItems: "center",

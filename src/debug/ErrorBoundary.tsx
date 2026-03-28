@@ -69,7 +69,7 @@ export class ErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex items-center justify-center min-h-screen bg-[#0a0a0f]">
+        <div className="flex items-center justify-center min-h-screen bg-[#060b18]">
           <div className="max-w-md mx-auto p-8 text-center">
             <div className="text-4xl mb-4">
               {this.state.isChunkError ? "\u26A0\uFE0F" : "\u274C"}

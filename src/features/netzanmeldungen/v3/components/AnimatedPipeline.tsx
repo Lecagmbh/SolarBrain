@@ -1,6 +1,6 @@
 /**
  * Animated Pipeline — Baunity D2D Sales Pipeline
- * LEAD → TERMIN → ANGEBOT → VERKAUFT → INSTALLATION → FERTIG
+ * ZU KONTAKTIEREN → KONTAKTIERT → QUALIFIZIERT | DISQUALIFIZIERT
  */
 import { useCountUp } from "../hooks/useCountUp";
 import type { PipelineCounts } from "../types";
@@ -24,18 +24,6 @@ function PipelineStage({ label, count, color, sub, active, onClick, delay = 0, p
   );
 }
 
-function Arrow({ color = "#64748b" }: { color?: string }) {
-  return (
-    <div className="pipe-arrow">
-      <svg width="24" height="32" viewBox="0 0 24 32">
-        <path d="M5 8 L17 16 L5 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity="0.3">
-          <animate attributeName="opacity" values="0.15;0.5;0.15" dur="2s" repeatCount="indefinite" />
-        </path>
-      </svg>
-    </div>
-  );
-}
-
 interface Props {
   counts: PipelineCounts;
   activeFilter: string | null;
@@ -43,47 +31,44 @@ interface Props {
   isStaff: boolean;
 }
 
-// Map legacy GridNetz counts to D2D pipeline
+// Map counts to 3-stage pipeline
 function mapCounts(counts: PipelineCounts) {
   return {
-    lead: (counts as any).lead || counts.eingang || 0,
-    termin: (counts as any).termin || counts.beim_nb || 0,
-    angebot: (counts as any).angebot || counts.rueckfrage || 0,
-    verkauft: (counts as any).verkauft || counts.genehmigt || 0,
-    installation: (counts as any).installation || counts.ibn || 0,
-    fertig: counts.fertig || 0,
+    zuKontaktieren: (counts as any).lead || counts.eingang || 0,
+    kontaktiert: (counts as any).kontaktiert || counts.beim_nb || 0,
+    qualifiziert: (counts as any).qualifiziert || counts.rueckfrage || counts.genehmigt || 0,
+    disqualifiziert: (counts as any).disqualifiziert || 0,
   };
 }
 
 export default function AnimatedPipeline({ counts, activeFilter, onFilter }: Props) {
   const d2d = mapCounts(counts);
+  const gesamt = d2d.zuKontaktieren + d2d.kontaktiert + d2d.qualifiziert;
 
   return (
     <div style={{ padding: "14px 24px 10px" }}>
-      <div style={{ display: "flex", gap: 8, alignItems: "flex-start", minWidth: 700 }}>
-        {/* AKQUISE */}
-        <div style={{ flex: 1.2 }}>
-          <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <span className="pipe-label" style={{ "--lc1": "#D4A84320", "--lc2": "#3b82f620", color: "#D4A843" } as any}>AKQUISE</span>
-          </div>
-          <div style={{ display: "flex", gap: 4 }}>
-            <PipelineStage label="LEADS" count={d2d.lead} color="#D4A843" active={activeFilter === "lead" || activeFilter === "eingang"} onClick={() => onFilter("lead")} delay={0} pulse={d2d.lead > 0} />
-            <PipelineStage label="TERMINE" count={d2d.termin} color="#3b82f6" active={activeFilter === "termin" || activeFilter === "beim_nb"} onClick={() => onFilter("termin")} delay={80} />
-            <PipelineStage label="ANGEBOTE" count={d2d.angebot} color="#8b5cf6" active={activeFilter === "angebot" || activeFilter === "rueckfrage"} onClick={() => onFilter("angebot")} delay={160} />
-          </div>
-        </div>
+      <div style={{ display: "flex", gap: 6, alignItems: "flex-start", minWidth: 500 }}>
+        <PipelineStage label="ZU KONTAKTIEREN" count={d2d.zuKontaktieren} color="#D4A843" active={activeFilter === "lead" || activeFilter === "eingang"} onClick={() => onFilter("lead")} delay={0} pulse={d2d.zuKontaktieren > 0} />
+        <PipelineStage label="KONTAKTIERT" count={d2d.kontaktiert} color="#3b82f6" sub="In Bearbeitung" active={activeFilter === "kontaktiert" || activeFilter === "beim_nb"} onClick={() => onFilter("kontaktiert")} delay={80} />
+        <PipelineStage label="QUALIFIZIERT" count={d2d.qualifiziert} color="#22c55e" sub="Angebot möglich" active={activeFilter === "qualifiziert"} onClick={() => onFilter("qualifiziert")} delay={160} />
 
-        <Arrow color="#D4A843" />
-
-        {/* ABSCHLUSS */}
-        <div style={{ flex: 1.2 }}>
-          <div style={{ textAlign: "center", marginBottom: 8 }}>
-            <span className="pipe-label" style={{ "--lc1": "#22c55e20", "--lc2": "#f59e0b20", color: "#22c55e" } as any}>ABSCHLUSS</span>
+        {/* Gesamt + Disqualifiziert */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 90, paddingTop: 4 }}>
+          <div style={{ textAlign: "center", padding: "10px 8px", borderRadius: 10, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div style={{ fontSize: 22, fontWeight: 900, color: "#e2e8f0", letterSpacing: -1 }}>{gesamt}</div>
+            <div style={{ fontSize: 9, fontWeight: 800, color: "#71717a", letterSpacing: 0.5 }}>GESAMT</div>
           </div>
-          <div style={{ display: "flex", gap: 4 }}>
-            <PipelineStage label="VERKAUFT" count={d2d.verkauft} color="#22c55e" active={activeFilter === "verkauft" || activeFilter === "genehmigt"} onClick={() => onFilter("verkauft")} delay={240} />
-            <PipelineStage label="INSTALLATION" count={d2d.installation} color="#f59e0b" active={activeFilter === "installation" || activeFilter === "ibn"} onClick={() => onFilter("installation")} delay={320} />
-            <PipelineStage label="FERTIG" count={d2d.fertig} color="#64748b" active={activeFilter === "fertig"} onClick={() => onFilter("fertig")} delay={400} />
+          <div
+            onClick={() => onFilter("disqualifiziert")}
+            style={{
+              textAlign: "center", padding: "6px 8px", borderRadius: 8, cursor: "pointer",
+              background: activeFilter === "disqualifiziert" ? "rgba(239,68,68,0.15)" : "rgba(239,68,68,0.06)",
+              border: activeFilter === "disqualifiziert" ? "1px solid rgba(239,68,68,0.4)" : "1px solid rgba(239,68,68,0.15)",
+              transition: "all 0.15s",
+            }}
+          >
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#ef4444" }}>{d2d.disqualifiziert}</div>
+            <div style={{ fontSize: 8, fontWeight: 700, color: "#ef4444", opacity: 0.7, letterSpacing: 0.3 }}>DISQUALIFIZIERT</div>
           </div>
         </div>
       </div>

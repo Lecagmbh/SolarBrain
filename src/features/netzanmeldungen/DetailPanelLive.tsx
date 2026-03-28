@@ -421,7 +421,7 @@ function mapCrmComments(p: any): any[] {
 
 function LoadingSkeleton() {
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#0a0a0f", minHeight: "100vh", padding: "40px 28px" }}>
+    <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#060b18", minHeight: "100vh", padding: "40px 28px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ display: "flex", gap: 16, marginBottom: 24, alignItems: "center" }}>
           <div style={{ width: 120, height: 36, borderRadius: 8, background: "rgba(255,255,255,0.04)", animation: "pulse 1.5s infinite" }} />
@@ -442,7 +442,7 @@ function LoadingSkeleton() {
 
 function ErrorState({ error, onBack }: { error: string; onBack: () => void }) {
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#0a0a0f", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#e2e8f0" }}>
+    <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#060b18", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#e2e8f0" }}>
       <div style={{ textAlign: "center", maxWidth: 400 }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>⚠</div>
         <div style={{ fontSize: 20, fontWeight: 700, color: "#ef4444", marginBottom: 8 }}>Projekt nicht gefunden</div>

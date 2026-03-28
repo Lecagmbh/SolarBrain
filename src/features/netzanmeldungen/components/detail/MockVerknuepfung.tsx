@@ -5,7 +5,7 @@
 import { useState } from "react";
 
 const C = {
-  bg: "#0a0a0f", card: "rgba(17,20,35,0.95)", border: "rgba(212,168,67,0.08)",
+  bg: "#060b18", card: "rgba(17,20,35,0.95)", border: "rgba(212,168,67,0.08)",
   text: "#e2e8f0", dim: "#64748b", accent: "#D4A843", green: "#22c55e",
   blue: "#3b82f6", orange: "#f59e0b", red: "#ef4444", purple: "#f0d878",
 };

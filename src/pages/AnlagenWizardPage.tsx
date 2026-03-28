@@ -11,7 +11,7 @@ const AnlagenWizardPage: React.FC = () => {
         alignItems: 'center',
         justifyContent: 'center',
         height: '100vh',
-        background: '#0a0a0f',
+        background: '#060b18',
         color: '#fff'
       }}>
         <div>Lade Wizard...</div>

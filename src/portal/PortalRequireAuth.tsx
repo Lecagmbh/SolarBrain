@@ -15,7 +15,7 @@ export default function PortalRequireAuth() {
   // Loading State
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
+      <div className="min-h-screen bg-[#060b18] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 text-amber-500 animate-spin" />
           <span className="text-zinc-400">Laden...</span>

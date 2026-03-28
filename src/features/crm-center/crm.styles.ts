@@ -3,7 +3,7 @@ export const C = {
   bg: "#06060b",
   bgCard: "rgba(12,12,20,0.85)",
   bgCardHover: "rgba(18,18,30,0.95)",
-  bgPanel: "#0a0a12",
+  bgPanel: "#060b18",
   bgInput: "rgba(15,15,25,0.9)",
   border: "rgba(212,168,67,0.08)",
   borderHover: "rgba(212,168,67,0.2)",

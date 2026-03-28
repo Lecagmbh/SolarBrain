@@ -25,11 +25,16 @@ export const SC: Record<string, { l: string; c: string; i: string }> = {
   crm_nb_abgelehnt:     { l: "Abgelehnt",      c: "#ef4444", i: "❌" },
   crm_eingestellt:      { l: "Eingestellt",    c: "#64748b", i: "⏸" },
   crm_abgeschlossen:    { l: "Abgeschlossen",  c: "#22c55e", i: "🎉" },
+  // D2D Pipeline
+  lead:                 { l: "Lead",           c: "#D4A843", i: "🌟" },
+  kontaktiert:          { l: "Kontaktiert",    c: "#3b82f6", i: "📞" },
+  qualifiziert:         { l: "Qualifiziert",   c: "#22c55e", i: "✅" },
+  disqualifiziert:      { l: "Disqualifiziert",c: "#ef4444", i: "❌" },
   // Wizard-Leads
   lead_neu:             { l: "Neuer Lead",     c: "#a855f7", i: "🌟" },
   lead_kontaktiert:     { l: "Kontaktiert",    c: "#06b6d4", i: "📞" },
   lead_qualifiziert:    { l: "Qualifiziert",   c: "#22c55e", i: "✅" },
-  lead_konvertiert:     { l: "Konvertiert",    c: "#22c55e", i: "🎉" },
+  lead_disqualifiziert: { l: "Disqualifiziert",c: "#ef4444", i: "❌" },
   lead_abgelehnt:       { l: "Abgelehnt",      c: "#64748b", i: "🚫" },
 };
 
@@ -40,7 +45,8 @@ export const STATUS_ORDER: Record<string, number> = {
   eingang: 10, beim_nb: 11, rueckfrage: 12, genehmigt: 13,
   ibn: 14, fertig: 15, storniert: 16,
   crm_eingestellt: 17, crm_nb_abgelehnt: 18, crm_abgeschlossen: 19,
-  lead_neu: 0, lead_kontaktiert: 1, lead_qualifiziert: 2, lead_konvertiert: 20, lead_abgelehnt: 21,
+  lead: 0, kontaktiert: 1, qualifiziert: 2, disqualifiziert: 3, verkauft: 4, installation_d2d: 5,
+  lead_neu: 0, lead_kontaktiert: 1, lead_qualifiziert: 2, lead_disqualifiziert: 20, lead_abgelehnt: 21,
 };
 
 // ═══════════════════════════════════════════════════════════════════
@@ -155,7 +161,7 @@ export const V3_CSS = `
 .pipe-arrow{display:flex;align-items:center;padding:12px 0 0}
 .pipe-arrow svg path{animation:flowPulse 2s infinite}
 .pipe-label{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;text-align:center;padding:4px 14px;border-radius:20px;display:inline-block;background:linear-gradient(135deg,var(--lc1),var(--lc2));background-size:200% 200%;animation:shimmer 3s linear infinite}
-select option{background:#0f0f1a;color:#e2e8f0}
+select option{background:#0a1128;color:#e2e8f0}
 
 /* ─── Responsive: Tablet (<1024px) ─── */
 @media(max-width:1024px){

@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import LifecycleBar from "./LifecycleBar";
 
 const C = {
-  panel: "#0c0c18", border: "rgba(255,255,255,0.05)", primary: "#D4A843", accent: "#a5b4fc",
+  panel: "#081020", border: "rgba(255,255,255,0.05)", primary: "#D4A843", accent: "#a5b4fc",
   text: "#e2e8f0", dim: "#94a3b8", muted: "#64748b", bright: "#f8fafc",
   green: "#22c55e", gBg: "rgba(34,197,94,0.06)", red: "#ef4444", rBg: "rgba(239,68,68,0.05)",
   cyan: "#06b6d4", orange: "#f97316", pink: "#ec4899", wa: "#25D366", purple: "#f0d878",

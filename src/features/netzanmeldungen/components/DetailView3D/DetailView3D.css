@@ -17,8 +17,8 @@
   width: 100vw;
   height: 100vh;
   z-index: 9999;
-  background: #0a0a0f;
-  background: linear-gradient(145deg, #0a0a0f 0%, #1a1a2e 100%);
+  background: #060b18;
+  background: linear-gradient(145deg, #060b18 0%, #1a1a2e 100%);
   overflow-y: auto;
   isolation: isolate;
 }

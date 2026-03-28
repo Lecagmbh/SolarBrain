@@ -116,9 +116,9 @@
   height: calc(100vh - 220px);
   min-height: 500px;
 }
-.elc-col-list { background: #09090b; overflow-y: auto; display: flex; flex-direction: column; }
+.elc-col-list { background: #060b18; overflow-y: auto; display: flex; flex-direction: column; }
 .elc-col-preview { background: #0a0a0c; overflow-y: auto; }
-.elc-col-training { background: #09090b; overflow-y: auto; }
+.elc-col-training { background: #060b18; overflow-y: auto; }
 
 /* List Items */
 .elc-list-item {

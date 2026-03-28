@@ -81,10 +81,12 @@ export default function ProjektePage() {
   };
 
   const phasen = [
-    { key: 'vertrieb', label: 'Vertrieb', status: ['ANFRAGE', 'ANGEBOT_ERSTELLT', 'ANGEBOT_VERSENDET', 'ANGEBOT_AKZEPTIERT'] },
-    { key: 'planung', label: 'Planung', status: ['AUFTRAG', 'IN_PLANUNG', 'MATERIAL_BESTELLT'] },
-    { key: 'installation', label: 'Installation', status: ['INSTALLATION_GEPLANT', 'INSTALLATION_LAEUFT', 'INSTALLATION_FERTIG'] },
-    { key: 'abschluss', label: 'Abschluss', status: ['NETZANMELDUNG_LAEUFT', 'INBETRIEBNAHME', 'ABGESCHLOSSEN', 'GEWAEHRLEISTUNG'] },
+    { key: 'lead', label: 'Lead', status: ['ANFRAGE'] },
+    { key: 'kontaktiert', label: 'Kontaktiert', status: ['ANGEBOT_ERSTELLT', 'ANGEBOT_VERSENDET', 'ANGEBOT_AKZEPTIERT'] },
+    { key: 'qualifiziert', label: 'Qualifiziert', status: ['AUFTRAG', 'IN_PLANUNG', 'MATERIAL_BESTELLT'] },
+    { key: 'verkauft', label: 'Verkauft', status: ['INSTALLATION_GEPLANT'] },
+    { key: 'installation', label: 'Installation', status: ['INSTALLATION_LAEUFT', 'INSTALLATION_FERTIG', 'NETZANMELDUNG_LAEUFT'] },
+    { key: 'fertig', label: 'Fertig', status: ['INBETRIEBNAHME', 'ABGESCHLOSSEN', 'GEWAEHRLEISTUNG'] },
   ];
 
   const inputStyle: React.CSSProperties = { padding: '12px 16px', borderRadius: '10px', border: '1px solid #334155', background: '#0f172a', color: '#fff', fontSize: '0.9rem' };

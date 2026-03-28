@@ -64,7 +64,7 @@ function useImpersonation() {
       setTimeout(() => {
         document.title = "Session beendet";
         document.body.innerHTML = `
-          <div style="min-height:100vh;background:#0a0a0f;display:flex;align-items:center;justify-content:center;font-family:system-ui,-apple-system,sans-serif">
+          <div style="min-height:100vh;background:#060b18;display:flex;align-items:center;justify-content:center;font-family:system-ui,-apple-system,sans-serif">
             <div style="text-align:center;max-width:360px">
               <div style="width:56px;height:56px;border-radius:50%;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -165,11 +165,6 @@ export default function AdminLayout() {
     <>
       {/* Desktop Titlebar (Electron only) */}
       {isDesktop && <DesktopTitlebar isConnected={isOnline} />}
-
-      {/* 3D Background Layer */}
-      <Suspense fallback={null}>
-        <DashboardBackground />
-      </Suspense>
 
       <div className={`admin-layout ${sidebarCollapsed ? "admin-layout--collapsed" : ""}`}>
         <SessionWarningModal

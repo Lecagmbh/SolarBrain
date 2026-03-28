@@ -14,7 +14,7 @@ export const DEFAULT_COLORS: ThreeColors = {
   warning: '#f59e0b',
   error: '#ef4444',
   info: '#3b82f6',
-  background: '#0a0a0f',
+  background: '#060b18',
   surface: 'rgba(255, 255, 255, 0.02)',
   pipelineDraft: '#525866',
   pipelineSubmitted: '#3b82f6',

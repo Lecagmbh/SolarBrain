@@ -87,9 +87,8 @@ interface LeadStats {
   total: number;
   neu: number;
   kontaktiert: number;
-  inVerhandlung: number;
-  gewonnen: number;
-  verloren: number;
+  qualifiziert: number;
+  disqualifiziert: number;
   wiedervorlagenFaellig: number;
   pipelineAnmeldungen: number;
   conversionRate: number;
@@ -104,17 +103,16 @@ interface DuplicateMatch {
   matchReason: string;
 }
 
-type LeadStatus = "NEU" | "KONTAKTIERT" | "IN_VERHANDLUNG" | "GEWONNEN" | "VERLOREN";
+type LeadStatus = "NEU" | "KONTAKTIERT" | "QUALIFIZIERT" | "DISQUALIFIZIERT";
 type LeadInteresse = "HOCH" | "MITTEL" | "NIEDRIG" | "UNBEKANNT";
 
 /* ── Constants ── */
 
-const STATUS_CONFIG: Record<LeadStatus, { label: string; color: string; bg: string; dot: string }> = {
-  NEU: { label: "Neu", color: "#9CA3AF", bg: "rgba(107,114,128,0.15)", dot: "#9CA3AF" },
-  KONTAKTIERT: { label: "Kontaktiert", color: "#60A5FA", bg: "rgba(59,130,246,0.15)", dot: "#60A5FA" },
-  IN_VERHANDLUNG: { label: "In Verhandlung", color: "#FBBF24", bg: "rgba(245,158,11,0.15)", dot: "#FBBF24" },
-  GEWONNEN: { label: "Gewonnen", color: "#34D399", bg: "rgba(16,185,129,0.15)", dot: "#34D399" },
-  VERLOREN: { label: "Verloren", color: "#F87171", bg: "rgba(239,68,68,0.15)", dot: "#F87171" },
+const STATUS_CONFIG: Record<LeadStatus, { label: string; sub: string; color: string; bg: string; dot: string }> = {
+  NEU: { label: "Zu Kontaktieren", sub: "", color: "#D4A843", bg: "rgba(212,168,67,0.15)", dot: "#D4A843" },
+  KONTAKTIERT: { label: "Kontaktiert", sub: "In Bearbeitung", color: "#3b82f6", bg: "rgba(59,130,246,0.15)", dot: "#3b82f6" },
+  QUALIFIZIERT: { label: "Qualifiziert", sub: "Angebot möglich", color: "#22c55e", bg: "rgba(34,197,94,0.15)", dot: "#22c55e" },
+  DISQUALIFIZIERT: { label: "Disqualifiziert", sub: "", color: "#ef4444", bg: "rgba(239,68,68,0.15)", dot: "#ef4444" },
 };
 
 const BRANCHE_LABELS: Record<string, string> = {
@@ -159,7 +157,7 @@ const ACTIVITY_LABELS: Record<string, string> = {
   VIDEO: "Videocall",
 };
 
-const STATUS_ORDER: LeadStatus[] = ["NEU", "KONTAKTIERT", "IN_VERHANDLUNG", "GEWONNEN", "VERLOREN"];
+const STATUS_ORDER: LeadStatus[] = ["NEU", "KONTAKTIERT", "QUALIFIZIERT", "DISQUALIFIZIERT"];
 
 const formatDate = (d: string | null) =>
   d ? new Date(d).toLocaleDateString("de-DE") : "-";
@@ -403,9 +401,8 @@ function PipelineView({
   const grouped: Record<LeadStatus, Lead[]> = {
     NEU: [],
     KONTAKTIERT: [],
-    IN_VERHANDLUNG: [],
-    GEWONNEN: [],
-    VERLOREN: [],
+    QUALIFIZIERT: [],
+    DISQUALIFIZIERT: [],
   };
   leads.forEach((l) => {
     if (grouped[l.status]) grouped[l.status].push(l);
@@ -428,8 +425,9 @@ function PipelineView({
                   flexShrink: 0,
                 }}
               />
-              <span style={{ color: cfg.color, fontWeight: 600, fontSize: "0.8rem" }}>
-                {cfg.label}
+              <span style={{ display: "flex", flexDirection: "column" }}>
+                <span style={{ color: cfg.color, fontWeight: 600, fontSize: "0.8rem" }}>{cfg.label}</span>
+                {cfg.sub && <span style={{ color: "#64748b", fontSize: "0.65rem" }}>{cfg.sub}</span>}
               </span>
               <span
                 style={{
@@ -1717,9 +1715,8 @@ export function HvLeadsTab() {
         total: d.totalLeads || 0,
         neu: sc.NEU || 0,
         kontaktiert: sc.KONTAKTIERT || 0,
-        inVerhandlung: sc.IN_VERHANDLUNG || 0,
-        gewonnen: sc.GEWONNEN || 0,
-        verloren: sc.VERLOREN || 0,
+        qualifiziert: sc.QUALIFIZIERT || sc.IN_VERHANDLUNG || 0,
+        disqualifiziert: sc.DISQUALIFIZIERT || sc.VERLOREN || 0,
         wiedervorlagenFaellig: d.wiedervorlagenFaellig || 0,
         pipelineAnmeldungen: d.pipelineAnmeldungenProMonat || 0,
         conversionRate: d.conversionRate || 0,
@@ -1800,25 +1797,15 @@ export function HvLeadsTab() {
       {/* Stats Cards */}
       {stats && (
         <div style={styles.statsGrid}>
-          <StatCard icon={Users} label="Neue Leads" value={stats.neu} color="#9CA3AF" />
-          <StatCard icon={Target} label="In Verhandlung" value={stats.inVerhandlung} color="#FBBF24" />
-          <StatCard
-            icon={CheckCircle}
-            label="Gewonnen"
-            value={stats.gewonnen}
-            sub={`Conversion: ${stats.conversionRate}%`}
-            color="#34D399"
-          />
-          <StatCard
-            icon={Clock}
-            label="Wiedervorlagen fällig"
-            value={stats.wiedervorlagenFaellig}
-            color="#F87171"
-          />
+          <StatCard icon={Users} label="Zu Kontaktieren" value={stats.neu} color="#D4A843" />
+          <StatCard icon={Phone} label="Kontaktiert" value={stats.kontaktiert} color="#3b82f6" />
+          <StatCard icon={Target} label="Qualifiziert" value={stats.qualifiziert} color="#22c55e" sub="Angebot möglich" />
+          <StatCard icon={XCircle} label="Disqualifiziert" value={stats.disqualifiziert} color="#ef4444" />
           <StatCard
             icon={TrendingUp}
-            label="Pipeline Anm./Mon."
-            value={stats.pipelineAnmeldungen}
+            label="Gesamt"
+            value={stats.total}
+            sub={`Conversion: ${stats.conversionRate}%`}
             color="#D4A843"
           />
         </div>

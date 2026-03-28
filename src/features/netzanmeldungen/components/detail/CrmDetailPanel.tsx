@@ -123,10 +123,10 @@ const css = `
 
 function DetailSkeleton({ onBack }: { onBack: () => void }) {
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "#0a0a0f", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "#060b18", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif" }}>
       <style>{css}</style>
       {/* Header Skeleton */}
-      <div style={{ background: "#0c0c18", borderBottom: "1px solid rgba(255,255,255,0.05)", padding: "10px 20px" }}>
+      <div style={{ background: "#081020", borderBottom: "1px solid rgba(255,255,255,0.05)", padding: "10px 20px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
           <button onClick={onBack} style={{ background: "rgba(255,255,255,0.04)", color: "#64748b", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 5, padding: "4px 10px", fontSize: 11, cursor: "pointer", fontFamily: "'DM Sans'" }}>← Projekte</button>
           <div className="sk" style={{ width: 10, height: 10, borderRadius: "50%" }} />
@@ -166,7 +166,7 @@ function DetailSkeleton({ onBack }: { onBack: () => void }) {
 
 function DetailError({ error, onBack, onRetry }: { error: string; onBack: () => void; onRetry: () => void }) {
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "#0a0a0f", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans', sans-serif" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "#060b18", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans', sans-serif" }}>
       <div style={{ textAlign: "center", maxWidth: 400 }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>⚠</div>
         <div style={{ fontSize: 16, fontWeight: 700, color: "#ef4444", marginBottom: 8 }}>Laden fehlgeschlagen</div>
@@ -459,7 +459,7 @@ export default function CrmDetailPanel({ item, onClose, mode = "crm" }: Props) {
   const knownTabs = ["uebersicht", "verlauf", "comments", "docs", "vde", "angebot", "tix", "nb", "check", "montage"];
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "#0a0a0f", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif", overflowY: "auto" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "#060b18", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif", overflowY: "auto" }}>
       <style>{css}</style>
       <DetailHeader
         title={p.titel || p.kundenName || "—"}

@@ -4,13 +4,13 @@
   min-height: 100vh;
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
-  background: radial-gradient(circle at top, #020617 0, #000 65%);
+  background: radial-gradient(circle at top, #060b18 0, #060b18 65%);
 }
 
 /* Sidebar */
 
 .admin-sidebar {
-  background: linear-gradient(to bottom, #020617, #020617 40%, #020617 100%);
+  background: linear-gradient(to bottom, #060b18, #060b18 40%, #060b18 100%);
   border-right: 1px solid #020b29;
   padding: 1.2rem 1.25rem;
   display: flex;
@@ -111,7 +111,7 @@
 /* Panels generisch */
 
 .admin-panel {
-  background: radial-gradient(circle at top left, #020b29, #020617 70%);
+  background: radial-gradient(circle at top left, #020b29, #060b18 70%);
   border-radius: var(--admin-radius-lg);
   border: 1px solid rgba(15, 23, 42, 0.95);
   box-shadow: var(--admin-shadow-soft);

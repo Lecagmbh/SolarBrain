@@ -3,7 +3,7 @@ import { CONTEXTS, PRIORITIES } from "../constants";
 import { createTicket } from "../services/ticketApi";
 
 const C = {
-  bg: "#0a0a12", bgCard: "rgba(12,12,20,0.95)", bgInput: "rgba(15,15,25,0.9)",
+  bg: "#060b18", bgCard: "rgba(12,12,20,0.95)", bgInput: "rgba(15,15,25,0.9)",
   border: "rgba(212,168,67,0.12)", borderHover: "rgba(212,168,67,0.3)",
   text: "#e2e8f0", textMuted: "#64748b", textBright: "#f1f5f9",
   primary: "#D4A843", red: "#f87171",

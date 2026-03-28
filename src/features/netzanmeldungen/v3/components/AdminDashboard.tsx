@@ -101,11 +101,11 @@ export default function AdminDashboard({ onDrillDown, onPipelineFilter, pipeline
       {/* KPI Row — D2D Lead Pipeline */}
       <div className="v3-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 10, marginBottom: 16 }}>
         {[
-          { v: wizardLeadNeu, l: "Neue Leads", c: "#a855f7", sub: "zu kontaktieren" },
-          { v: (wizardLeadsData?.stats?.kontaktiert || 0), l: "Kontaktiert", c: "#06b6d4", sub: "in Bearbeitung" },
+          { v: wizardLeadNeu, l: "Zu Kontaktieren", c: "#D4A843", sub: "neue Leads" },
+          { v: (wizardLeadsData?.stats?.kontaktiert || 0), l: "Kontaktiert", c: "#3b82f6", sub: "in Bearbeitung" },
           { v: (wizardLeadsData?.stats?.qualifiziert || 0), l: "Qualifiziert", c: "#22c55e", sub: "Angebot möglich" },
-          { v: (wizardLeadsData?.stats?.konvertiert || 0), l: "Konvertiert", c: "#22c55e", sub: "Projekt angelegt" },
-          { v: wizardLeadCount, l: "Gesamt", c: "#D4A843", sub: `${wizardLeadsData?.stats?.abgelehnt || 0} abgelehnt` },
+          { v: (wizardLeadsData?.stats?.abgelehnt || 0), l: "Disqualifiziert", c: "#ef4444", sub: "" },
+          { v: wizardLeadCount, l: "Gesamt", c: "#64748b", sub: "" },
         ].map(k => (
           <div key={k.l} style={{ ...cardStyle, padding: "16px", cursor: "default", textAlign: "center", border: `1px solid ${k.c}15`, background: k.c + "04" }}>
             <div style={{ fontSize: 32, fontWeight: 800, color: k.c, letterSpacing: -1, textShadow: `0 0 20px ${k.c}25` }}><CountUp to={k.v} duration={1600} locale /></div>
@@ -140,10 +140,9 @@ export default function AdminDashboard({ onDrillDown, onPipelineFilter, pipeline
         <div style={cardStyle}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#D4A843", marginBottom: 12 }}>⚡ Handlungsbedarf</div>
           {[
-            { icon: "🌟", text: `${wizardLeadNeu} neue Leads`, action: "Kontaktieren", color: "#a855f7" },
-            { icon: "📞", text: `${wizardLeadsData?.stats?.kontaktiert || 0} kontaktiert`, action: "Qualifizieren", color: "#06b6d4" },
+            { icon: "⚡", text: `${wizardLeadNeu} zu kontaktieren`, action: "Kontaktieren", color: "#D4A843" },
+            { icon: "📞", text: `${wizardLeadsData?.stats?.kontaktiert || 0} kontaktiert`, action: "Qualifizieren", color: "#3b82f6" },
             { icon: "✅", text: `${wizardLeadsData?.stats?.qualifiziert || 0} qualifiziert`, action: "Angebot erstellen", color: "#22c55e" },
-            { icon: "🎉", text: `${wizardLeadsData?.stats?.konvertiert || 0} konvertiert`, action: "Projekt bearbeiten", color: "#22c55e" },
           ].map((p, i) => (
             <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "5px 0", borderBottom: i < 3 ? `1px solid ${C.border}` : "none" }}>
               <span style={{ fontSize: 14, flexShrink: 0 }}>{p.icon}</span>

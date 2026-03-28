@@ -494,12 +494,10 @@ function transformAlertsToActionItems(alerts: any[], isAdmin: boolean): ActionIt
 
 function getDefaultPipelineStages(): PipelineStage[] {
   return [
-    { key: 'eingang', label: 'Eingang', count: 0 },
-    { key: 'beim_nb', label: 'Beim NB', count: 0 },
-    { key: 'rueckfrage', label: 'Rückfrage', count: 0 },
-    { key: 'genehmigt', label: 'Genehmigt', count: 0 },
-    { key: 'ibn', label: 'IBN', count: 0 },
-    { key: 'fertig', label: 'Fertig', count: 0 },
+    { key: 'zu_kontaktieren', label: 'Zu Kontaktieren', count: 0 },
+    { key: 'kontaktiert', label: 'Kontaktiert', count: 0 },
+    { key: 'qualifiziert', label: 'Qualifiziert', count: 0 },
+    { key: 'disqualifiziert', label: 'Disqualifiziert', count: 0 },
   ];
 }
 
@@ -533,14 +531,18 @@ function getTaskType(inst: any): string {
 
 function mapStatus(status: string): string {
   const statusMap: Record<string, string> = {
-    'EINGANG': 'eingang',
-    'BEIM_NB': 'beim-nb',
-    'RUECKFRAGE': 'rueckfrage',
-    'GENEHMIGT': 'genehmigt',
-    'IBN': 'ibn',
-    'FERTIG': 'fertig',
+    'LEAD': 'zu_kontaktieren',
+    'EINGANG': 'zu_kontaktieren',
+    'KONTAKTIERT': 'kontaktiert',
+    'BEIM_NB': 'kontaktiert',
+    'QUALIFIZIERT': 'qualifiziert',
+    'RUECKFRAGE': 'qualifiziert',
+    'GENEHMIGT': 'qualifiziert',
+    'DISQUALIFIZIERT': 'disqualifiziert',
+    'IBN': 'qualifiziert',
+    'FERTIG': 'qualifiziert',
   };
-  return statusMap[status] || 'eingang';
+  return statusMap[status] || 'zu_kontaktieren';
 }
 
 function getStatusLabel(status: string): string {

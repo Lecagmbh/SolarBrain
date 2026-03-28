@@ -19,7 +19,7 @@
 .energy-network-fallback {
   position: absolute;
   inset: 0;
-  background: var(--bg-primary, #0a0a0f);
+  background: var(--bg-primary, #060b18);
 }
 
 .energy-network-fallback__orb {

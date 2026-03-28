@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from "react";
 
 // Design System
 const C = {
-  bg: "#0a0a0f", card: "rgba(17,20,35,0.95)", panel: "#0c0c18",
+  bg: "#060b18", card: "rgba(17,20,35,0.95)", panel: "#081020",
   border: "rgba(212,168,67,0.08)", borderLight: "rgba(255,255,255,0.05)",
   text: "#e2e8f0", dim: "#64748b", muted: "#94a3b8", bright: "#f8fafc",
   accent: "#D4A843", accentLight: "#a5b4fc",

@@ -10,7 +10,7 @@ import { getContextMeta } from "./constants";
 
 const C = {
   bg: "#06060b", bgCard: "rgba(12,12,20,0.85)", bgCardHover: "rgba(18,18,30,0.95)",
-  bgPanel: "#0a0a12", bgInput: "rgba(15,15,25,0.9)",
+  bgPanel: "#060b18", bgInput: "rgba(15,15,25,0.9)",
   border: "rgba(212,168,67,0.08)", borderHover: "rgba(212,168,67,0.2)",
   text: "#e2e8f0", textDim: "#94a3b8", textMuted: "#64748b", textBright: "#f1f5f9",
   primary: "#D4A843", primaryLight: "#EAD068", primaryGlow: "rgba(212,168,67,0.15)",

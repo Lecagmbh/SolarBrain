@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Activity, Zap, Clock, MessageSquareWarning, CheckCircle, ClipboardCheck, PartyPopper } from 'lucide-react';
+import { Activity, Zap, Phone, CheckCircle, XCircle } from 'lucide-react';
 import { AnimatedCounter } from '../AnimatedCounter';
 import { FlowingParticles } from './FlowingParticles';
 import './animated-pipeline.css';
@@ -30,41 +30,35 @@ const STAGE_CONFIG: Record<string, {
     color: '#D4A843',
     bgClass: 'pipeline__stage-icon--eingang',
   },
-  'beim-nb': {
-    icon: <Clock size={22} />,
-    color: '#f59e0b',
+  zu_kontaktieren: {
+    icon: <Zap size={22} />,
+    color: '#D4A843',
+    bgClass: 'pipeline__stage-icon--eingang',
+  },
+  kontaktiert: {
+    icon: <Phone size={22} />,
+    color: '#3b82f6',
     bgClass: 'pipeline__stage-icon--beim-nb',
   },
-  rueckfragen: {
-    icon: <MessageSquareWarning size={22} />,
-    color: '#ef4444',
-    bgClass: 'pipeline__stage-icon--rueckfragen',
-  },
-  genehmigt: {
+  qualifiziert: {
     icon: <CheckCircle size={22} />,
-    color: '#10b981',
+    color: '#22c55e',
     bgClass: 'pipeline__stage-icon--genehmigt',
   },
-  ibn: {
-    icon: <ClipboardCheck size={22} />,
-    color: '#3b82f6',
-    bgClass: 'pipeline__stage-icon--ibn',
-  },
-  fertig: {
-    icon: <PartyPopper size={22} />,
-    color: '#22c55e',
-    bgClass: 'pipeline__stage-icon--fertig',
+  disqualifiziert: {
+    icon: <XCircle size={22} />,
+    color: '#ef4444',
+    bgClass: 'pipeline__stage-icon--rueckfragen',
   },
 };
 
 // Emoji mapping for stages (fallback)
 const STAGE_EMOJI: Record<string, string> = {
   eingang: '⚡',
-  'beim-nb': '⏳',
-  rueckfragen: '🔴',
-  genehmigt: '✅',
-  ibn: '📋',
-  fertig: '🎉',
+  zu_kontaktieren: '⚡',
+  kontaktiert: '📞',
+  qualifiziert: '✅',
+  disqualifiziert: '❌',
 };
 
 /**

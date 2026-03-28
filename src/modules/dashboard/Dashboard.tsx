@@ -47,10 +47,10 @@ export function Dashboard() {
   // Role checks
   const isAdmin = user?.role === 'ADMIN' || user?.role === 'MITARBEITER';
   const isKunde = user?.role === 'KUNDE' || user?.role === 'DEMO';
-  const isHV = user?.role === 'HANDELSVERTRETER';
+  const isHV = ['HANDELSVERTRETER', 'HV_LEITER', 'HV_TEAMLEITER', 'HV_LEADER'].includes(user?.role || '');
   const isSub = user?.role === 'SUBUNTERNEHMER';
 
-  // Redirect Handelsvertreter to HV-Center
+  // Redirect alle HV-Rollen to HV-Center
   useEffect(() => {
     if (isHV) {
       navigate('/hv-center', { replace: true });

@@ -70,7 +70,7 @@ const TABS = [
    ═══════════════════════════════════════════════════════════════════════════ */
 
 const styles = `
-.cs-page { min-height: 100vh; background: linear-gradient(135deg, #0a0a0f 0%, #0d0d14 50%, #0a0f1a 100%); padding: 32px; position: relative; }
+.cs-page { min-height: 100vh; background: linear-gradient(135deg, #060b18 0%, #081020 50%, #0a0f1a 100%); padding: 32px; position: relative; }
 .cs-orb { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.3; pointer-events: none; z-index: 0; }
 .cs-orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, #D4A843 0%, transparent 70%); left: -150px; top: 10%; }
 .cs-orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, #EAD068 0%, transparent 70%); right: -100px; bottom: 20%; }
@@ -135,7 +135,7 @@ const styles = `
 .cs-btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,168,67,0.4); }
 .cs-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 .cs-btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; }
-.cs-footer { position: sticky; bottom: 0; padding: 20px 0; background: linear-gradient(to top, #0a0a0f 0%, transparent 100%); display: flex; justify-content: flex-end; gap: 12px; margin-top: 32px; }
+.cs-footer { position: sticky; bottom: 0; padding: 20px 0; background: linear-gradient(to top, #060b18 0%, transparent 100%); display: flex; justify-content: flex-end; gap: 12px; margin-top: 32px; }
 .cs-toast { position: fixed; bottom: 32px; right: 32px; padding: 16px 24px; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); border-radius: 12px; color: #22c55e; font-size: 14px; font-weight: 500; z-index: 100; }
 .cs-toast.error { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.3); color: #f87171; }
 @media (max-width: 1024px) { .cs-layout { flex-direction: column; } .cs-sidebar { width: 100%; } .cs-nav { display: flex; flex-wrap: wrap; gap: 8px; position: static; } .cs-nav-item { flex: 0 0 auto; } .cs-grid, .cs-grid-3 { grid-template-columns: 1fr; } .cs-integration-grid { grid-template-columns: 1fr; } }

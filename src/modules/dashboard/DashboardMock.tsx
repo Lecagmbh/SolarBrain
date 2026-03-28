@@ -176,12 +176,10 @@ const FEED_COLORS: Record<string, string> = {
 };
 
 const PIPELINE_DEFS = [
-  { key: "lead", label: "LEADS", color: "#D4A843", glow: "rgba(212,168,67,0.15)" },
-  { key: "termin", label: "TERMINE", color: "#3b82f6", glow: "rgba(59,130,246,0.15)" },
-  { key: "angebot", label: "ANGEBOTE", color: "#8b5cf6", glow: "rgba(139,92,246,0.15)" },
-  { key: "verkauft", label: "VERKAUFT", color: "#22c55e", glow: "rgba(34,197,94,0.15)" },
-  { key: "installation", label: "INSTALLATION", color: "#f59e0b", glow: "rgba(245,158,11,0.15)" },
-  { key: "fertig", label: "FERTIG", color: "#64748b", glow: "rgba(100,116,139,0.1)" },
+  { key: "lead", label: "ZU KONTAKTIEREN", color: "#D4A843", glow: "rgba(212,168,67,0.15)" },
+  { key: "kontaktiert", label: "KONTAKTIERT", color: "#3b82f6", glow: "rgba(59,130,246,0.15)" },
+  { key: "qualifiziert", label: "QUALIFIZIERT", color: "#22c55e", glow: "rgba(34,197,94,0.15)" },
+  { key: "disqualifiziert", label: "DISQUALIFIZIERT", color: "#ef4444", glow: "rgba(239,68,68,0.1)" },
 ];
 
 function getGreeting(): string {
@@ -245,38 +243,42 @@ export default function DashboardMock() {
 
   const loadData = useCallback(async () => {
     try {
-      // Wizard-Leads als primäre Datenquelle
-      const leadsRes = await apiFetch("/wizard/leads");
-      const leads = leadsRes?.data || [];
-      const stats = leadsRes?.stats || {};
+      // Daten aus beiden Quellen: Wizard-Leads (JSON) + DB-Installationen
+      const [leadsRes, installRes] = await Promise.allSettled([
+        apiFetch("/wizard/leads"),
+        apiFetch("/installations/counts"),
+      ]);
 
-      const neu = stats.neu || 0;
-      const kontaktiert = stats.kontaktiert || 0;
-      const qualifiziert = stats.qualifiziert || 0;
-      const konvertiert = stats.konvertiert || 0;
-      const abgelehnt = stats.abgelehnt || 0;
-      const total = stats.total || 0;
+      const wizardStats = (leadsRes.status === "fulfilled" ? leadsRes.value?.stats : {}) || {};
+      const dbCounts = (installRes.status === "fulfilled" ? installRes.value : {}) || {};
+      const leads = (leadsRes.status === "fulfilled" ? leadsRes.value?.data : []) || [];
+
+      // DB-Installationen haben Vorrang, Wizard-Leads als Fallback
+      const neu = (dbCounts.LEAD || 0) + (dbCounts.EINGANG || 0) + (wizardStats.neu || 0);
+      const kontaktiert = (dbCounts.KONTAKTIERT || 0) + (dbCounts.BEIM_NB || 0) + (wizardStats.kontaktiert || 0);
+      const qualifiziert = (dbCounts.QUALIFIZIERT || 0) + (dbCounts.GENEHMIGT || 0) + (wizardStats.qualifiziert || 0);
+      const disqualifiziert = (dbCounts.DISQUALIFIZIERT || 0) + (wizardStats.abgelehnt || 0);
+      const total = neu + kontaktiert + qualifiziert + disqualifiziert;
       const aktiv = neu + kontaktiert + qualifiziert;
+      const abgelehnt = disqualifiziert;
 
       const pipeline = [
-        { key: "lead", label: "NEUE LEADS", count: neu, color: "#a855f7", glow: "rgba(168,85,247,0.15)" },
-        { key: "kontaktiert", label: "KONTAKTIERT", count: kontaktiert, color: "#06b6d4", glow: "rgba(6,182,212,0.15)" },
+        { key: "lead", label: "ZU KONTAKTIEREN", count: neu, color: "#D4A843", glow: "rgba(212,168,67,0.15)" },
+        { key: "kontaktiert", label: "KONTAKTIERT", count: kontaktiert, color: "#3b82f6", glow: "rgba(59,130,246,0.15)" },
         { key: "qualifiziert", label: "QUALIFIZIERT", count: qualifiziert, color: "#22c55e", glow: "rgba(34,197,94,0.15)" },
-        { key: "konvertiert", label: "KONVERTIERT", count: konvertiert, color: "#D4A843", glow: "rgba(212,168,67,0.15)" },
-        { key: "abgelehnt", label: "ABGELEHNT", count: abgelehnt, color: "#64748b", glow: "rgba(100,116,139,0.15)" },
+        { key: "disqualifiziert", label: "DISQUALIFIZIERT", count: abgelehnt, color: "#ef4444", glow: "rgba(239,68,68,0.15)" },
       ];
 
       const kpis = [
-        { value: neu, label: "Neue Leads", sub: "zu kontaktieren", color: "#a855f7" },
-        { value: kontaktiert, label: "Kontaktiert", sub: "in Bearbeitung", color: "#06b6d4" },
+        { value: neu, label: "Zu Kontaktieren", sub: "neue Leads", color: "#D4A843" },
+        { value: kontaktiert, label: "Kontaktiert", sub: "in Bearbeitung", color: "#3b82f6" },
         { value: qualifiziert, label: "Qualifiziert", sub: "Angebot möglich", color: "#22c55e" },
-        { value: konvertiert, label: "Konvertiert", sub: "Projekt angelegt", color: "#D4A843" },
-        { value: total, label: "Gesamt", sub: `${abgelehnt} abgelehnt`, color: "#64748b" },
-        { value: aktiv, label: "Pipeline", sub: `${total} insgesamt`, color: "#D4A843" },
+        { value: abgelehnt, label: "Disqualifiziert", sub: "", color: "#ef4444" },
+        { value: total, label: "Gesamt", sub: `${aktiv} aktiv`, color: "#64748b" },
       ];
 
       // Recent leads as projects
-      const STATUS_LABELS: Record<string, string> = { neu: "Neu", kontaktiert: "Kontaktiert", qualifiziert: "Qualifiziert", konvertiert: "Konvertiert", abgelehnt: "Abgelehnt" };
+      const STATUS_LABELS: Record<string, string> = { neu: "Zu Kontaktieren", kontaktiert: "Kontaktiert", qualifiziert: "Qualifiziert", disqualifiziert: "Disqualifiziert", abgelehnt: "Disqualifiziert" };
       const projects = leads.slice(0, 8).map((l: any) => ({
         id: l.id,
         name: l.name || "–",
@@ -303,17 +305,16 @@ export default function DashboardMock() {
       console.error("[Dashboard] Failed to load:", err);
       setData({
         pipeline: [
-          { key: "lead", label: "NEUE LEADS", count: 0, color: "#a855f7", glow: "rgba(168,85,247,0.15)" },
-          { key: "kontaktiert", label: "KONTAKTIERT", count: 0, color: "#06b6d4", glow: "rgba(6,182,212,0.15)" },
+          { key: "lead", label: "ZU KONTAKTIEREN", count: 0, color: "#D4A843", glow: "rgba(212,168,67,0.15)" },
+          { key: "kontaktiert", label: "KONTAKTIERT", count: 0, color: "#3b82f6", glow: "rgba(59,130,246,0.15)" },
           { key: "qualifiziert", label: "QUALIFIZIERT", count: 0, color: "#22c55e", glow: "rgba(34,197,94,0.15)" },
-          { key: "konvertiert", label: "KONVERTIERT", count: 0, color: "#D4A843", glow: "rgba(212,168,67,0.15)" },
-          { key: "abgelehnt", label: "ABGELEHNT", count: 0, color: "#64748b", glow: "rgba(100,116,139,0.15)" },
+          { key: "disqualifiziert", label: "DISQUALIFIZIERT", count: 0, color: "#ef4444", glow: "rgba(239,68,68,0.15)" },
         ],
         kpis: [
-          { value: 0, label: "Neue Leads", sub: "–", color: "#a855f7" },
-          { value: 0, label: "Kontaktiert", sub: "–", color: "#06b6d4" },
+          { value: 0, label: "Zu Kontaktieren", sub: "–", color: "#D4A843" },
+          { value: 0, label: "Kontaktiert", sub: "–", color: "#3b82f6" },
           { value: 0, label: "Qualifiziert", sub: "–", color: "#22c55e" },
-          { value: 0, label: "Konvertiert", sub: "–", color: "#D4A843" },
+          { value: 0, label: "Disqualifiziert", sub: "–", color: "#ef4444" },
           { value: 0, label: "Gesamt", sub: "–", color: "#64748b" },
           { value: 0, label: "Pipeline", sub: "–", color: "#D4A843" },
         ],

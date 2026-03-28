@@ -118,7 +118,7 @@ export default function ProduktKatalogPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif", padding: "24px 32px" }}>
+    <div style={{ minHeight: "100vh", background: "#060b18", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif", padding: "24px 32px" }}>
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <div>

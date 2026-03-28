@@ -135,7 +135,7 @@ export function FinanzenPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--dash-bg, #0a0a0f)" }}>
+    <div style={{ minHeight: "100vh", background: "var(--dash-bg, #060b18)" }}>
       {/* Header */}
       <header
         style={{

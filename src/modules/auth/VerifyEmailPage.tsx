@@ -207,7 +207,7 @@ export default function VerifyEmailPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(135deg, #0a0a0f 0%, #0d0d1a 50%, #0a0f1a 100%);
+          background: linear-gradient(135deg, #060b18 0%, #0a1128 50%, #0a0f1a 100%);
           position: relative;
           overflow: hidden;
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;

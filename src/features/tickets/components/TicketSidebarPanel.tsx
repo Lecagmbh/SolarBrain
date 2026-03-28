@@ -7,7 +7,7 @@ import type { FieldTicket } from "../constants";
 import { getStatusMeta } from "../constants";
 
 const C = {
-  bg: "#0a0a12", bgCard: "rgba(12,12,20,0.85)",
+  bg: "#060b18", bgCard: "rgba(12,12,20,0.85)",
   border: "rgba(212,168,67,0.08)", borderHover: "rgba(212,168,67,0.2)",
   text: "#e2e8f0", textMuted: "#64748b", textBright: "#f1f5f9",
   primary: "#D4A843", primaryGlow: "rgba(212,168,67,0.15)",

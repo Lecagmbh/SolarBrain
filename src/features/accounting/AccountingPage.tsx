@@ -67,7 +67,7 @@ export function AccountingPage() {
   const ActiveComponent = TABS.find((t) => t.id === activeTab)?.component || AccountingDashboard;
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--dash-bg, #0a0a0f)" }}>
+    <div style={{ minHeight: "100vh", background: "var(--dash-bg, #060b18)" }}>
       {/* Header */}
       <header
         style={{

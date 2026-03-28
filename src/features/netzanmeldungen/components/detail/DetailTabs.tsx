@@ -2,7 +2,7 @@
  * Detail Tabs — Premium Design, Pill-Style, dynamisch je nach Herkunft
  */
 
-const C = { primary: "#D4A843", accent: "#a5b4fc", muted: "#475569", border: "rgba(255,255,255,0.05)", bg: "#0a0a0f" };
+const C = { primary: "#D4A843", accent: "#a5b4fc", muted: "#475569", border: "rgba(255,255,255,0.05)", bg: "#060b18" };
 
 interface Tab { k: string; l: string; i: string }
 

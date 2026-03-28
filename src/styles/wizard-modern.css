@@ -10,7 +10,7 @@
 .wizard-modern-page {
   min-height: 100vh;
   padding: 32px;
-  background: radial-gradient(circle at top, #0f172a, #020617 45%, #000);
+  background: radial-gradient(circle at top, #0f172a, #060b18 45%, #060b18);
   color: #e5e7eb;
   display: flex;
   justify-content: center;
@@ -74,7 +74,7 @@
 /* STEP WRAPPER (innerhalb der Main Card) */
 
 .wizard-modern-step-card {
-  background: radial-gradient(circle at top left, #0b1220 0%, #020617 55%);
+  background: radial-gradient(circle at top left, #0b1220 0%, #060b18 55%);
   border-radius: 18px;
   padding: 22px 24px 26px;
   border: 1px solid rgba(148, 163, 184, 0.28);
@@ -160,7 +160,7 @@
 }
 
 .wizard-panel {
-  background: radial-gradient(circle at top left, #020617 0%, #020617 85%);
+  background: radial-gradient(circle at top left, #060b18 0%, #060b18 85%);
   border-radius: 16px;
   padding: 18px 18px 20px;
   border: 1px solid rgba(30, 64, 175, 0.4);
@@ -180,7 +180,7 @@
 .wizard-ai-panel-mini {
   flex: 0 0 320px;
   max-width: 340px;
-  background: radial-gradient(circle at top, #020617, #020617 65%);
+  background: radial-gradient(circle at top, #060b18, #060b18 65%);
   border-radius: 16px;
   padding: 18px 18px 20px;
   border: 1px solid rgba(148, 163, 184, 0.45);

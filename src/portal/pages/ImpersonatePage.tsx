@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 
 const styles = `
-.imp-page { min-height: 100vh; background: linear-gradient(135deg, #0a0a0f 0%, #0d0d14 50%, #0a0f1a 100%); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.imp-page { min-height: 100vh; background: linear-gradient(135deg, #060b18 0%, #0d0d14 50%, #0a0f1a 100%); display: flex; align-items: center; justify-content: center; padding: 20px; }
 .imp-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 40px; max-width: 380px; width: 100%; text-align: center; }
 
 /* Loading */

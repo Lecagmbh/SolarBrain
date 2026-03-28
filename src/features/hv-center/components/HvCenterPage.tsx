@@ -46,16 +46,12 @@ const ALL_TABS: Tab[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, component: HvDashboardTab },
   { id: "leads", label: "Leads", icon: Target, component: HvLeadsTab },
   { id: "team", label: "Mein Team", icon: UsersRound, component: HvTeamTab, oberHvOnly: true },
-  { id: "kunden", label: "Kunden", icon: Users, component: HvKundenTab },
   { id: "provisionen", label: "Provisionen", icon: Coins, component: HvProvisionenTab },
   { id: "auszahlungen", label: "Auszahlungen", icon: Banknote, component: HvAuszahlungenTab },
-  { id: "benutzer", label: "Benutzer", icon: UserPlus, component: HvBenutzerTab },
-  { id: "profil", label: "Profil", icon: UserCircle, component: HvProfilTab },
-  { id: "programm", label: "Programm", icon: BookOpen, component: HvProgrammTab },
   { id: "vertrag", label: "Vertrag", icon: FileText, component: HvVertragTab },
 ];
 
-const ALLOWED_ROLES = ["ADMIN", "MITARBEITER", "HANDELSVERTRETER"];
+const ALLOWED_ROLES = ["ADMIN", "MITARBEITER", "HANDELSVERTRETER", "HV_LEITER", "HV_TEAMLEITER", "HV_LEADER"];
 
 export function HvCenterPage() {
   const { user } = useAuth();
@@ -112,7 +108,7 @@ export function HvCenterPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--dash-bg, #0a0a0f)" }}>
+    <div style={{ minHeight: "100vh", background: "var(--dash-bg, #060b18)" }}>
       {/* Tab Navigation */}
       <nav
         style={{

@@ -17,7 +17,7 @@
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(135deg, #0a0a12 0%, #0d0d1a 50%, #0a0a12 100%);
+  background: linear-gradient(135deg, #060b18 0%, #0a1128 50%, #060b18 100%);
   overflow: hidden;
 }
 

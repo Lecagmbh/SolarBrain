@@ -4,7 +4,7 @@
 
 .factro-center {
   min-height: 100vh;
-  background: #0a0a0f;
+  background: #060b18;
   color: #e4e4e7;
   padding: 24px 32px;
 }
@@ -2071,7 +2071,7 @@
   color: white;
   flex-shrink: 0;
   z-index: 1;
-  box-shadow: 0 0 0 3px var(--bg-base, #09090b);
+  box-shadow: 0 0 0 3px var(--bg-base, #060b18);
 }
 
 .factro-comment-avatar--reply {
@@ -2079,7 +2079,7 @@
   height: 28px;
   font-size: 0.62rem;
   background: linear-gradient(135deg, #475569 0%, #64748b 100%);
-  box-shadow: 0 0 0 2px var(--bg-base, #09090b);
+  box-shadow: 0 0 0 2px var(--bg-base, #060b18);
 }
 
 .factro-comment-bubble {

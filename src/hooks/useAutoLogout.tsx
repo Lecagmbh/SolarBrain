@@ -3,8 +3,8 @@ import { useAuth } from "../pages/AuthContext";
 import { clearAccessToken } from "../modules/auth/tokenStorage";
 import { AUTH_TOKEN_KEY } from "../config/storage";
 
-const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 Minuten
-const WARNING_BEFORE = 5 * 60 * 1000;      // Warnung 5 Min vorher
+const INACTIVITY_TIMEOUT = 4 * 60 * 60 * 1000; // 4 Stunden
+const WARNING_BEFORE = 5 * 60 * 1000;           // Warnung 5 Min vorher
 const ACTIVITY_EVENTS = ["mousedown", "mousemove", "keydown", "scroll", "touchstart", "click"];
 
 export function useAutoLogout() {
@@ -134,47 +134,70 @@ export function SessionWarningModal({ show, secondsRemaining, onExtend, onLogout
   const minutes = Math.floor(secondsRemaining / 60);
   const seconds = secondsRemaining % 60;
 
+  const pct = Math.max(0, (secondsRemaining / (5 * 60)) * 100);
+
   return (
     <div style={{
-      position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)",
-      backdropFilter: "blur(4px)", display: "flex", alignItems: "center",
+      position: "fixed", inset: 0, background: "rgba(6,11,24,0.85)",
+      backdropFilter: "blur(12px)", display: "flex", alignItems: "center",
       justifyContent: "center", zIndex: 99999,
+      animation: "swFadeIn 0.3s ease",
     }}>
+      <style>{`
+        @keyframes swFadeIn { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes swPulse { 0%,100% { box-shadow: 0 0 30px rgba(212,168,67,0.1) } 50% { box-shadow: 0 0 60px rgba(212,168,67,0.25) } }
+        @keyframes swRing { 0% { transform: rotate(0deg) } 100% { transform: rotate(360deg) } }
+      `}</style>
       <div style={{
-        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
-        border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px",
-        padding: "32px", maxWidth: "400px", textAlign: "center",
+        background: "linear-gradient(135deg, #0a1128 0%, #0e1630 100%)",
+        border: "1px solid rgba(212,168,67,0.15)", borderRadius: 24,
+        padding: "36px 32px", maxWidth: 380, width: "90%", textAlign: "center",
+        animation: "swPulse 3s ease infinite",
       }}>
-        <div style={{
-          width: "64px", height: "64px", background: "rgba(251,191,36,0.1)",
-          borderRadius: "50%", display: "flex", alignItems: "center",
-          justifyContent: "center", margin: "0 auto 20px",
-        }}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2">
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        {/* Timer Circle */}
+        <div style={{ position: "relative", width: 90, height: 90, margin: "0 auto 24px" }}>
+          <svg width="90" height="90" style={{ transform: "rotate(-90deg)" }}>
+            <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="5" />
+            <circle cx="45" cy="45" r="38" fill="none" stroke="#D4A843" strokeWidth="5"
+              strokeLinecap="round" strokeDasharray={`${2 * Math.PI * 38}`}
+              strokeDashoffset={`${2 * Math.PI * 38 * (1 - pct / 100)}`}
+              style={{ transition: "stroke-dashoffset 1s linear" }} />
           </svg>
+          <div style={{
+            position: "absolute", inset: 0, display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+          }}>
+            <span style={{ fontSize: 22, fontWeight: 900, color: "#D4A843", letterSpacing: -1, lineHeight: 1 }}>
+              {minutes}:{seconds.toString().padStart(2, "0")}
+            </span>
+            <span style={{ fontSize: 9, color: "#506080", fontWeight: 600, marginTop: 2 }}>VERBLEIBEND</span>
+          </div>
         </div>
-        <h2 style={{ color: "white", fontSize: "20px", fontWeight: 700, marginBottom: "12px" }}>
-          Session läuft ab
+
+        <h2 style={{ color: "#fff", fontSize: 18, fontWeight: 800, marginBottom: 8, letterSpacing: -0.5 }}>
+          Noch aktiv?
         </h2>
-        <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "14px", marginBottom: "24px" }}>
-          Aufgrund von Inaktivität werden Sie in <strong style={{ color: "#fbbf24" }}>
-          {minutes}:{seconds.toString().padStart(2, "0")}</strong> automatisch ausgeloggt.
+        <p style={{ color: "#506080", fontSize: 13, marginBottom: 24, lineHeight: 1.5 }}>
+          Deine Session wird aus Sicherheitsgründen beendet.
         </p>
-        <div style={{ display: "flex", gap: "12px" }}>
-          <button onClick={onLogout} style={{
-            flex: 1, padding: "12px 20px", background: "rgba(255,255,255,0.1)",
-            border: "1px solid rgba(255,255,255,0.2)", borderRadius: "8px",
-            color: "rgba(255,255,255,0.8)", fontSize: "14px", cursor: "pointer",
-          }}>Abmelden</button>
-          <button onClick={onExtend} style={{
-            flex: 1, padding: "12px 20px",
-            background: "linear-gradient(135deg, #D4A843 0%, #EAD068 100%)",
-            border: "none", borderRadius: "8px", color: "white",
-            fontSize: "14px", fontWeight: 600, cursor: "pointer",
-          }}>Angemeldet bleiben</button>
-        </div>
+
+        <button onClick={onExtend} style={{
+          width: "100%", padding: "14px 20px",
+          background: "linear-gradient(135deg, #D4A843 0%, #f59e0b 100%)",
+          border: "none", borderRadius: 12, color: "#060b18",
+          fontSize: 15, fontWeight: 800, cursor: "pointer",
+          boxShadow: "0 4px 20px rgba(212,168,67,0.3)",
+          marginBottom: 10,
+        }}>
+          Weiter arbeiten
+        </button>
+        <button onClick={onLogout} style={{
+          width: "100%", padding: "10px 20px", background: "none",
+          border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10,
+          color: "#506080", fontSize: 13, fontWeight: 600, cursor: "pointer",
+        }}>
+          Abmelden
+        </button>
       </div>
     </div>
   );

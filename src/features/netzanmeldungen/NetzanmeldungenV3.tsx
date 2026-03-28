@@ -189,7 +189,7 @@ export default function NetzanmeldungenV3() {
     const totalDone = (grouped.genehmigt?.length || 0) + (grouped.ibn?.length || 0) + (grouped.fertig?.length || 0);
 
     return (
-      <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e2e8f0", fontFamily: "'Inter','DM Sans', sans-serif" }}>
+      <div style={{ minHeight: "100vh", background: "#060b18", color: "#e2e8f0", fontFamily: "'Inter','DM Sans', sans-serif" }}>
         <style dangerouslySetInnerHTML={{ __html: CSS_INJECT + V3_CSS }} />
 
         {/* Header */}
@@ -275,7 +275,7 @@ export default function NetzanmeldungenV3() {
   // ═══════════════════════════════════════════════════════════════════
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: "#060b18", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif" }}>
       <style dangerouslySetInnerHTML={{ __html: CSS_INJECT + V3_CSS }} />
 
       {/* ═══ HEADER ═══ */}
@@ -446,7 +446,7 @@ export default function NetzanmeldungenV3() {
               // Status-Gruppierung immer wenn nach Status sortiert
               if (sortBy === "status") {
                 const groups: Record<string, typeof items> = {};
-                const ORDER = ["lead_neu", "lead_kontaktiert", "lead_qualifiziert", "rueckfrage", "beim_nb", "eingang", "genehmigt", "ibn", "fertig", "storniert", "lead_konvertiert", "lead_abgelehnt"];
+                const ORDER = ["lead_neu", "lead_kontaktiert", "lead_qualifiziert", "rueckfrage", "beim_nb", "eingang", "genehmigt", "ibn", "fertig", "storniert", "lead_disqualifiziert", "lead_abgelehnt"];
                 items.forEach(item => {
                   const key = item.status || "sonstige";
                   if (!groups[key]) groups[key] = [];
@@ -512,11 +512,10 @@ export default function NetzanmeldungenV3() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 const LEAD_STATUSES = [
-  { key: "neu", label: "Neu", color: "#a855f7", icon: "🌟" },
-  { key: "kontaktiert", label: "Kontaktiert", color: "#06b6d4", icon: "📞" },
+  { key: "neu", label: "Zu Kontaktieren", color: "#D4A843", icon: "⚡" },
+  { key: "kontaktiert", label: "Kontaktiert", color: "#3b82f6", icon: "📞" },
   { key: "qualifiziert", label: "Qualifiziert", color: "#22c55e", icon: "✅" },
-  { key: "konvertiert", label: "Konvertiert", color: "#22c55e", icon: "🎉" },
-  { key: "abgelehnt", label: "Abgelehnt", color: "#64748b", icon: "🚫" },
+  { key: "disqualifiziert", label: "Disqualifiziert", color: "#ef4444", icon: "❌" },
 ];
 
 const HAUSART_MAP: Record<string, string> = {
@@ -533,7 +532,7 @@ const SCREEN_PROTECT_CSS = `
   .screen-protect *{user-select:none!important;-webkit-user-select:none!important}
   .screen-protect img{pointer-events:none!important}
   @media print{.screen-protect{display:none!important}.print-block{display:flex!important}}
-  .print-block{display:none;position:fixed;inset:0;background:#0a0a0f;z-index:99999;align-items:center;justify-content:center;color:#ef4444;font-size:24px;font-weight:800}
+  .print-block{display:none;position:fixed;inset:0;background:#060b18;z-index:99999;align-items:center;justify-content:center;color:#ef4444;font-size:24px;font-weight:800}
   .screen-protect-watermark{position:fixed;inset:0;z-index:9998;pointer-events:none;
     background:repeating-linear-gradient(135deg,transparent,transparent 200px,rgba(255,255,255,0.012) 200px,rgba(255,255,255,0.012) 201px);
     display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -660,7 +659,7 @@ function LeadDetailPanel({ item, onClose }: { item: UnifiedItem; onClose: () => 
   };
 
   const currentStatus = lead?.status || "neu";
-  const isConvertible = !["konvertiert", "abgelehnt"].includes(currentStatus);
+  const isConvertible = !["disqualifiziert", "abgelehnt"].includes(currentStatus);
 
   const cardBg = "rgba(17,20,35,0.95)";
   const borderColor = "rgba(212,168,67,0.08)";
@@ -673,7 +672,7 @@ function LeadDetailPanel({ item, onClose }: { item: UnifiedItem; onClose: () => 
   // Success: Lead wurde konvertiert → Link zur Installation
   if (convertSuccess) {
     return (
-      <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16, textAlign: "center" }}>
+      <div style={{ minHeight: "100vh", background: "#060b18", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16, textAlign: "center" }}>
         <div style={{ fontSize: 56 }}>🎉</div>
         <div style={{ fontSize: 22, fontWeight: 800 }}>Lead konvertiert!</div>
         <div style={{ fontSize: 14, color: "#94a3b8", maxWidth: 360 }}>
@@ -694,7 +693,7 @@ function LeadDetailPanel({ item, onClose }: { item: UnifiedItem; onClose: () => 
   }
 
   return (
-    <div className={blurred ? "blur-on-leave" : ""} style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif" }}>
+    <div className={blurred ? "blur-on-leave" : ""} style={{ minHeight: "100vh", background: "#060b18", color: "#e2e8f0", fontFamily: "'DM Sans', sans-serif" }}>
       <style dangerouslySetInnerHTML={{ __html: CSS_INJECT + V3_CSS + (isHv ? SCREEN_PROTECT_CSS : "") }} />
 
       {/* Print-Blocker */}

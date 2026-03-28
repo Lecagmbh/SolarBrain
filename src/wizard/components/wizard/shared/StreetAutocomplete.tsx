@@ -172,7 +172,7 @@ export const StreetAutocomplete: React.FC<StreetAutocompleteProps> = ({
       height: '40px',
       padding: '0 12px',
       paddingRight: loading ? '40px' : '12px',
-      background: '#09090b',
+      background: '#060b18',
       border: `1px solid ${error ? '#ef4444' : isOpen ? '#3b82f6' : 'rgba(255,255,255,0.12)'}`,
       borderRadius: '8px',
       color: '#fafafa',

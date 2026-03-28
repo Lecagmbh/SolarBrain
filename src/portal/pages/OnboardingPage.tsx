@@ -416,7 +416,7 @@ function formatAnlagenTyp(t: string): string {
 const styles = `
   .ob-page {
     min-height: 100vh;
-    background: linear-gradient(145deg, #0a0a0f 0%, #1a1a2e 100%);
+    background: linear-gradient(145deg, #060b18 0%, #1a1a2e 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -722,7 +722,7 @@ const styles = `
 
   /* Modal */
   .ob-modal {
-    background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
+    background: linear-gradient(180deg, #1a1a2e 0%, #0a1128 100%);
     border: 1px solid rgba(52,211,153,0.2);
     border-radius: 24px;
     width: 100%;

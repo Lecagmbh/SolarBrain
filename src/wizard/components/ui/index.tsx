@@ -36,7 +36,7 @@ const injectStyles = () => {
     /* Base Container */
     .lw-container {
       min-height: 100vh;
-      background: #09090b;
+      background: #060b18;
       color: #fafafa;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
     }
@@ -70,7 +70,7 @@ const injectStyles = () => {
       align-items: center;
       justify-content: center;
       padding: 20px 16px;
-      background: #09090b;
+      background: #060b18;
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 12px;
       cursor: pointer;
@@ -95,7 +95,7 @@ const injectStyles = () => {
       align-items: center;
       gap: 12px;
       padding: 16px;
-      background: #09090b;
+      background: #060b18;
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 8px;
       cursor: pointer;
@@ -137,7 +137,7 @@ const injectStyles = () => {
       width: 100%;
       height: 40px;
       padding: 0 12px;
-      background: #09090b;
+      background: #060b18;
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 8px;
       color: #fafafa;
@@ -185,7 +185,7 @@ const injectStyles = () => {
       width: 100%;
       height: 40px;
       padding: 0 36px 0 12px;
-      background: #09090b;
+      background: #060b18;
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 8px;
       color: #fafafa;
