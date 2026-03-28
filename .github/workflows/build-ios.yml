@@ -36,13 +36,37 @@ jobs:
       - name: Install Codemagic CLI tools
         run: pip3 install --break-system-packages codemagic-cli-tools
 
-      - name: Decode P8 key
+      - name: Decode P8 key and verify
         env:
           APP_STORE_CONNECT_KEY_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_KEY_P8_BASE64 }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
         run: |
           echo "$APP_STORE_CONNECT_KEY_P8_BASE64" | base64 --decode > $RUNNER_TEMP/AuthKey.p8
           chmod 600 $RUNNER_TEMP/AuthKey.p8
           echo "P8 key decoded: $(wc -c < $RUNNER_TEMP/AuthKey.p8) bytes"
+          echo "Key ID length: ${#APP_STORE_CONNECT_KEY_ID}"
+          echo "Issuer ID length: ${#APP_STORE_CONNECT_ISSUER_ID}"
+          echo "Key starts with: $(head -1 $RUNNER_TEMP/AuthKey.p8)"
+          # Test API call directly with python
+          pip3 install --break-system-packages PyJWT cryptography 2>/dev/null
+          python3 -c "
+          import jwt, time, urllib.request, json
+          with open('$RUNNER_TEMP/AuthKey.p8') as f:
+              key = f.read()
+          kid = '$APP_STORE_CONNECT_KEY_ID'
+          iss = '$APP_STORE_CONNECT_ISSUER_ID'
+          print(f'Key ID: {kid}')
+          print(f'Issuer: {iss}')
+          print(f'Key length: {len(key)} chars')
+          token = jwt.encode({'iss': iss, 'iat': int(time.time()), 'exp': int(time.time())+1200, 'aud': 'appstoreconnect-v1'}, key, algorithm='ES256', headers={'kid': kid})
+          req = urllib.request.Request('https://api.appstoreconnect.apple.com/v1/apps', headers={'Authorization': f'Bearer {token}'})
+          try:
+              resp = urllib.request.urlopen(req)
+              print(f'API TEST OK: {resp.status}')
+          except urllib.error.HTTPError as e:
+              print(f'API TEST FAILED: {e.code} - {e.read().decode()[:200]}')
+          "
 
       - name: Setup signing
         env:
