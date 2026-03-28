@@ -102,7 +102,8 @@ jobs:
           sys.exit(r.returncode)
           "
 
-          keychain add-certificates $KEYCHAIN_PATH
+          keychain initialize
+          keychain add-certificates
           xcode-project use-profiles --project ios/App/App.xcodeproj
 
       - name: Build IPA
