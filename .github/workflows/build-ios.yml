@@ -27,11 +27,8 @@ jobs:
       - name: Build web (Capacitor)
         run: VITE_CAPACITOR=true npx vite build
 
-      - name: Sync Capacitor iOS + CocoaPods
-        run: |
-          npx cap sync ios
-          cd ios/App
-          pod install --repo-update
+      - name: Sync Capacitor iOS
+        run: npx cap sync ios
 
       - name: Install Codemagic CLI tools
         run: pip3 install --break-system-packages codemagic-cli-tools
@@ -162,19 +159,14 @@ jobs:
       - name: Build IPA
         run: |
           cd ios/App
-          # Use xcode-project but allow warnings (exit 0 even on warnings)
-          xcode-project build-ipa \
-            --workspace App.xcworkspace \
-            --scheme App \
-            --archive-flags="-destination 'generic/platform=iOS'" \
-            || true
 
-          # Check if IPA was actually created despite warnings
+          # Build with SPM (no CocoaPods, no duplicate framework issue)
+          xcode-project build-ipa \
+            --project App.xcodeproj \
+            --scheme App \
+            --archive-flags="-destination 'generic/platform=iOS' -clonedSourcePackagesDirPath $RUNNER_TEMP/spm-cache"
+
           IPA=$(find build -name "*.ipa" 2>/dev/null | head -1)
-          if [ -z "$IPA" ]; then
-            echo "ERROR: No IPA file found"
-            exit 1
-          fi
           echo "IPA built: $IPA ($(du -h "$IPA" | cut -f1))"
 
       - name: Upload to App Store Connect (TestFlight)
