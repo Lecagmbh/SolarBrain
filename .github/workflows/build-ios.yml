@@ -27,8 +27,11 @@ jobs:
       - name: Build web (Capacitor)
         run: VITE_CAPACITOR=true npx vite build
 
-      - name: Sync Capacitor iOS
-        run: npx cap sync ios
+      - name: Sync Capacitor iOS + CocoaPods
+        run: |
+          npx cap sync ios
+          cd ios/App
+          pod install --repo-update
 
       - name: Install Codemagic CLI tools
         run: pip3 install --break-system-packages codemagic-cli-tools
@@ -167,7 +170,7 @@ jobs:
           echo "Profiles installed: $(ls ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision 2>/dev/null | wc -l)"
 
           xcodebuild archive \
-            -project App.xcodeproj \
+            -workspace App.xcworkspace \
             -scheme App \
             -destination "generic/platform=iOS" \
             -archivePath $RUNNER_TEMP/App.xcarchive \
@@ -175,15 +178,16 @@ jobs:
             CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=UURWRHMHV8 \
             "CODE_SIGN_IDENTITY=Apple Distribution" \
-            2>&1 | tee /tmp/xcodebuild.log | tail -30
+            2>&1 | tee /tmp/xcodebuild.log | tail -30 || true
 
-          # Check if archive succeeded (warnings are OK)
-          if [ ! -d "$RUNNER_TEMP/App.xcarchive" ]; then
-            echo "Archive failed. Full log:"
-            cat /tmp/xcodebuild.log | grep "error:" | head -20
+          # Check if archive was actually created (warnings cause exit 65 but archive exists)
+          if [ -d "$RUNNER_TEMP/App.xcarchive/Products" ]; then
+            echo "Archive OK: $(du -sh $RUNNER_TEMP/App.xcarchive | cut -f1)"
+          else
+            echo "Archive FAILED. Errors:"
+            cat /tmp/xcodebuild.log | grep "error:" | grep -v "warning:" | head -20
             exit 1
           fi
-          echo "Archive OK"
 
       - name: Export IPA
         run: |
