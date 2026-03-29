@@ -193,32 +193,45 @@ jobs:
         run: |
           cd ios/App
 
-          # Get provisioning profile name
-          PROFILE_NAME=$(ls ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/*.mobileprovision 2>/dev/null | head -1)
-          echo "Profile: $PROFILE_NAME"
+          # Get provisioning profile UUID
+          PROFILE_PATH=$(ls ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision 2>/dev/null | head -1)
+          if [ -z "$PROFILE_PATH" ]; then
+            PROFILE_PATH=$(ls ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/*.mobileprovision 2>/dev/null | head -1)
+          fi
+          echo "Profile: $PROFILE_PATH"
+          PROFILE_UUID=$(security cms -D -i "$PROFILE_PATH" | grep -A1 UUID | grep string | sed 's/.*<string>//' | sed 's/<\/string>.*//')
+          PROFILE_NAME=$(security cms -D -i "$PROFILE_PATH" | grep -A1 Name | grep string | sed 's/.*<string>//' | sed 's/<\/string>.*//' | head -1)
+          echo "Profile UUID: $PROFILE_UUID"
+          echo "Profile Name: $PROFILE_NAME"
 
-          cat > $RUNNER_TEMP/ExportOptions.plist << 'PLIST'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>method</key>
-            <string>app-store</string>
-            <key>teamID</key>
-            <string>UURWRHMHV8</string>
-            <key>uploadBitcode</key>
-            <false/>
-            <key>uploadSymbols</key>
-            <true/>
-          </dict>
-          </plist>
-          PLIST
+          cat > $RUNNER_TEMP/ExportOptions.plist << PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>method</key>
+  <string>app-store-connect</string>
+  <key>teamID</key>
+  <string>UURWRHMHV8</string>
+  <key>signingStyle</key>
+  <string>manual</string>
+  <key>provisioningProfiles</key>
+  <dict>
+    <key>de.solarbrain.app</key>
+    <string>${PROFILE_NAME}</string>
+  </dict>
+  <key>uploadSymbols</key>
+  <true/>
+</dict>
+</plist>
+PLIST
 
           mkdir -p build/ios/ipa
           xcodebuild -exportArchive \
             -archivePath $RUNNER_TEMP/App.xcarchive \
             -exportPath build/ios/ipa \
-            -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist
+            -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist \
+            2>&1 | tail -20
 
           IPA=$(find build -name "*.ipa" | head -1)
           echo "IPA: $IPA ($(du -h "$IPA" | cut -f1))"
